@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kivalliq Hydro-Fibre Link — decision flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#101d26;--ink-soft:#40525e;--ink-faint:#7c8b95;
+  --paper:#eceff0;--panel:#ffffff;--rule:#cdd5d8;--rail:#dde4e6;
+  --pro:#6b6250;--mb:#2c6a5c;--nu:#1c4d79;--fed:#5c3b5f;
+  --check:#9a7614;--trace:#b4441f;--shadow:rgba(16,29,38,.17);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ink:#e3e9ec;--ink-soft:#a7b6bf;--ink-faint:#6d7f8a;
+  --paper:#0d171e;--panel:#141f28;--rule:#2a3a45;--rail:#1e2d37;
+  --pro:#b9ad93;--mb:#6fbfa9;--nu:#74add9;--fed:#b48bb7;--check:#d9ac3b;--trace:#e8794f;
+  --shadow:rgba(0,0,0,.6);}}
+:root[data-theme="dark"]{--ink:#e3e9ec;--ink-soft:#a7b6bf;--ink-faint:#6d7f8a;
+  --paper:#0d171e;--panel:#141f28;--rule:#2a3a45;--rail:#1e2d37;
+  --pro:#b9ad93;--mb:#6fbfa9;--nu:#74add9;--fed:#b48bb7;--check:#d9ac3b;--trace:#e8794f;
+  --shadow:rgba(0,0,0,.6);}
+*,*::before,*::after{box-sizing:inherit}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.55}
+body.modal-open{overflow:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px 70px}
+header{padding:36px 0 12px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;font-size:clamp(23px,3.8vw,34px);
+  line-height:1.15;letter-spacing:-.015em;margin:0 0 9px;max-width:24ch}
+.standfirst{max-width:70ch;color:var(--ink-soft);margin:0;font-size:14.5px}
+
+.toolbar{margin:18px 0 0;padding:11px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.tb-row{display:flex;flex-wrap:wrap;gap:7px 16px;align-items:center}
+.tb-row+.tb-row{margin-top:10px;padding-top:10px;border-top:1px dotted var(--rule)}
+.tb-lab{font-size:11.5px;font-weight:600;color:var(--ink-soft);flex:0 0 auto}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+button.chip{font:inherit;font-size:12px;cursor:pointer;border:1px solid var(--rule);
+  background:var(--panel);color:var(--ink-soft);padding:3px 10px;border-radius:11px}
+button.chip:hover{border-color:var(--ink-faint);color:var(--ink)}
+button.chip[aria-pressed="true"]{background:var(--trace);border-color:var(--trace);color:#fff}
+button.chip.mode[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+button.chip.reg{padding-left:7px;display:inline-flex;align-items:center;gap:6px}
+button.chip.reg i{width:9px;height:9px;border-radius:50%;background:var(--rc);flex:0 0 auto}
+button.chip.reg[aria-pressed="true"]{background:var(--panel);border-color:var(--rc);color:var(--ink)}
+button.chip.reg[aria-pressed="false"]{opacity:.5}
+button.chip:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+button.chip.cand{border-style:dashed}
+.hint{font-size:12.5px;color:var(--ink-faint);margin:9px 0 0;max-width:78ch;min-height:2.4em}
+
+.scroller{position:relative;overflow-x:auto;padding:14px 0 10px;margin-top:6px}
+.canvas{position:relative}
+svg.layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+svg.bands{z-index:0}svg.wires{z-index:1}
+.grid{display:grid;position:relative;z-index:2}
+.band{padding:0 5px 7px;font-size:10.5px;font-weight:600;color:var(--ink-faint);
+  text-align:center;line-height:1.25;border-left:1px dashed var(--rail)}
+.band.first{border-left:0}
+.ph{padding:0 4px 9px;text-align:center;font-size:10px;color:var(--ink-faint);
+  border-left:1px dashed var(--rail);line-height:1.2}
+.ph.first{border-left:0;text-align:left}
+.lname{font-size:11.5px;font-weight:600;color:var(--lc);padding-top:13px}
+.cell{padding:9px 4px;border-left:1px dashed var(--rail);display:flex;flex-direction:column;
+  align-items:center;gap:13px;min-height:24px}
+.cell.first{border-left:0}
+.lane-pro{--lc:var(--pro)}.lane-mb{--lc:var(--mb)}.lane-nu{--lc:var(--nu)}.lane-fed{--lc:var(--fed)}
+
+.node{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;max-width:116px}
+.node:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px}
+.disc{width:38px;height:38px;border-radius:50%;border:1.6px solid var(--rc);
+  background:var(--panel);display:grid;place-items:center;color:var(--rc);flex:0 0 auto;
+  transition:transform .12s ease}
+.disc svg{width:19px;height:19px}
+.node:hover .disc{transform:scale(1.12)}
+.node.prov .disc{border-style:dashed}
+.node.off .disc{opacity:.5}
+.node.gate .disc{box-shadow:0 0 0 3.5px color-mix(in srgb,var(--trace) 22%,transparent)}
+.lbl{font-size:10.6px;line-height:1.24;text-align:center;color:var(--ink-soft);max-width:110px}
+body.nolabels .lbl{display:none}
+body.nolabels .cell{gap:10px}
+.node[data-r="pro"]{--rc:var(--pro)}.node[data-r="mb"]{--rc:var(--mb)}
+.node[data-r="nu"]{--rc:var(--nu)}.node[data-r="fed"]{--rc:var(--fed)}
+.node.dim{opacity:.16;pointer-events:none}
+.tracing .node:not(.dim){opacity:.2}
+.tracing .node.hit{opacity:1}
+.tracing .node.hit .disc{border-color:var(--trace);color:var(--trace);
+  box-shadow:0 0 0 3.5px color-mix(in srgb,var(--trace) 18%,transparent)}
+.tracing .node.hit .lbl{color:var(--ink)}
+
+.gapband{display:flex;gap:9px;margin:6px 0 0;padding:8px 11px;
+  border:1px dashed var(--trace);border-radius:3px;background:var(--panel)}
+.gapband p{margin:0;font-size:12px;color:var(--ink-soft);line-height:1.45}
+.gapband strong{color:var(--trace);font-weight:600}
+
+.legend{display:flex;flex-wrap:wrap;gap:11px 20px;margin:16px 0 0;padding-top:13px;
+  border-top:1px solid var(--rule);font-size:11.8px;color:var(--ink-soft)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend .g{width:22px;height:22px;border-radius:50%;border:1.4px solid var(--ink-faint);
+  display:grid;place-items:center;color:var(--ink-faint);flex:0 0 auto}
+.legend .g svg{width:12px;height:12px}
+
+.backdrop{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 38%,transparent);
+  display:none;place-items:center;z-index:60;padding:calc(18px + env(safe-area-inset-top,0px)) 16px
+  calc(18px + env(safe-area-inset-bottom,0px))}
+.backdrop.on{display:grid}
+.modal{background:var(--panel);border-radius:5px;max-width:460px;width:100%;max-height:100%;
+  overflow-y:auto;box-shadow:0 14px 44px var(--shadow);border-top:4px solid var(--band,var(--rule));
+  padding:18px 19px 20px;position:relative}
+.modal h3{font-family:"IBM Plex Serif",Georgia,serif;font-size:19px;margin:0 2.2em 2px 0;font-weight:600;line-height:1.2}
+.modal .msub{font-size:12.5px;color:var(--ink-faint);margin:0}
+.closeb{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--rule);background:var(--panel);color:var(--ink-soft);cursor:pointer;
+  font-size:16px;line-height:1;display:grid;place-items:center}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 0}
+.tag{font-size:10.5px;font-weight:600;border:1px solid currentColor;border-radius:2px;padding:1px 5px}
+.tag.v{color:var(--mb)}.tag.p{color:var(--check)}.tag.c{color:var(--ink-faint)}
+.tag.g{color:var(--ink-faint)}.tag.r{color:var(--trace)}
+.mgrid{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:13px 0 0;font-size:13px}
+.mgrid dt{font-weight:600;color:var(--ink-soft);font-size:12px;white-space:nowrap}
+.mgrid dd{margin:0}
+.cicons{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:11px;border-top:1px dotted var(--rule)}
+.ci{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--ink-soft);
+  border:1px solid var(--rule);border-radius:11px;padding:2px 8px 2px 5px}
+.ci.cand{border-style:dashed}
+.ci svg{width:14px;height:14px;color:var(--band,var(--ink-soft))}
+.ci.none{border:0;padding-left:0;font-style:italic;color:var(--ink-faint)}
+.mnote{font-size:12.8px;color:var(--ink-soft);margin:13px 0 0;padding-top:11px;
+  border-top:1px dotted var(--rule);line-height:1.5}
+.more{margin:13px 0 0;font-size:12px}
+.more button{font:inherit;font-size:12px;background:none;border:0;color:var(--trace);
+  cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
+
+#detail{margin-top:20px;background:var(--panel);border:1px solid var(--rule);
+  border-left:3px solid var(--band,var(--rule));border-radius:3px;padding:15px 17px;scroll-margin-top:20px}
+#detail h3{font-family:"IBM Plex Serif",Georgia,serif;font-size:17.5px;margin:0 0 2px;font-weight:600}
+#detail .dsub{font-size:12.5px;color:var(--ink-faint);margin:0}
+#detail dl{margin:12px 0 0;font-size:13.5px}
+#detail dt{font-weight:600;color:var(--ink-soft);margin-top:10px;font-size:12.5px}
+#detail dd{margin:2px 0 0}
+#detail .note{font-size:13px;color:var(--ink-soft);margin-top:12px;padding-top:10px;border-top:1px dotted var(--rule)}
+#detail .placeholder{color:var(--ink-faint);font-size:14px;margin:0}
+
+section.tail{margin-top:34px;padding-top:19px;border-top:1px solid var(--rule)}
+section.tail h3{font-family:"IBM Plex Serif",Georgia,serif;font-size:18px;margin:0 0 10px;font-weight:600}
+section.tail p,section.tail li{max-width:74ch;color:var(--ink-soft);font-size:13.8px}
+section.tail strong{color:var(--ink);font-weight:600}
+section.tail ul{padding-left:19px}section.tail li{margin:7px 0}
+footer{margin-top:28px;padding-top:13px;border-top:1px solid var(--rule);
+  font-size:12px;color:var(--ink-faint);max-width:74ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<g id="g-frame"><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></g>
+<g id="g-intake"><path d="M12 3v10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 9.5 12 13.5 16 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3.5h16V16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></g>
+<g id="g-review"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></g>
+<g id="g-delib"><path d="M3.5 7.5A2.5 2.5 0 0 1 6 5h7a2.5 2.5 0 0 1 2.5 2.5v3A2.5 2.5 0 0 1 13 13H8l-4 3v-3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M18 9h.5A2.5 2.5 0 0 1 21 11.5v3a2.5 2.5 0 0 1-2 2.45V20l-3-3h-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></g>
+<g id="g-decide"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g id="g-gate"><rect x="5" y="10.5" width="14" height="9.5" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="1.6"/></g>
+<g id="g-permit"><path d="M5 5h10l4 4v10H5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 13.5 11 16l5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g id="g-switch"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 2.6"/><path d="M12 8v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="currentColor"/></g>
+<g id="g-money"><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.5v9M14.5 9.8c-.6-.8-1.5-1.1-2.5-1.1-1.4 0-2.4.7-2.4 1.8 0 2.6 5 1.2 5 3.9 0 1.2-1.1 1.9-2.6 1.9-1.1 0-2-.4-2.6-1.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></g>
+<g id="i-ghg"><path d="M4 14c0-2 1.5-3 3-3 .2-2.2 1.8-3.6 3.6-3.6 1.5 0 2.7.9 3.2 2.2.3-.1.6-.2 1-.2 1.5 0 2.7 1.2 2.7 2.7S16.3 15 14.8 15H6.5C5.1 15 4 14.6 4 14z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 18h8M9 20.5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></g>
+<g id="i-inuit"><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/></g>
+<g id="i-cari"><path d="M12 21v-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 14C12 9 9 8 7.5 5.5M7.5 5.5 5 6.5M7.5 5.5 6.5 3M12 14c0-5 3-6 4.5-8.5M16.5 5.5 19 6.5M16.5 5.5 17.5 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></g>
+<g id="i-wild"><path d="M12 20c-3 0-5-1.6-5-3.6 0-1.8 2-3.4 5-3.4s5 1.6 5 3.4C17 18.4 15 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="6.5" cy="9" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="9" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="5.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.5"/></g>
+<g id="i-sov"><path d="M6 21V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 4h11l-2.5 3.5L17 11H6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></g>
+<g id="i-rate"><path d="M4 18a8 8 0 0 1 16 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 18l4.5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="18" r="1.3" fill="currentColor"/></g>
+<g id="i-jobs"><path d="M3 18h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5 18v-1a7 7 0 0 1 14 0v1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 10.6V6.5h4v4.1" fill="none" stroke="currentColor" stroke-width="1.5"/></g>
+<g id="i-fin"><path d="M4 20h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6.5 20v-5M11 20V8M15.5 20v-8M20 20V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></g>
+<g id="i-reliab"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></g>
+<g id="i-redund"><path d="M10 14a4 4 0 0 1 0-5.6l2-2a4 4 0 0 1 5.7 5.6l-1 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 10a4 4 0 0 1 0 5.6l-2 2a4 4 0 0 1-5.7-5.6l1-1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></g>
+<g id="i-nat"><circle cx="5" cy="12" r="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="19" cy="12" r="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.4 12h9.2" stroke="currentColor" stroke-width="1.5"/><path d="M12 7.5v9" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/></g>
+<g id="i-route"><path d="M5 19c0-5 14-5 14-10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2.5"/><circle cx="5" cy="19" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="19" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></g>
+<marker id="ar" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 1.2l5.5 2.8-5.5 2.8z" fill="var(--rule)"/></marker>
+</defs></svg>
+
+<div class="wrap">
+<header>
+  <h1>Where a concern can enter, and what leads to what</h1>
+  <p class="standfirst">Columns place each step either by how many steps must precede it or by stage. Grouping shows the regulators as separate lanes or as bands within a single flow. The symbol in each circle is the kind of work the step does; everything else about a step is in its entry.</p>
+</header>
+
+<div class="toolbar">
+  <div class="tb-row">
+    <span class="tb-lab">Columns</span><div class="chips" id="colmodes"></div>
+    <span class="tb-lab">Grouping</span><div class="chips" id="grpmodes"></div>
+    <span class="tb-lab">Labels</span>
+    <div class="chips"><button class="chip" id="lbltog" aria-pressed="true" type="button">on</button></div>
+  </div>
+  <div class="tb-row">
+    <span class="tb-lab">Show</span><div class="chips" id="regs"></div>
+  </div>
+  <div class="tb-row">
+    <span class="tb-lab">Trace a concern</span><div class="chips" id="chips"></div>
+  </div>
+  <p class="hint" id="hint"></p>
+</div>
+
+<div class="scroller"><div class="canvas" id="canvas">
+  <svg class="layer bands" id="bands" aria-hidden="true"></svg>
+  <svg class="layer wires" id="wires" aria-hidden="true"></svg>
+  <div class="grid" id="grid"></div>
+</div></div>
+
+<div class="gapband"><p><strong>Nothing connects the Manitoba and Nunavut processes.</strong> Manitoba licenses its own segment. Nunavut's statute reaches both, since ss.98 and 156–157 apply to the whole project and s.90(i) makes cumulative effects mandatory at screening. Coordinating machinery exists on both sides and has never been used here.</p></div>
+
+<div class="legend" id="legend"></div>
+<div id="detail"><p class="placeholder">Click a step for the full entry: legal basis, assessment method, inputs, possible outputs, publication and reasons.</p></div>
+
+<section class="tail">
+  <h3>Reading the precedence columns</h3>
+  <p>Position comes from the edges rather than from stages I invented, and the merged headers above say which stage each span belongs to. Two things show up that the stage view concealed.</p>
+  <ul>
+    <li><strong>The downstream permits are not really downstream.</strong> The only thing holding them is the screening gate at NuPPAA s.75, so by precedence they sit immediately after screening — earlier than the hearing, earlier than either final decision. A permit can issue before anyone has weighed the project as a whole.</li>
+    <li><strong>Cabinet's designation sits in the first column with nothing before it.</strong> Nothing has to happen for that order to be made, and nothing compels it ever to be made.</li>
+  </ul>
+</section>
+
+<footer>Built from the verified step and edge tables, 30 September 2026. Concerns are drawn from statements by named parties; five further categories are omitted because no party statement has been found for them. Assessment methods are my classification of what each instrument does, not a term any statute uses. Sources: NuPPAA and the <em>Canadian Energy Regulator Act</em> via Justice Laws; Manitoba's <em>Environment Act</em> and Regulations 163/88 and 164/88; SOR/2026-185; COSEWIC; Review Board and Planning Commission guidance.</footer>
+</div>
+
+<div class="backdrop" id="backdrop" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+const C=[
+ {id:"ghg",label:"Emissions and diesel",ev:1},{id:"inuit",label:"Inuit ownership",ev:1},
+ {id:"cari",label:"Caribou",ev:1},{id:"sov",label:"Arctic sovereignty",ev:1},
+ {id:"rate",label:"Cost to consumers",ev:1},{id:"jobs",label:"Employment",ev:1},
+ {id:"fin",label:"Financing",ev:1},{id:"wild",label:"Wildlife beyond caribou",ev:0},
+ {id:"reliab",label:"Reliability of supply",ev:0},{id:"redund",label:"System redundancy",ev:0},
+ {id:"nat",label:"Nation-building",ev:0},{id:"route",label:"Routing and who benefits",ev:0}];
+const CM=Object.fromEntries(C.map(c=>[c.id,c]));
+const KIND={
+ frame:["g-frame","Framing — fixes what later steps can argue about"],
+ intake:["g-intake","Intake — receives submissions, decides nothing"],
+ review:["g-review","Review — analysis within one mandate"],
+ delib:["g-delib","Deliberation — hearing, recommendation"],
+ decide:["g-decide","Decision — binding outcome"],
+ gate:["g-gate","Gate — blocks everything downstream"],
+ permit:["g-permit","Permit — narrow authorisation"],
+ switch:["g-switch","Discretionary switch — no criteria published"],
+ money:["g-money","Funding — conditions without assessment"]};
+const METHOD={
+ score:"Weighted scoring — numbers assigned and combined",model:"Technical modelling",
+ check:"Completeness or conformity check against written criteria",
+ signif:"Significance threshold judgment",expert:"Expert judgment within a single mandate",
+ legal:"Legal test — rights doctrine",hearing:"Hearing — evidence, testimony, cross-examination",
+ minjudge:"Ministerial judgment on a record",bargain:"Negotiation between parties",
+ discret:"Discretion — no published method",none:"No method — collection only",
+ standard:"Compliance with technical standards"};
+const PH=["Before application","Entry","Scrutiny","Deliberation","Decision","Downstream permits"];
+const REGS=[["pro","Proponent"],["mb","Manitoba"],["nu","Nunavut"],["fed","Federal"]];
+
+const N=[
+{id:"pr-route",r:"pro",p:0,k:"frame",m:"score",t:"Route selection",st:"p",
+ basis:"No statutory basis. The 2021 baseline fieldwork was itself screened by the Review Board and followed a speculative corridor from the draft land use plan.",
+ mnote:"Assumed to use weighted multi-criteria siting of the kind standard in transmission routing. Not confirmed for this project — and if confirmed, it is the only place on the map where incommensurable things are given numbers and added.",
+ in:"Engineering and cost constraints; traditional land use and Inuit Qaujimajatuqangit studies; whatever input the proponent chooses to seek.",
+ out:"A preferred corridor and a short list of alternatives.",dec:"Proponent",pub:"Partial — the fieldwork file only",rea:"No",
+ c:["cari","wild","fin","route"],note:"The only step with no public record, and everything downstream traces back to it."},
+{id:"pr-tsr",r:"pro",p:0,k:"review",m:"model",t:"Transmission service request",st:"v",
+ basis:"Manitoba Hydro's open access transmission tariff. The governing provision has not been read.",
+ mnote:"Power-system modelling. A genuinely technical question with a determinate answer.",
+ in:"A request for up to 150 MW and a point of interconnection.",out:"Feasibility; required system upgrades.",
+ dec:"Manitoba Hydro",pub:"Partial",rea:"No",c:["rate","fin","reliab"],
+ note:"Filed 4 November 2025. The filing is confirmed; the tariff basis is not."},
+{id:"fed-fund",r:"fed",p:0,k:"money",m:"discret",t:"Federal funding channels",st:"p",
+ basis:"Programme terms rather than statute.",
+ mnote:"No published appraisal method. Decisions appear as announcements rather than as assessments.",
+ in:"Project economics, strategic rationale, Indigenous participation.",
+ out:"Contributions with conditions; prioritisation.",dec:"Federal funders and central agencies",
+ pub:"Grant records only",rea:"Rarely",c:["sov","fin","jobs","ghg","nat","redund"],
+ note:"Wide intake, no assessment, almost nothing published. Runs throughout rather than stopping here."},
+{id:"fed-desig",r:"fed",p:0,k:"switch",m:"discret",t:"Cabinet designation",st:"g",
+ basis:"Canadian Energy Regulator Act s.261. Federal law treats Nunavut as a province, so the line very likely is an interprovincial power line.",
+ mnote:"No criteria are published and no timeline applies. The decision is not an assessment of anything.",
+ in:"Cabinet consideration.",out:"Designate, or do not designate.",dec:"Governor in Council",
+ pub:"Order in council",rea:"No",c:[],
+ note:"The entire federal lane hangs on this one order. None has been made, and nothing has to happen before one could be."},
+
+{id:"mb-eap",r:"mb",p:1,k:"intake",m:"check",t:"Environment Act Proposal",st:"v",
+ basis:"The Environment Act ss.11–12; Classes of Development Regulation 164/88; Licensing Procedures Regulation 163/88.",
+ mnote:"Completeness against the regulation's content requirements, including mapping at 1:50,000 or better.",
+ in:"Project description, environmental assessment, alternatives considered.",
+ out:"Filed as complete, or further information required.",dec:"Director or Minister, depending on class",
+ pub:"Yes — s.17 registry",rea:"No",c:["cari","wild","ghg","route"],
+ note:"Above 230 kV is Class 3 and the Minister decides; 115 to 230 kV is Class 2 and the Director does. The voltage has not been published, so the whole Manitoba lane's shape is undetermined."},
+{id:"nu-npc",r:"nu",p:1,k:"review",m:"check",t:"Planning conformity",st:"v",
+ basis:"NuPPAA ss.76–85, with s.156 applying the planning provisions to the entire project.",
+ mnote:"Conformity against the text of the applicable land use plan. A yes or no question about a document.",
+ in:"Project description and location.",out:"Conforms; does not conform; variance; or exemption.",
+ dec:"Nunavut Planning Commission",pub:"Yes",rea:"Yes, for non-conformity",c:["cari","route"],
+ note:"Tested against the regional plan, since the 2023 territory-wide plan was jointly rejected in July 2026."},
+{id:"fed-cer",r:"fed",p:3,k:"delib",m:"hearing",t:"Energy Regulator review",st:"g",
+ basis:"Canadian Energy Regulator Act ss.2, 261 and 262, with reasons under s.63. Removed from the Impact Assessment Act's list by SOR/2026-185 on 3 September 2026.",
+ mnote:"A public interest determination on a hearing record. Inactive here.",
+ in:"Engineering, routing, environmental and socio-economic effects, Indigenous consultation.",
+ out:"Certificate or permit with conditions, or refusal.",dec:"The Commission and Governor in Council",
+ pub:"Yes",rea:"Yes",c:["ghg","inuit","cari","rate","sov","wild"],
+ note:"Would be the widest single federal forum available. Inactive because nobody has made the designation order."},
+
+{id:"mb-reg",r:"mb",p:2,k:"intake",m:"none",t:"Public registry and comment",st:"v",
+ basis:"The Environment Act s.17, with ss.11(8)(a) and 12(4)(a).",
+ mnote:"None. Submissions are collected, not assessed. Nothing filters what may be said and nothing determines what follows.",
+ in:"Written submissions from anyone. No content filter appears in the Act.",
+ out:"Comments on the record; objections that may prompt a hearing.",dec:"None — a collection point",
+ pub:"Yes",rea:"Owed to objectors where no hearing is held (s.12(6))",
+ c:["ghg","inuit","cari","sov","rate","jobs","fin","wild","reliab","redund","nat","route"],
+ note:"Everything can come in and nothing goes out — but s.12(6) compels reasons for the decision NOT to hold a hearing."},
+{id:"mb-tac",r:"mb",p:2,k:"review",m:"expert",t:"Technical Advisory Committee",st:"c",
+ basis:"Administrative practice. Only a general advisory committee power at s.5.",
+ mnote:"Each department applies its own expertise to its own mandate. There is no step at which the departmental views are weighed against one another.",
+ in:"The proposal, reviewed by each department within its own mandate.",
+ out:"Departmental comments and recommended licence conditions.",dec:"Participating departments",
+ pub:"Usually on the registry",rea:"No",c:["cari","wild","ghg"],
+ note:"Each department answers within its mandate. Nothing holds several mandates together."},
+{id:"mb-crown",r:"mb",p:2,k:"review",m:"legal",t:"Crown–Indigenous consultation",st:"p",
+ basis:"Section 35 of the Constitution Act 1982 and provincial policy, which has not been retrieved.",
+ mnote:"A legal test turning on the strength of the claim and the seriousness of the impact. Concerns not attaching to a right fall outside it however strongly held.",
+ in:"Potential adverse impacts on asserted or established rights.",out:"A consultation record and accommodation.",
+ dec:"The Crown",pub:"Partial",rea:"No statutory requirement found",c:["inuit","cari","route"],
+ note:"A rights channel, not a values channel."},
+{id:"nu-screen",r:"nu",p:2,k:"gate",m:"signif",t:"Screening",st:"v",gate:1,
+ basis:"NuPPAA ss.86–92 and 157. Section 90(i) makes cumulative impacts mandatory. Section 75(1) bars any regulatory authority from issuing a permit until assessment is complete, and s.75(2) makes any such permit of no force or effect.",
+ mnote:"A threshold judgment: may the project have significant ecosystemic or socio-economic impacts. Socio-economic sits in the test itself, which is the sharpest contrast with Manitoba.",
+ in:"The proposal plus public and agency comments.",
+ out:"Review not required; review required; or the project must be modified or abandoned.",
+ dec:"Nunavut Impact Review Board",pub:"Yes",rea:"Yes — a written screening report",
+ c:["ghg","cari","wild","inuit","reliab"],
+ note:"The only confirmed hard gate on the map, and wider than first recorded: a permit issued in breach is void, not merely irregular."},
+{id:"nu-min1",r:"nu",p:2,k:"switch",m:"discret",t:"Minister's screening decision",st:"v",
+ basis:"NuPPAA ss.93 and 94. Section 94(1)(a)(ii) makes a federal panel the default where the project is partly outside Nunavut.",
+ mnote:"No published method. The Minister may send a project to review even where the Board found none necessary, and chooses the review body.",
+ in:"The Board's screening report.",out:"Proceed; review by the Board, a federal panel or a joint panel; or not proceed.",
+ dec:"Responsible Minister",pub:"Yes",rea:"Partly verified",c:["sov","fin","nat"],
+ note:"Who reviews the project is a discretionary choice made before the review begins."},
+
+{id:"mb-cec",r:"mb",p:3,k:"delib",m:"hearing",t:"Clean Environment Commission hearing",st:"v",
+ basis:"The Environment Act ss.6(5)(b), 12(6) and 7(3). Referral is discretionary; the report is due within 90 days.",
+ mnote:"Adversarial hearing with Information Requests and cross-examination. Among the few methods able to hold several considerations in view at once — and it produces advice, not a decision.",
+ in:"Evidence, public presentations, Information Requests, cross-examination.",
+ out:"A public report with recommendations.",dec:"Commission recommends; Minister decides",
+ pub:"Yes — reports public, transcripts by practice",rea:"Yes, where recommendations are not incorporated",
+ c:["ghg","inuit","cari","sov","rate","jobs","fin","wild","reliab","nat","route"],
+ note:"Broad admissibility and compelled reasons on departure — and entirely optional."},
+{id:"nu-scope",r:"nu",p:3,k:"frame",m:"check",t:"Scoping and guidelines",st:"v",
+ basis:"NuPPAA ss.99 and 101. Draft guidelines must be in both official languages and in Inuktitut, which includes Inuinnaqtun.",
+ mnote:"Deliberative scoping against a published draft, open to comment. The same framing move as route selection, done in the open.",
+ in:"Public and agency input on what the assessment should cover.",
+ out:"Guidelines telling the proponent what to assess.",dec:"Nunavut Impact Review Board",pub:"Yes",rea:"Yes",
+ c:["ghg","inuit","cari","wild","jobs","route"],
+ note:"The pairing with route selection is the cleanest comparison on this map."},
+{id:"nu-panel",r:"nu",p:3,k:"delib",m:"hearing",t:"Federal or joint panel",st:"v",
+ basis:"NuPPAA s.94(1)(a)(ii)–(iii) and ss.160–162, with the record public under s.123(2).",
+ mnote:"Panel hearing over the whole project, including the Manitoba segment.",
+ in:"The whole project, including the Manitoba segment.",out:"A panel report.",
+ dec:"Minister of Environment, or joint appointment",pub:"Yes",rea:"—",
+ c:["ghg","inuit","cari","sov","rate","jobs","fin","wild","nat","route"],
+ note:"The only body anywhere on this map with a mandate over the full 1,200 km corridor."},
+{id:"nu-hearing",r:"nu",p:3,k:"delib",m:"hearing",t:"Review and public hearing",st:"v",
+ basis:"NuPPAA s.102, under which the hearing is discretionary and may be closed; s.103 factors include (c) the priorities and values of the residents and (f) cumulative effects.",
+ mnote:"Hearing against a mandatory list of factors, with traditional knowledge admissible under s.103(3). The only method anywhere here that names residents' values as something to be considered.",
+ in:"The impact statement, technical review, submissions and oral testimony.",out:"Findings.",
+ dec:"Nunavut Impact Review Board",pub:"Yes, though a hearing may be closed",rea:"—",
+ c:["ghg","inuit","cari","sov","rate","jobs","fin","wild","reliab","redund","nat","route"],
+ note:"Section 103(c) makes residents' priorities and values a mandatory statutory factor. Nothing in Manitoba law has an equivalent."},
+
+{id:"mb-lic",r:"mb",p:4,k:"decide",m:"minjudge",t:"Licensing decision",st:"v",
+ basis:"The Environment Act ss.11 and 12; s.12.0.1 requires proponent consultation to be considered and s.12.0.2 requires climate to be considered.",
+ mnote:"Judgment on the record against two named statutory factors. How those are weighed against anything else is not specified and not published.",
+ in:"The assessment record, departmental comments, the consultation record, and any Commission report.",
+ out:"Licence with conditions, or refusal.",dec:"Director or Minister",pub:"Yes",rea:"Limited",
+ c:["cari","wild","ghg","inuit","route"],
+ note:"Everything becomes one answer here. Section 12.0.2 gives climate a statutory foothold no other value in this Act enjoys."},
+{id:"nu-cert",r:"nu",p:4,k:"decide",m:"minjudge",t:"Minister's decision and certificate",st:"v",
+ basis:"NuPPAA ss.105–111, reconsideration under s.112. Override grounds are limited to national or regional interest, or to terms being insufficient or excessively onerous. Section 107(1) requires the Board to reconsider in light of the Minister's reasons. Section 108 permits the Minister to vary terms that are purely socio-economic.",
+ mnote:"Judgment on the Board's report, with enumerated override grounds — except for socio-economic terms, which s.108 allows the Minister to vary without stating one.",
+ in:"The Board's report.",out:"Accept or reject terms; override; issue a certificate.",
+ dec:"Minister, then the Board issues",pub:"Yes — revised reports public",rea:"Implied wherever terms are rejected",
+ c:["ghg","inuit","cari","sov","jobs","wild","nat"],
+ note:"The sharpest thing on this map. Socio-economic considerations are mandatory at review under s.103(c), then singled out at s.108 as the one class of term a Minister may vary without stating a ground."},
+
+{id:"nu-water",r:"nu",p:5,k:"permit",m:"standard",t:"Water licence",st:"p",
+ basis:"Nunavut Waters and Nunavut Surface Rights Tribunal Act, s.37 coordinating it with the Review Board.",
+ mnote:"Technical standards and licence conditions.",in:"Water use and waste deposit.",
+ out:"A licence with conditions.",dec:"Nunavut Water Board",pub:"Yes",rea:"Yes, by practice",c:[],
+ note:"Whether a transmission corridor triggers it at all is unconfirmed."},
+{id:"nu-iol",r:"nu",p:5,k:"permit",m:"bargain",t:"Inuit Owned Land access",st:"c",
+ basis:"The Nunavut Agreement. The relevant articles and the association's lands policy have not been retrieved.",
+ mnote:"Negotiation between landowner and proponent. Whatever is traded against what leaves no public trace — and this may be where the most consequential combining actually happens.",
+ in:"Applications to use Inuit Owned Land parcels.",out:"Permit or lease with terms, or refusal.",
+ dec:"The regional Inuit association, as landowner",pub:"Unclear",rea:"Unclear",c:["inuit","jobs","route"],
+ note:"NuPPAA defines a regulatory authority as a public body, so the s.75 gate may not bind a private landowner — while s.74 still prohibits carrying out the project before assessment."},
+{id:"nu-arch",r:"nu",p:5,k:"permit",m:"standard",t:"Archaeology permit",st:"c",
+ basis:"Territorial archaeological and palaeontological site regulations. Not retrieved.",
+ mnote:"Standards and permit conditions.",in:"Proposed ground disturbance.",
+ out:"A permit with conditions.",dec:"Culture and Heritage",pub:"—",rea:"—",c:[],
+ note:"Unverified. No party in the record has raised heritage as a concern."},
+{id:"fed-fish",r:"fed",p:5,k:"permit",m:"standard",t:"Fisheries Act authorisation",st:"p",
+ basis:"The Fisheries Act. The provision has not been confirmed.",
+ mnote:"Habitat standards with offsetting requirements. One value, assessed well, and nothing else admitted.",
+ in:"Works likely to harmfully alter fish habitat.",out:"Authorisation with offsetting, or refusal.",
+ dec:"Fisheries and Oceans Canada",pub:"Registry",rea:"Limited",c:["wild"],
+ note:"Subject to the Nunavut screening gate, which binds federal authorities in the territory."},
+{id:"fed-mbca",r:"fed",p:5,k:"permit",m:"standard",t:"Migratory Birds Act",st:"p",
+ basis:"The Migratory Birds Convention Act 1994. Inferred.",
+ mnote:"Prohibitions and timing windows rather than an assessment.",
+ in:"Works affecting birds or nests.",out:"No project permit; constraints on timing.",
+ dec:"Environment and Climate Change Canada",pub:"—",rea:"—",c:["wild"],note:"Unverified."}];
+
+const E=[
+ ["pr-tsr","pr-route",1],["fed-fund","pr-route",1],
+ ["pr-route","mb-eap",1],["pr-route","nu-npc",1],["pr-route","fed-cer",1],["pr-route","fed-mbca",1],
+ ["mb-eap","mb-reg",0],["mb-eap","mb-tac",1],["mb-eap","mb-crown",1],["mb-eap","mb-lic",1],
+ ["mb-reg","mb-cec",1],["mb-tac","mb-lic",1],["mb-crown","mb-lic",0],["mb-cec","mb-lic",0],
+ ["nu-npc","nu-screen",0],["nu-screen","nu-min1",0],
+ ["nu-min1","nu-scope",1],["nu-min1","nu-panel",1],["nu-min1","nu-cert",1],
+ ["nu-scope","nu-hearing",0],["nu-hearing","nu-cert",0],["nu-panel","nu-cert",1],
+ ["nu-screen","nu-water",0],["nu-screen","nu-arch",0],["nu-screen","fed-fish",0],
+ ["nu-screen","nu-iol",1],["fed-desig","fed-cer",1]];
+
+const DEP={};
+(function(){const inc={},adj={};N.forEach(n=>{inc[n.id]=0;adj[n.id]=[]});
+ E.forEach(([a,b])=>{if(adj[a]&&inc[b]!=null){adj[a].push(b);inc[b]++;}});
+ const q=N.map(n=>n.id).filter(i=>!inc[i]);q.forEach(i=>DEP[i]=0);
+ while(q.length){const u=q.shift();
+  adj[u].forEach(v=>{DEP[v]=Math.max(DEP[v]??0,DEP[u]+1);if(--inc[v]===0)q.push(v);});}
+ N.forEach(n=>{if(DEP[n.id]==null)DEP[n.id]=0;});})();
+
+const COLMODE={
+ seq:{n:"By precedence",ncols:()=>Math.max(...Object.values(DEP))+1,col:n=>DEP[n.id],
+  blurb:"Each step placed by how many steps must precede it, computed from the edges. Headers show which stage each span belongs to."},
+ stage:{n:"By stage",ncols:()=>PH.length,col:n=>n.p,
+  blurb:"Six stages of my own devising. Easier to read, but it makes some things look concurrent that are not."}};
+let colMode="seq",grouping="lanes",active=null,lastFocus=null;
+const regOn={pro:1,mb:1,nu:1,fed:1};
+const STLAB={v:"verified",p:"provisional",c:"candidate",g:"no order made"};
+
+const grid=document.getElementById("grid"),chips=document.getElementById("chips"),
+ colEl=document.getElementById("colmodes"),grpEl=document.getElementById("grpmodes"),
+ regsEl=document.getElementById("regs"),detail=document.getElementById("detail"),
+ hint=document.getElementById("hint"),wires=document.getElementById("wires"),
+ bands=document.getElementById("bands"),canvas=document.getElementById("canvas"),
+ legend=document.getElementById("legend"),backdrop=document.getElementById("backdrop"),
+ modal=document.getElementById("modal"),lbltog=document.getElementById("lbltog");
+
+function stageSpans(nc){
+  const out=[];for(let i=0;i<nc;i++){
+    const ns=N.filter(n=>COLMODE[colMode].col(n)===i);
+    const cnt={};ns.forEach(n=>cnt[n.p]=(cnt[n.p]||0)+1);
+    let best=null,bv=-1;Object.entries(cnt).forEach(([k,v])=>{if(v>bv||(v===bv&&+k<best)){bv=v;best=+k;}});
+    out.push(best==null?null:best);}
+  const spans=[];out.forEach((s,i)=>{const last=spans[spans.length-1];
+    if(last&&last.s===s)last.n++;else spans.push({s,n:1});});
+  return spans;
+}
+function mkNode(n){
+  const b=document.createElement("button");
+  b.className="node"+(n.st==="p"||n.st==="c"?" prov":"")+(n.st==="g"?" off":"")+(n.gate?" gate":"")
+    +(regOn[n.r]?"":" dim");
+  b.type="button";b.id="n-"+n.id;b.dataset.c=n.c.join(" ");b.dataset.r=n.r;
+  b.innerHTML=`<span class="disc"><svg viewBox="0 0 24 24"><use href="#${KIND[n.k][0]}"/></svg></span>
+    <span class="lbl">${n.t}</span>`;
+  b.addEventListener("click",()=>{openModal(n);fill(n);});
+  return b;
+}
+function build(){
+  const CMd=COLMODE[colMode],nc=CMd.ncols();
+  const lead=grouping==="lanes"?78:0;
+  grid.style.gridTemplateColumns=(lead?`${lead}px `:"")+`repeat(${nc},minmax(120px,1fr))`;
+  canvas.style.minWidth=(lead+nc*126)+"px";
+  let html="";
+  const spans=stageSpans(nc);
+  if(lead)html+='<div class="band first"></div>';
+  spans.forEach((sp,i)=>{html+=`<div class="band${!lead&&i===0?" first":""}" style="grid-column:span ${sp.n}">${sp.s==null?"":PH[sp.s]}</div>`;});
+  grid.innerHTML=html;
+  if(grouping==="lanes"){
+    REGS.forEach(([rid,rn])=>{
+      grid.insertAdjacentHTML("beforeend",`<div class="lname lane-${rid}">${rn}</div>`);
+      for(let i=0;i<nc;i++){
+        const cell=document.createElement("div");cell.className="cell";
+        N.filter(n=>n.r===rid&&CMd.col(n)===i).forEach(n=>cell.appendChild(mkNode(n)));
+        grid.appendChild(cell);
+      }
+    });
+  }else{
+    const ord={pro:0,mb:1,nu:2,fed:3};
+    for(let i=0;i<nc;i++){
+      const cell=document.createElement("div");cell.className="cell"+(i===0?" first":"");
+      N.filter(n=>CMd.col(n)===i).sort((a,b)=>ord[a.r]-ord[b.r]).forEach(n=>cell.appendChild(mkNode(n)));
+      grid.appendChild(cell);
+    }
+  }
+  if(active)applyTrace();
+  requestAnimationFrame(()=>{draw();drawBands();});
+}
+function drawBands(){
+  bands.innerHTML="";
+  if(grouping!=="flow"){return;}
+  const cb=canvas.getBoundingClientRect();
+  bands.setAttribute("viewBox",`0 0 ${cb.width} ${cb.height}`);
+  const nc=COLMODE[colMode].ncols();
+  REGS.forEach(([rid])=>{
+    if(!regOn[rid])return;
+    const cols=[];
+    for(let i=0;i<nc;i++){
+      const ns=N.filter(n=>n.r===rid&&COLMODE[colMode].col(n)===i)
+        .map(n=>document.querySelector("#n-"+n.id+" .disc")).filter(Boolean);
+      if(!ns.length){cols.push(null);continue;}
+      const ys=ns.map(e=>e.getBoundingClientRect());
+      const xs=ys[0];
+      cols.push({x:xs.left+xs.width/2-cb.left,
+        top:Math.min(...ys.map(y=>y.top))-cb.top-13,
+        bot:Math.max(...ys.map(y=>y.bottom))-cb.top+ (document.body.classList.contains("nolabels")?10:26)});
+    }
+    const runs=[];let cur=[];
+    cols.forEach(c=>{if(c)cur.push(c);else{if(cur.length)runs.push(cur);cur=[];}});
+    if(cur.length)runs.push(cur);
+    runs.forEach(run=>{
+      const pad=48;
+      const top=run.map(c=>`${c.x} ${c.top}`),bot=run.slice().reverse().map(c=>`${c.x} ${c.bot}`);
+      const x0=run[0].x-pad,x1=run[run.length-1].x+pad;
+      const d=`M ${x0} ${run[0].top} L ${top.join(" L ")} L ${x1} ${run[run.length-1].top}
+        L ${x1} ${run[run.length-1].bot} L ${bot.join(" L ")} L ${x0} ${run[0].bot} Z`;
+      bands.insertAdjacentHTML("beforeend",
+        `<path d="${d}" fill="var(--${rid})" fill-opacity=".055" stroke="var(--${rid})"
+          stroke-opacity=".3" stroke-width="1" stroke-dasharray="4 4" stroke-linejoin="round"/>`);
+      const lx=run[0].x-pad+8,ly=run[0].top+13;
+      bands.insertAdjacentHTML("beforeend",
+        `<text x="${lx}" y="${ly}" fill="var(--${rid})" font-size="10.5" font-weight="600"
+          font-family="IBM Plex Sans, sans-serif" opacity=".8">${REGS.find(r=>r[0]===rid)[1]}</text>`);
+    });
+  });
+}
+function concernRow(n){
+  return n.c.length
+    ? n.c.map(id=>`<span class="ci ${CM[id].ev?"":"cand"}"><svg viewBox="0 0 24 24"><use href="#i-${id}"/></svg>${CM[id].label}</span>`).join("")
+    : `<span class="ci none">None of the recorded concerns</span>`;
+}
+function openModal(n){
+  lastFocus=document.activeElement;
+  modal.style.setProperty("--band",`var(--${n.r})`);
+  modal.innerHTML=`<button class="closeb" id="cb" aria-label="Close">&times;</button>
+    <h3 id="mtitle">${n.t}</h3><p class="msub">${KIND[n.k][1]}</p>
+    <div class="tags"><span class="tag ${n.st}">${STLAB[n.st]}</span>
+      ${n.gate?'<span class="tag r">gate</span>':""}</div>
+    <dl class="mgrid">
+      <dt>Assessment method</dt><dd>${METHOD[n.m]}</dd>
+      <dt>Decided by</dt><dd>${n.dec}</dd>
+      <dt>Public</dt><dd>${n.pub}</dd>
+      <dt>Reasons</dt><dd>${n.rea}</dd>
+    </dl>
+    <div class="cicons">${concernRow(n)}</div>
+    <p class="mnote">${n.mnote}</p>
+    <p class="more"><button type="button" id="mm">Full entry below &darr;</button></p>`;
+  backdrop.classList.add("on");document.body.classList.add("modal-open");
+  document.getElementById("cb").addEventListener("click",closeModal);
+  document.getElementById("cb").focus();
+  document.getElementById("mm").addEventListener("click",()=>{closeModal();
+    detail.scrollIntoView({behavior:"smooth",block:"start"});});
+}
+function closeModal(){backdrop.classList.remove("on");document.body.classList.remove("modal-open");
+  if(lastFocus)lastFocus.focus();}
+backdrop.addEventListener("click",e=>{if(e.target===backdrop)closeModal();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&backdrop.classList.contains("on"))closeModal();});
+function fill(n){
+  detail.style.setProperty("--band",`var(--${n.r})`);
+  detail.innerHTML=`<h3>${n.t}</h3><p class="dsub">${KIND[n.k][1]}</p>
+    <dl>
+      <dt>Legal basis</dt><dd>${n.basis}</dd>
+      <dt>Assessment method</dt><dd>${METHOD[n.m]}. ${n.mnote}</dd>
+      <dt>Takes in</dt><dd>${n.in}</dd>
+      <dt>Can produce</dt><dd>${n.out}</dd>
+      <dt>Decided by</dt><dd>${n.dec}</dd>
+      <dt>On the public record</dt><dd>${n.pub}</dd>
+      <dt>Written reasons</dt><dd>${n.rea}</dd>
+      <dt>Concerns it can receive</dt><dd><div class="cicons" style="border:0;padding-top:4px;margin-top:0">${concernRow(n)}</div></dd>
+    </dl><p class="note">${n.note}</p>`;
+}
+function applyTrace(){
+  document.querySelectorAll(".node").forEach(nd=>
+    nd.classList.toggle("hit",!!active&&nd.dataset.c.split(" ").includes(active)&&regOn[nd.dataset.r]));
+}
+Object.entries(COLMODE).forEach(([k,v],i)=>{
+  const b=document.createElement("button");b.className="chip mode";b.type="button";
+  b.setAttribute("aria-pressed",i===0?"true":"false");b.textContent=v.n;
+  b.addEventListener("click",()=>{colMode=k;
+    colEl.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");hint.textContent=v.blurb;build();});
+  colEl.appendChild(b);
+});
+[["lanes","Swimlanes"],["flow","Single flow"]].forEach(([k,n],i)=>{
+  const b=document.createElement("button");b.className="chip mode";b.type="button";
+  b.setAttribute("aria-pressed",i===0?"true":"false");b.textContent=n;
+  b.addEventListener("click",()=>{grouping=k;
+    grpEl.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    hint.textContent=k==="flow"
+      ?"One flow, with a band drawn behind each regulator's steps. The Manitoba and Nunavut bands sit side by side over the same span and never touch."
+      :COLMODE[colMode].blurb;
+    build();});
+  grpEl.appendChild(b);
+});
+REGS.forEach(([rid,rn])=>{
+  const b=document.createElement("button");b.className="chip reg";b.type="button";
+  b.style.setProperty("--rc",`var(--${rid})`);b.setAttribute("aria-pressed","true");
+  b.innerHTML=`<i></i>${rn}`;
+  b.addEventListener("click",()=>{regOn[rid]=regOn[rid]?0:1;
+    b.setAttribute("aria-pressed",regOn[rid]?"true":"false");
+    document.querySelectorAll(`.node[data-r="${rid}"]`).forEach(n=>n.classList.toggle("dim",!regOn[rid]));
+    applyTrace();draw();drawBands();});
+  regsEl.appendChild(b);
+});
+C.forEach(c=>{
+  const b=document.createElement("button");b.className="chip"+(c.ev?"":" cand");b.type="button";
+  b.setAttribute("aria-pressed","false");b.textContent=c.label;
+  b.addEventListener("click",()=>{
+    const on=active!==c.id;active=on?c.id:null;
+    chips.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
+    if(on)b.setAttribute("aria-pressed","true");
+    document.body.classList.toggle("tracing",on);applyTrace();
+    const hits=[...document.querySelectorAll(".node.hit")].map(x=>x.id.slice(2));
+    const binding=hits.filter(id=>{const n=N.find(z=>z.id===id);return n&&(n.k==="decide"||n.k==="permit");}).length;
+    hint.textContent=on
+      ?`${hits.length} steps shown are built to receive this, of which ${binding} produce a binding outcome. ${c.ev?"A named party has raised it.":"It surfaced from the record but has not been adopted as a category."}`
+      :COLMODE[colMode].blurb;
+  });
+  chips.appendChild(b);
+});
+lbltog.addEventListener("click",()=>{
+  const on=lbltog.getAttribute("aria-pressed")==="true";
+  lbltog.setAttribute("aria-pressed",on?"false":"true");lbltog.textContent=on?"off":"on";
+  document.body.classList.toggle("nolabels",on);
+  requestAnimationFrame(()=>{draw();drawBands();});
+});
+Object.entries(KIND).forEach(([k,[g,lab]])=>legend.insertAdjacentHTML("beforeend",
+  `<span><i class="g"><svg viewBox="0 0 24 24"><use href="#${g}"/></svg></i>${lab}</span>`));
+legend.insertAdjacentHTML("beforeend",`<span>Dashed circle — provisional or unverified</span>`);
+
+function draw(){
+  const cb=canvas.getBoundingClientRect();
+  wires.setAttribute("viewBox",`0 0 ${cb.width} ${cb.height}`);
+  wires.innerHTML=E.map(([a,b,dash])=>{
+    const na=N.find(z=>z.id===a),nb=N.find(z=>z.id===b);
+    if(!na||!nb)return"";
+    const faint=!regOn[na.r]||!regOn[nb.r];
+    const A=document.querySelector("#n-"+a+" .disc"),B=document.querySelector("#n-"+b+" .disc");
+    if(!A||!B)return"";
+    const ra=A.getBoundingClientRect(),rb=B.getBoundingClientRect();
+    const ax=ra.left+ra.width/2-cb.left,ay=ra.top+ra.height/2-cb.top;
+    const bx=rb.left+rb.width/2-cb.left,by=rb.top+rb.height/2-cb.top;
+    const dx=bx-ax,dy=by-ay,len=Math.hypot(dx,dy)||1,r=21;
+    const x1=ax+dx/len*r,y1=ay+dy/len*r,x2=bx-dx/len*(r+5),y2=by-dy/len*(r+5);
+    const c=Math.max(22,Math.abs(x2-x1)*.5)*(x2>=x1?1:-1);
+    return `<path d="M${x1} ${y1} C ${x1+c} ${y1}, ${x2-c} ${y2}, ${x2} ${y2}" fill="none"
+      stroke="var(--rule)" stroke-width="1.3" opacity="${faint?.14:1}"
+      ${dash?'stroke-dasharray="3 3"':''} marker-end="url(#ar)"/>`;
+  }).join("");
+}
+hint.textContent=COLMODE.seq.blurb;
+build();
+window.addEventListener("resize",()=>{draw();drawBands();});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{draw();drawBands();});
+setTimeout(()=>{draw();drawBands();},300);
+</script>
+</body>
+</html>
