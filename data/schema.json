@@ -1,0 +1,84 @@
+{
+  "_about": "Single definition of the workbook. validate.py reads this. Change a column or a permitted value here, nowhere else.",
+  "tabs": {
+    "sites": {
+      "id": "site_id",
+      "columns": ["site_id","name","lat","lon","coord_confidence","category","category_label","commodity","critical_mineral","operator_org_id","operator_raw","co_owners","nearest_community","status","description","regulatory_notes","source_ref"],
+      "required": ["site_id","name","lat","lon","coord_confidence","category"],
+      "enums": {"coord_confidence": ["S","A","VA"], "category": ["mine","proc","expl","leg","infra"], "critical_mineral": ["yes","no"]},
+      "refs": {"operator_org_id": "orgs", "source_ref": "sources"},
+      "lat": "lat", "lon": "lon"
+    },
+    "routes": {
+      "id": "route_id",
+      "columns": ["route_id","name","lat_from","lon_from","lat_to","lon_to","coord_confidence","status","description","regulatory_notes","source_ref"],
+      "required": ["route_id","name","lat_from","lon_from","lat_to","lon_to"],
+      "enums": {"coord_confidence": ["S","A","VA"], "status": ["existing","proposed","retired"]},
+      "refs": {"source_ref": "sources"}
+    },
+    "orgs": {
+      "id": "org_id",
+      "columns": ["org_id","name","type","notes","review"],
+      "required": ["org_id","name"],
+      "enums": {},
+      "refs": {}
+    },
+    "instruments": {
+      "id": "instrument_id",
+      "columns": ["instrument_id","name","jurisdiction","jurisdiction_label","legal_basis","takes_in","can_produce","decider","public_record","written_reasons","assessment_method","assessment_method_label","assessment_method_note","kind","kind_label","stage","stage_label","x","y","status","note","source_ref"],
+      "required": ["instrument_id","name","jurisdiction","x","y"],
+      "enums": {"jurisdiction": ["pro","mb","nu","fed"], "status": ["verified","provisional","candidate","disputed","no order made"]},
+      "refs": {"source_ref": "sources"}
+    },
+    "edges": {
+      "id": null,
+      "columns": ["from_instrument_id","to_instrument_id","dependency","basis","status"],
+      "required": ["from_instrument_id","to_instrument_id","dependency"],
+      "enums": {"dependency": ["always","conditional"]},
+      "refs": {"from_instrument_id": "instruments", "to_instrument_id": "instruments"}
+    },
+    "concerns": {
+      "id": "concern_id",
+      "columns": ["concern_id","label","definition","kind","first_stated_by","status","source_ref"],
+      "required": ["concern_id","label"],
+      "enums": {"kind": ["factual","evaluative","mixed"], "status": ["verified","provisional","candidate","disputed"]},
+      "refs": {"first_stated_by": "orgs", "source_ref": "sources"}
+    },
+    "admissibility": {
+      "id": null,
+      "columns": ["concern_id","instrument_id","can_enter","basis","confidence","coder"],
+      "required": ["concern_id","instrument_id","can_enter"],
+      "enums": {"can_enter": ["yes","no","unclear"]},
+      "refs": {"concern_id": "concerns", "instrument_id": "instruments"}
+    },
+    "sources": {
+      "id": "source_id",
+      "columns": ["source_id","short_name","full_ref","url","tier","retrieved"],
+      "required": ["source_id","short_name"],
+      "enums": {},
+      "refs": {},
+      "dates": ["retrieved"]
+    },
+    "events": {
+      "id": "event_id",
+      "columns": ["event_id","site_id","instrument_id","date","outcome","decider_org_id","reasons_published","source_ref","status"],
+      "required": ["event_id","site_id","instrument_id","outcome","status"],
+      "enums": {
+        "outcome": ["filed","posted","referred","not-referred","hearing-held","report-issued","issued","amended","refused","approved","dismissed","withdrawn","pending","not-used","unknown"],
+        "reasons_published": ["yes","limited","no","unknown","n/a"],
+        "status": ["verified","provisional","candidate","disputed"]
+      },
+      "refs": {"site_id": "sites", "instrument_id": "instruments", "decider_org_id": "orgs", "source_ref": "sources"},
+      "dates": ["date"]
+    },
+    "statements": {
+      "id": "statement_id",
+      "columns": ["statement_id","site_id","org_id","date","verbatim","paraphrase","concern_id","source_ref","tier"],
+      "required": ["statement_id","site_id","org_id"],
+      "enums": {},
+      "refs": {"site_id": "sites", "org_id": "orgs", "concern_id": "concerns", "source_ref": "sources"},
+      "dates": ["date"]
+    }
+  },
+  "bounds": {"lat": [49, 60], "lon": [-102, -89]}
+}

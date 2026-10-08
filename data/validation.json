@@ -1,0 +1,30 @@
+{
+ "ok": true,
+ "errors": [],
+ "warnings": [
+  {
+   "tab": "sites",
+   "row": null,
+   "column": "source_ref",
+   "problem": "50 of 50 rows have no source yet"
+  },
+  {
+   "tab": "routes",
+   "row": null,
+   "column": "source_ref",
+   "problem": "7 of 7 rows have no source yet"
+  },
+  {
+   "tab": "instruments",
+   "row": null,
+   "column": "source_ref",
+   "problem": "26 of 26 rows have no source yet"
+  },
+  {
+   "tab": "concerns",
+   "row": null,
+   "column": "source_ref",
+   "problem": "12 of 12 rows have no source yet"
+  }
+ ]
+}

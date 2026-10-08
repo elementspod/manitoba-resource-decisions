@@ -117,7 +117,7 @@ footer{margin-top:26px;padding-top:13px;border-top:1px solid var(--rule);
 <div class="wrap">
 <header>
   <h1>Manitoba mineral projects and infrastructure</h1>
-  <p class="standfirst">Fifty sites: producing mines, processing plants, exploration properties, legacy sites awaiting remediation, and the rail, port, road and transmission infrastructure that connects them. Click any point for what is known about it, including its regulatory history where one exists.</p>
+  <p class="standfirst"><span id="nsites">The</span> sites: producing mines, processing plants, exploration properties, legacy sites awaiting remediation, and the rail, port, road and transmission infrastructure that connects them. Click any point for what is known about it, including its regulatory history where one exists.</p>
 </header>
 
 <div class="toolbar">
@@ -138,7 +138,7 @@ footer{margin-top:26px;padding-top:13px;border-top:1px solid var(--rule);
   <h3>How to read the map</h3>
   <ul>
     <li><strong>Shape is type</strong> — circle for a mine, square for processing, triangle for exploration, diamond for a legacy or abandoned site, small ring for infrastructure. Lines are rail, road, transmission and the proposed northern corridors.</li>
-    <li><strong>A dashed halo means the location is approximate.</strong> Only five of these coordinates come from a named source. The rest are community- or district-level estimates and should be checked against Manitoba's mineral deposit series before anything is published from them.</li>
+    <li><strong>A dashed halo means the location is approximate.</strong> Only <span id="nnamed">a few</span> of these coordinates come from a named source. The rest are community- or district-level estimates and should be checked against Manitoba's mineral deposit series before anything is published from them.</li>
     <li><strong>An orange ring marks a declared critical mineral</strong> on Canada's list.</li>
   </ul>
 </section>
@@ -189,116 +189,14 @@ const CAT={mine:["Mine","var(--mine)","ci"],proc:["Processing","var(--proc)","sq
  expl:["Exploration","var(--expl)","tr"],leg:["Legacy site","var(--leg)","di"],
  infra:["Infrastructure","var(--infra)","ci"]};
 
-const D=[
-{n:"Tanco Mine (Bernic Lake)",la:50.4300,lo:-95.4465,f:"S",c:"mine",com:"Lithium, cesium, tantalum, rubidium",cr:1,st:"Operating",ow:"Sinomine Resource Group",nc:"Lac du Bonnet",
- d:"Canada's only producing lithium mine and one of the world's largest cesium sources. Operating since 1969; Sinomine bought it in June 2019 for $135M and restarted spodumene production in late 2021. Throughput about 400 t/day.",
- r:"Original licence No. 973 dates from 1983. A cesium plant amendment was filed in 2022 and a 2023 Notice of Alteration allowed milling of ore from other properties. A new comprehensive licence replaced the 1983 one and excluded the proposal to partly drain Bernic Lake. <b>Appeals against the new licence were dismissed by cabinet order</b> — the Wilderness Committee objected not to the licence but to the appeal route, since the only recourse is to the same minister whose department issued it. In 2022 Ottawa ordered three other Chinese firms to divest Canadian lithium assets; Sinomine kept Tanco."},
-{n:"Falcon West cesium project",la:49.78,lo:-95.35,f:"VA",c:"expl",com:"Cesium",cr:1,st:"Pre-application",ow:"Grid Metals (85%) / Avenir Minerals, an Agnico Eagle subsidiary (15%)",nc:"Falcon Lake / Sagkeeng traditional territory",
- d:"Drilled October 2025 to March 2026. About 50,000 t of rock containing roughly 1,300 t of cesium — described by the company as the second-largest cesium deposit to be developed in the Western world, and roughly half of one year's global supply. Small enough that it might be mined out in a year. 130 km east of Winnipeg, 500 m north of the Trans-Canada.",
- r:"<b>An Environment Act licence filing is planned by the end of 2026.</b> Consent from Sagkeeng First Nation has not been given and talks are ongoing; Chief E.J. Fontaine describes the relationship positively and two members have worked as technicians on the prospecting team, while saying environmental concerns and economic benefits still have to be worked out. Note the word used is consent, not consultation. <b>Added from Winnipeg Free Press reporting — this entry did not appear in the underlying research and is the least checked here.</b>"},
-{n:"Tanco open pit / Bernic Lake drainage concept",la:50.4300,lo:-95.4465,f:"A",c:"mine",com:"Cesium, lithium, tantalum",cr:1,st:"Concept, not licensed",ow:"Sinomine",nc:"Lac du Bonnet",
- d:"A 2023 proposal to partly drain Bernic Lake for open-pit access.",
- r:"Explicitly excluded from the replacement licence. Would almost certainly trigger federal permits."},
-{n:"Tanco concentrator and cesium plant expansion",la:50.4320,lo:-95.4400,f:"A",c:"proc",com:"Lithium and cesium concentrates; cesium nitrate and carbonate",cr:1,st:"Approved 2023; build status unconfirmed",ow:"Sinomine",nc:"Lac du Bonnet",
- d:"A CAD 176M, 1 Mtpa processing plant approved in February 2023.",r:"Cesium plant expansion filed as an Environment Act Proposal amendment in 2022."},
-{n:"Shatford Lake lithium",la:50.40,lo:-95.45,f:"VA",c:"expl",com:"Lithium, cesium, tantalum",cr:1,st:"Exploration",ow:"ACME Lithium, optioned to Snow Lake",nc:"Bernic Lake",
- d:"31 claims contiguous to the south of Tanco.",r:""},
-{n:"Donner Lake lithium",la:50.45,lo:-95.55,f:"VA",c:"expl",com:"Lithium",cr:1,st:"Exploration, metallurgical testing",ow:"Grid Metals (75%) / Lithium Royalty Corp (25%)",nc:"Bird River",
- d:"Spodumene ore test-milled at Tanco under a 2023 Notice of Alteration.",r:""},
-{n:"Thompson Mine Complex",la:55.71,lo:-97.86,f:"A",c:"mine",com:"Nickel, copper, cobalt",cr:1,st:"Operating",ow:"Vale Base Metals, transferring to Exiro / Orion / Canada Growth Fund consortium (81.1%)",nc:"Thompson",
- d:"Two underground mines and a mill on the 135 km Thompson Nickel Belt. In February 2026 Vale agreed to transfer majority ownership to a consortium including the federal Canada Growth Fund, with up to US$200M committed.",
- r:"Operates under long-standing provincial licences; no Commission referral was found for the change of control. Vale's Q2 2026 statements still describe Thompson as held for sale, so <b>closing is not confirmed</b>. Nickel, copper and cobalt are all on Canada's critical minerals list."},
-{n:"Birchtree Mine",la:55.69,lo:-97.95,f:"A",c:"mine",com:"Nickel",cr:1,st:"Care and maintenance (unverified)",ow:"Vale Base Metals",nc:"Thompson",d:"Underground mine southwest of Thompson.",r:""},
-{n:"Pipe Lake deposit",la:55.4978,lo:-98.1556,f:"S",c:"leg",com:"Nickel",cr:1,st:"Closed",ow:"Vale Base Metals (presumed)",nc:"Thompson",d:"Historic Thompson Nickel Belt deposit.",r:""},
-{n:"Thompson smelter and refinery",la:55.72,lo:-97.84,f:"A",c:"proc",com:"Nickel",cr:1,st:"Closed",ow:"Vale Base Metals",nc:"Thompson",d:"Former integrated smelter and refinery. Closure dates unverified.",r:""},
-{n:"Minago Critical Minerals Project",la:53.97,lo:-98.97,f:"A",c:"mine",com:"Nickel, platinum group metals, magnesium, aggregate",cr:1,st:"Licensed, pre-construction",ow:"Norway House Cree Nation (Minago Development GP)",nc:"Grand Rapids / Norway House",
- d:"<b>Wholly owned by Norway House Cree Nation</b> since November 2024, bought from Flying Nickel for about $8M plus share surrender. Resource of roughly 690–722 Mlb nickel measured and indicated, plus palladium and platinum. The first phase quarries dolomite for low-emission magnesium before nickel — the community describes this as using the entire animal.",
- r:"Environment Act Licence No. 2981 issued August 2011 to Victory Nickel for a 10,000 t/day open pit. Changes proposed in 2022 triggered consultation with Norway House, Misipawistik, Mosakahiken, Pimicikamak and the Manitoba Métis Federation. <b>The amended licence was announced in March 2026. No Commission hearing was held.</b> Manitoba committed $2M toward the magnesium phase at PDAC 2026. The site lies inside the <b>Norway House Resource Management Area</b> — the one RMA overlap verified in the research. Marketed by the community as removing the usual consultation hurdle through direct ownership."},
-{n:"Lalor Mine",la:54.87,lo:-100.12,f:"A",c:"mine",com:"Gold, zinc, copper, silver",cr:1,st:"Operating",ow:"Hudbay Minerals",nc:"Snow Lake",
- d:"Anchor of the Snow Lake operations. In September 2026 Hudbay extended reserve life to 2043, with reserves of 27 Mt containing 2.0 Moz gold and production averaging about 185,000 oz/yr.",
- r:"No Commission history found. Zinc concentrate moves by rail to Churchill for export to Europe, 2026 being the third consecutive year."},
-{n:"1901 deposit",la:54.86,lo:-100.10,f:"VA",c:"mine",com:"Gold, zinc, copper",cr:1,st:"In development",ow:"Hudbay Minerals",nc:"Snow Lake",d:"Satellite deposit adjacent to Lalor.",r:""},
-{n:"Stall Concentrator",la:54.90,lo:-99.95,f:"A",c:"proc",com:"Zinc and copper concentrate",cr:1,st:"Operating",ow:"Hudbay Minerals",nc:"Snow Lake",d:"Base-metal mill treating Lalor ore.",r:""},
-{n:"New Britannia Mill",la:54.88,lo:-100.02,f:"A",c:"proc",com:"Gold",cr:0,st:"Operating",ow:"Hudbay Minerals",nc:"Snow Lake",d:"Gold mill, restarted 2021.",r:""},
-{n:"Britannia gold project",la:54.885,lo:-100.04,f:"VA",c:"expl",com:"Gold",cr:0,st:"Advanced exploration",ow:"Hudbay Minerals",nc:"Snow Lake",d:"Past-producing gold mine named as a growth option in September 2026.",r:""},
-{n:"777 Mine",la:54.77,lo:-101.88,f:"A",c:"mine",com:"Copper, zinc, gold, silver",cr:1,st:"Closed June 2022",ow:"Hudbay Minerals",nc:"Flin Flon",
- d:"Hudbay's flagship Flin Flon mine. Closure ended production in the district.",r:"Closure obligations updated for the mine site and tailings compound."},
-{n:"Flin Flon metallurgical complex",la:54.772,lo:-101.86,f:"A",c:"proc",com:"Copper, zinc; tailings reprocessing",cr:1,st:"Care and maintenance",ow:"Hudbay Minerals",nc:"Flin Flon",
- d:"Concentrator on care and maintenance. Hudbay is studying flow-sheet changes to reprocess the tailings for critical minerals and precious metals.",r:"Wildfires forced a regional evacuation in May 2025."},
-{n:"Thompson Brothers lithium deposit",la:54.865,lo:-99.70,f:"A",c:"expl",com:"Lithium",cr:1,st:"Advanced exploration",ow:"Snow Lake Resources (renamed; see notes)",nc:"Snow Lake / Wekusko Lake",
- d:"Spodumene pegmatite on the Grass River linking Wekusko Lake with Crowduck Bay. Resource figures conflict badly across sources — roughly 8–11 Mt at about 1% Li₂O from company-linked sources; one trade site's 73.6 Mt figure is inconsistent with everything else and should not be used.",
- r:"No Environment Act filing found. The company has renamed repeatedly and pivoted toward uranium elsewhere, so the Manitoba lithium project appears deprioritised."},
-{n:"Grass River lithium deposit",la:54.87,lo:-99.70,f:"VA",c:"expl",com:"Lithium",cr:1,st:"Exploration",ow:"Snow Lake Resources",nc:"Wekusko Lake",d:"Second deposit of the Snow Lake lithium project.",r:""},
-{n:"CentrePort lithium hydroxide plant",la:49.95,lo:-97.30,f:"VA",c:"proc",com:"Lithium hydroxide",cr:1,st:"Concept, memorandum only",ow:"Snow Lake Resources / LG Energy Solution",nc:"Winnipeg",d:"Proposed battery materials plant.",r:""},
-{n:"Gordon deposit (former Farley Lake mine)",la:56.906,lo:-100.441,f:"S",c:"mine",com:"Gold",cr:0,st:"Under construction",ow:"Alamos Gold",nc:"Lynn Lake",
- d:"The higher-grade pit, to be mined first.",r:"Federal assessment completed March 2023 with a positive decision statement. Separate provincial licence issued."},
-{n:"MacLellan deposit and mill",la:56.90,lo:-100.98,f:"A",c:"mine",com:"Gold, silver",cr:0,st:"Under construction",ow:"Alamos Gold",nc:"Lynn Lake",
- d:"9,000 t/day mill. About 186,000 oz/yr over a 25-year life, roughly 3 Moz total. Initial capital raised to $937M. First production expected in the first half of 2029, delayed from 2028 by the 2025 wildfire evacuation.",
- r:"Environment Act Licence No. 3391, with a Notice of Alteration approved 26 March 2026. <b>The only Manitoba mineral project in this catalogue to go through a full federal environmental assessment</b>, completed March 2023. Benefit agreements are in place with both proximate First Nations: Marcel Colomb signed in June 2023, Mathias Colomb in 2025 while its judicial review of the federal decision statement was being resolved. No provincial Commission hearing."},
-{n:"Lynn Lake legacy mine",la:56.85,lo:-101.05,f:"A",c:"leg",com:"Nickel, copper",cr:1,st:"Remediation — provincial priority",ow:"Province of Manitoba",nc:"Lynn Lake",
- d:"Farley headframe and mill demolished; tailings cover options under review.",r:"One of five priority orphaned and abandoned mine sites under a $50.7M five-year commitment."},
-{n:"Ruttan Mine",la:56.4750,lo:-99.6369,f:"S",c:"leg",com:"Copper, zinc",cr:1,st:"Remediation — provincial priority",ow:"Province of Manitoba",nc:"Leaf Rapids",
- d:"More than 1.3 million cubic metres of clay placed over the tailings.",r:""},
-{n:"Sherridon / Camp Lake",la:55.1351,lo:-101.1033,f:"S",c:"leg",com:"Copper, zinc",cr:1,st:"Long-term monitoring",ow:"Province of Manitoba",nc:"Sherridon",
- d:"The Sherritt-Gordon mine operated 1931–51 and left about 7 Mt of acid-generating tailings over 47 hectares. Remediation began in 2009 and construction was declared complete in 2022.",
- r:"<b>The province considers this finished; the Manitoba Métis Federation does not.</b> It says many Red River Métis citizens still have concerns, and earlier reporting documented local distrust. Manitoba created a Sherridon Collaboration Table in March 2024. A good test case for whether a closed file is actually closed."},
-{n:"Eden Lake carbonatite",la:56.68,lo:-100.20,f:"A",c:"expl",com:"Rare earth elements",cr:1,st:"Occurrence; no active project confirmed",ow:"Unknown",nc:"Leaf Rapids / Lynn Lake",
- d:"Manitoba's best-documented rare earth carbonatite occurrence.",r:"Note that the Mindat locality for this name is about 110 km off; the provincial coordinates were used."},
-{n:"True North Mine and Mill",la:51.03,lo:-95.70,f:"A",c:"mine",com:"Gold",cr:0,st:"Restarting — first ore targeted December 2026",ow:"1911 Gold",nc:"Bissett",
- d:"Formerly San Gold, then Klondex. About 62,000 ha and a fully permitted 1,300 t/day mill. A March 2026 preliminary economic assessment outlines about 58,000 oz/yr over 11 years.",
- r:"The restart uses existing permits; no new Environment Act filing was found. First Nation relationships are not documented in the sources consulted — a gap worth closing."},
-{n:"Central Mine (Bissett)",la:51.035,lo:-95.68,f:"VA",c:"leg",com:"Gold",cr:0,st:"Remediation — provincial priority",ow:"Province of Manitoba",nc:"Bissett",d:"Historic gold mine, one of five priority legacy sites.",r:""},
-{n:"Wanipigow sand quarry",la:51.17,lo:-96.28,f:"A",c:"mine",com:"Silica sand",cr:0,st:"Licensed; quarry development for proppant",ow:"Canadian Premium Sand",nc:"Seymourville / Hollow Water First Nation",
- d:"More than 41 contiguous quarry leases about 160 km north of Winnipeg. Inferred resource of 24.4 Mt of low-iron glass sand.",
- r:"Licence No. 3285 issued 16 May 2019. <b>A Notice of Alteration reducing volume and footprint produced licence 3285 R, approved July 2023 by the department — no Commission hearing.</b> Hollow Water's chief and council supported the project and signed a participation agreement; the Wilderness Committee says they waived Crown consultation. Some members opposed it through Camp Morningstar, citing sacred sites, and criticised the use of a minor alteration to make a substantial change. <b>The cleanest contrast with Sio Silica anywhere in this catalogue.</b>"},
-{n:"Selkirk glass manufacturing facility",la:50.14,lo:-96.88,f:"A",c:"proc",com:"Solar and float glass",cr:0,st:"Licensed; solar plans on hold, float-glass pivot",ow:"Canadian Premium Sand",nc:"Selkirk",
- d:"A 121-acre site on the CP subdivision using Selkirk's wastewater effluent. Up to $880M estimated. In September 2026 the company was promoting a 600 t/day float-glass plant instead, noting Canada has no domestic float-glass production.",
- r:"<b>Provincial approval announced 14 February 2024 — two days before Sio Silica was refused.</b> The environment minister went on record explaining how the two projects differed. Technical reviewers had questioned the company's lack of glass-making experience and whether Wanipigow sand could reach solar purity."},
-{n:"SiMbA sand extraction (formerly Vivian / CanWhite)",la:49.86,lo:-96.53,f:"A",c:"mine",com:"High-purity silica sand",cr:0,st:"Permitting — re-filed October 2025",ow:"Sio Silica Corporation",nc:"Vivian, RM of Springfield",
- d:"Airlift extraction of silica from the Winnipeg Sandstone aquifer, piped as slurry to a separately licensed plant. The original plan was 1.36 Mt/yr over 24 years from more than a thousand wells, up to 7,200 over time. The aquifer supplies drinking water to about 100,000 people.",
- r:"<b>The only mineral project in the Commission's record.</b> Referred in November 2021 for significant public interest. Twelve hearing days, 27 February to 15 March 2023, in Steinbach, Anola and Beausejour. The June 2023 report made eight recommendations and said the Commission could not state with confidence that the effects were understood — <b>it declined to recommend either way</b>. A draft licence was circulated in September 2023. On 16 February 2024 the minister refused it, saying the risk was simply too great; the company called the decision political. Springfield council voted against twice and was overruled by the Municipal Board; a phone-in referendum ran about 95% against. The Métis Federation intervened. Participants received no funding. Re-filed as SiMbA in October 2025 covering years 0–4 only, with an equity offer to Brokenhead Ojibway Nation reportedly worth more than $10M a year — <b>a First Nation the company had not consulted the first time round</b>. No decision found."},
-{n:"Vivian Sand processing facility",la:49.855,lo:-96.51,f:"A",c:"proc",com:"Silica sand",cr:0,st:"Licensed separately",ow:"Sio Silica Corporation",nc:"Vivian",
- d:"Processing plant fed by the slurry line.",r:"Licensed separately from the extraction project — a split that let one half proceed while the other was contested."},
-{n:"Gods Lake Mine",la:54.66,lo:-94.15,f:"VA",c:"leg",com:"Gold",cr:0,st:"Remediation — provincial priority",ow:"Province of Manitoba",nc:"Gods Lake Narrows",d:"Remote fly-in legacy site.",r:""},
-{n:"Snow Lake historic workings",la:54.88,lo:-100.03,f:"VA",c:"leg",com:"Gold",cr:0,st:"Remediation — provincial priority",ow:"Province of Manitoba",nc:"Snow Lake",d:"Historic tailings.",r:""},
-{n:"Baker Patton",la:54.75,lo:-101.65,f:"VA",c:"leg",com:"Copper, zinc",cr:1,st:"Remediation — high priority",ow:"Province of Manitoba",nc:"Flin Flon area",d:"Listed as a high-priority orphaned site.",r:""},
-{n:"Keewatinohk Converter Station",la:56.62,lo:-93.90,f:"A",c:"infra",com:"HVDC electricity",cr:0,st:"Operating",ow:"Manitoba Hydro",nc:"Gillam",
- d:"Northern terminal of Bipole III and the proposed tie-in point for the Kivalliq line.",r:""},
-{n:"Riel Converter Station",la:49.84,lo:-96.95,f:"VA",c:"infra",com:"Electricity",cr:0,st:"Operating",ow:"Manitoba Hydro",nc:"Winnipeg",d:"Southern terminal of Bipole III.",r:""},
-{n:"Kelsey Generating Station",la:56.04,lo:-96.53,f:"A",c:"infra",com:"Hydroelectricity",cr:0,st:"Operating",ow:"Manitoba Hydro",nc:"Split Lake / Thompson",
- d:"Built to power the Thompson nickel operations.",r:"Probably within the Split Lake Resource Management Area — inferred, not verified."},
-{n:"Kettle Generating Station",la:56.38,lo:-94.63,f:"A",c:"infra",com:"Hydroelectricity",cr:0,st:"Operating",ow:"Manitoba Hydro",nc:"Gillam",d:"Lower Nelson station.",r:""},
-{n:"Long Spruce Generating Station",la:56.40,lo:-94.37,f:"A",c:"infra",com:"Hydroelectricity",cr:0,st:"Operating",ow:"Manitoba Hydro",nc:"Gillam",d:"Lower Nelson station.",r:""},
-{n:"Limestone Generating Station",la:56.51,lo:-94.11,f:"A",c:"infra",com:"Hydroelectricity",cr:0,st:"Operating",ow:"Manitoba Hydro",nc:"Gillam",d:"Largest Lower Nelson station.",r:""},
-{n:"Keeyask Generating Station",la:56.35,lo:-95.20,f:"A",c:"infra",com:"Hydroelectricity",cr:0,st:"Operating",ow:"Keeyask Hydropower Limited Partnership — Manitoba Hydro with four Cree Nations",nc:"Gillam / Split Lake",
- d:"Partnership with Tataskweyak, War Lake, York Factory and Fox Lake Cree Nations.",
- r:"<b>Commission hearings from October 2013 into January 2014</b>, mostly at the Fort Garry Hotel in Winnipeg, with a report in April 2014."},
-{n:"Jenpeg Generating Station",la:54.52,lo:-98.03,f:"A",c:"infra",com:"Hydroelectricity; Lake Winnipeg regulation",cr:0,st:"Operating",ow:"Manitoba Hydro",nc:"Cross Lake",
- d:"Controls Lake Winnipeg outflow.",r:"Probably within the Cross Lake Resource Management Area — inferred."},
-{n:"Port of Churchill",la:58.78,lo:-94.20,f:"A",c:"infra",com:"Port — concentrate, potash, grain",cr:0,st:"Operating",ow:"Arctic Gateway Group",nc:"Churchill",
- d:"The only Arctic deepwater port connected to the North American rail network. Owned by a partnership of 41 Indigenous and Bayside communities, including 29 First Nations. 2026 traffic includes Snow Lake zinc concentrate for a third year, Saskatchewan concentrate, potash and the first grain since 2020.",
- r:"<b>Port of Churchill Plus was referred to the federal Major Projects Office on 11 September 2025</b> — rail upgrade, icebreaking, an all-weather road and a new energy corridor. Still pre-development. $175M of federal funding over five years announced March 2025."},
-{n:"Port Nelson corridor concept",la:57.08,lo:-92.60,f:"VA",c:"infra",com:"Proposed port and corridor",cr:0,st:"Unverified",ow:"Unverified",nc:"Mouth of the Nelson River",
- d:"Could not be confirmed as an active proposal. Treat as a lead only.",r:""},
-{n:"Amaranth gypsum",la:50.60,lo:-98.70,f:"VA",c:"mine",com:"Gypsum",cr:0,st:"Unverified",ow:"Unverified",nc:"Amaranth",d:"Candidate entry, not verified.",r:""},
-{n:"Gypsumville quarry",la:51.76,lo:-98.62,f:"VA",c:"mine",com:"Gypsum",cr:0,st:"Unverified",ow:"Unverified",nc:"Gypsumville",d:"Candidate entry, not verified.",r:""},
-{n:"Black Island silica",la:51.20,lo:-96.50,f:"VA",c:"leg",com:"Silica sand",cr:0,st:"Unverified",ow:"Unverified",nc:"Lake Winnipeg",d:"Historic glass-sand source. Not verified.",r:""},
-{n:"Russell / Gambler potash",la:50.78,lo:-101.29,f:"VA",c:"expl",com:"Potash",cr:1,st:"Unverified",ow:"Unverified",nc:"Russell",d:"Candidate entry, not verified.",r:""}
-];
-
-const LINES=[
-{n:"Bipole III",a:[56.62,-93.90],b:[49.84,-96.95],d:"HVDC line from Keewatinohk to Riel on a west-side route.",
- r:"<b>Commission hearings October to November 2012</b>, with sessions in Winnipeg, Gillam, Thompson, The Pas, Dauphin, Portage la Prairie and Niverville, plus a route-adjustment session in March 2013. Report June 2013."},
-{n:"Manitoba–Minnesota Transmission Project",a:[49.98,-97.45],b:[49.00,-95.90],d:"500 kV line from Dorsey to the US border near Piney.",
- r:"Commission hearings May to June 2017 at the convention centre in Winnipeg; report to the National Energy Board in October 2017."},
-{n:"Kivalliq Hydro-Fibre Link",a:[56.62,-93.90],b:[60.00,-94.00],d:"About 1,200 km, 150 MW plus fibre, from the Gillam area to five Kivalliq communities in Nunavut and two mines. Cost estimates have risen from $1.6B to $3.39B.",
- r:"Pre-development. Manitoba Hydro has reserved 50 MW and a transmission service request has been filed. No Manitoba Environment Act filing or federal impact assessment file was found. Fox Lake Cree Nation signed a memorandum with the Kivalliq Inuit Association in 2021 but conditions its support on mitigation and benefits. Sources disagree on whether the Manitoba origin is Keewatinohk, the Gillam area, or near Churchill.",dash:1},
-{n:"Hudson Bay Railway",a:[53.82,-101.24],b:[58.77,-94.17],d:"The Pas to Churchill. Carries Snow Lake zinc concentrate to tidewater.",
- r:"Owned by Arctic Gateway Group. Part of the Port of Churchill Plus referral to the federal Major Projects Office."},
-{n:"PTH 6 corridor",a:[50.12,-97.30],b:[55.74,-97.86],d:"Winnipeg to Thompson. The main mining supply road; passes the Minago site.",r:""},
-{n:"PR 391",a:[55.74,-97.86],b:[56.85,-101.05],d:"Thompson to Leaf Rapids and Lynn Lake. Being upgraded for the Lynn Lake gold project.",r:""},
-{n:"PR 304",a:[50.57,-96.23],b:[51.03,-95.70],d:"Pine Falls to Hollow Water and Bissett. Haul route for Wanipigow sand and True North gold.",r:""}
-];
+/* Data now comes from data/data.json, which is built from the Google Sheet.
+   Do not add sites here - add them in the sheet. */
+let D=[],LINES=[];
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const WORDS=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve",
+ "thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"],TENS=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+function words(n){if(n<20)return WORDS[n];if(n<100)return TENS[Math.floor(n/10)]+(n%10?"-"+WORDS[n%10]:"");return String(n);}
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
 
 /* ---------- render ---------- */
 const map=document.getElementById("map"),panel=document.getElementById("panel"),
@@ -330,7 +228,7 @@ function marker(d,i){
   else if(sh==="tr")g+=`<path class="core" d="M${x.toFixed(1)} ${(y-3.8).toFixed(1)} L${(x+3.4).toFixed(1)} ${(y+2.6).toFixed(1)} L${(x-3.4).toFixed(1)} ${(y+2.6).toFixed(1)} Z" fill="${col}"/>`;
   else g+=`<rect class="core" x="${(x-2.8).toFixed(1)}" y="${(y-2.8).toFixed(1)}" width="5.6" height="5.6" fill="${col}" transform="rotate(45 ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
   g+=`<circle class="hit" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="11"/>`;
-  return `<g class="pt" data-i="${i}" tabindex="0" role="button" aria-label="${d.n.replace(/"/g,'')}">${g}</g>`;
+  return `<g class="pt" data-i="${i}" tabindex="0" role="button" aria-label="${esc(d.n)}">${g}</g>`;
 }
 function draw(){
   let s=drawBase();
@@ -360,25 +258,25 @@ function visible(d){
 const FLAG={S:"located from a named source",A:"approximate location",VA:"very approximate location"};
 function show(d,i){
   sel=i;
-  panel.innerHTML=`<h2>${d.n}</h2><p class="sub">${d.nc}</p>
+  panel.innerHTML=`<h2>${esc(d.n)}</h2><p class="sub">${esc(d.nc)}</p>
     <div class="tags"><span class="tag cat" style="--c:${CAT[d.c][1]}">${CAT[d.c][0]}</span>
       ${d.cr?'<span class="tag crit">critical mineral</span>':''}
       <span class="tag flagA">${FLAG[d.f]}</span></div>
-    <dl><dt>Status</dt><dd>${d.st}</dd>
-      <dt>Commodity</dt><dd>${d.com}</dd>
-      <dt>Owner</dt><dd>${d.ow}</dd>
+    <dl><dt>Status</dt><dd>${esc(d.st)}</dd>
+      <dt>Commodity</dt><dd>${esc(d.com)}</dd>
+      <dt>Owner</dt><dd>${esc(d.ow)}</dd>
       <dt>Position</dt><dd>${d.la.toFixed(3)}, ${d.lo.toFixed(3)}</dd></dl>
-    <p class="desc">${d.d}</p>${d.r?`<p class="reg">${d.r}</p>`:""}
+    <p class="desc">${esc(d.d)}</p>${d.r?`<p class="reg">${esc(d.r)}</p>`:""}
     <p class="reg" style="border-top:1px dotted var(--rule);padding-top:11px"><button class="row" style="padding:0;color:var(--trace)" onclick="back()">&larr; Back to list</button></p>`;
   draw();
   map.querySelectorAll(".pt").forEach(g=>g.classList.toggle("sel",+g.dataset.i===i));
 }
 function showLine(l){
   sel="L";
-  panel.innerHTML=`<h2>${l.n}</h2><p class="sub">Linear infrastructure</p>
+  panel.innerHTML=`<h2>${esc(l.n)}</h2><p class="sub">Linear infrastructure</p>
     <div class="tags"><span class="tag cat" style="--c:var(--infra)">Infrastructure</span>
       <span class="tag flagA">endpoints approximate</span></div>
-    <p class="desc">${l.d}</p>${l.r?`<p class="reg">${l.r}</p>`:""}
+    <p class="desc">${esc(l.d)}</p>${l.r?`<p class="reg">${esc(l.r)}</p>`:""}
     <p class="reg" style="border-top:1px dotted var(--rule);padding-top:11px"><button class="row" style="padding:0;color:var(--trace)" onclick="back()">&larr; Back to list</button></p>`;
 }
 function back(){sel=null;draw();}
@@ -387,7 +285,7 @@ function list(){
     .sort((a,b)=>a[0].n.localeCompare(b[0].n));
   panel.innerHTML=`<p class="listhead">${v.length} site${v.length===1?"":"s"} shown — click the map or a row</p>
     <div class="rows">${v.map(([d,i])=>
-      `<button class="row" data-i="${i}"><i style="--c:${CAT[d.c][1]}"></i><span>${d.n}</span><em>${d.nc}</em></button>`).join("")}
+      `<button class="row" data-i="${i}"><i style="--c:${CAT[d.c][1]}"></i><span>${esc(d.n)}</span><em>${esc(d.nc)}</em></button>`).join("")}
     </div>`;
   panel.querySelectorAll(".row").forEach(b=>b.addEventListener("click",()=>show(D[+b.dataset.i],+b.dataset.i)));
 }
@@ -407,7 +305,15 @@ Object.entries(CAT).forEach(([k,[label,col,sh]])=>{
 });
 qEl.addEventListener("input",()=>{q=qEl.value.trim().toLowerCase();sel=null;draw();});
 window.back=back;
-draw();
+fetch("data/data.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("data/data.json not found");return r.json();}).then(j=>{
+  D=j.sites.map(s=>({n:s.name,la:+s.lat,lo:+s.lon,f:s.coord_confidence,c:s.category,com:s.commodity,
+    cr:s.critical_mineral==="yes"?1:0,st:s.status,ow:s.operator_raw,nc:s.nearest_community,d:s.description,r:s.regulatory_notes,id:s.site_id}))
+    .filter(s=>CAT[s.c]&&isFinite(s.la)&&isFinite(s.lo));
+  LINES=j.routes.map(l=>({n:l.name,a:[+l.lat_from,+l.lon_from],b:[+l.lat_to,+l.lon_to],d:l.description,r:l.regulatory_notes,dash:l.status==="proposed"?1:0}));
+  document.getElementById("nsites").textContent=cap(words(D.length));
+  document.getElementById("nnamed").textContent=words(D.filter(s=>s.f==="S").length);
+  draw();
+}).catch(e=>{panel.innerHTML=`<p class="empty">Could not load the data (${esc(e.message)}). Try refreshing the page.</p>`;});
 </script>
 </body>
 </html>

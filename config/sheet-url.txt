@@ -1,0 +1,3 @@
+# Paste the "Publish to web" link of the Google Sheet on the line below.
+# (File > Share > Publish to web > Entire document > Microsoft Excel (.xlsx) > Publish > copy the link)
+

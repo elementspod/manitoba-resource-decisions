@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data status · Manitoba resource decisions</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#101d26;--soft:#40525e;--faint:#7c8b95;--paper:#eceff0;--panel:#fff;--rule:#cdd5d8;--ok:#2c6a5c;--bad:#b4441f;--warn:#9a7614}
+@media (prefers-color-scheme:dark){:root{--ink:#e3e9ec;--soft:#a7b6bf;--faint:#6d7f8a;--paper:#0d171e;--panel:#141f28;--rule:#2a3a45;--ok:#6fbfa9;--bad:#e8794f;--warn:#d9ac3b}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 "IBM Plex Sans",system-ui,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:32px 18px 60px}
+h1{font:600 clamp(22px,3.4vw,30px)/1.2 "IBM Plex Serif",Georgia,serif;margin:0 0 6px}
+p{color:var(--soft);margin:0 0 14px}
+.badge{display:inline-block;font-weight:600;font-size:13px;padding:3px 10px;border-radius:12px;border:1.5px solid currentColor}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.warn{color:var(--warn)}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:16px 18px;margin:16px 0}
+h2{font-size:15px;margin:0 0 10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule)}
+th{font-size:12px;color:var(--soft);font-weight:600}
+td.n{text-align:right;font-variant-numeric:tabular-nums;width:90px}
+li{margin:4px 0;font-size:14px}
+a{color:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Data status</h1>
+  <p>This page shows what the last build pulled from the Google Sheet. If the numbers here match the sheet, the link between the sheet and the site works.</p>
+  <div id="out"><p>Loading…</p></div>
+  <p><a href="./">← Map</a> · <a href="process.html">Decision flow</a></p>
+</div>
+<script>
+const out=document.getElementById("out");
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const LABEL={sites:"Sites",routes:"Routes",orgs:"Organisations",instruments:"Approval steps",edges:"Arrows between steps",
+  concerns:"Concerns",admissibility:"Concern × step pairs",sources:"Sources",events:"Events",statements:"Statements"};
+Promise.all([
+  fetch("data/data.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("data/data.json not found");return r.json();}),
+  fetch("data/validation.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null)
+]).then(([d,v])=>{
+  let h=`<div class="card"><h2>Last build: ${esc(d.built)}</h2>`;
+  if(v)h+=v.ok?`<span class="badge ok">No data problems</span>`:`<span class="badge bad">${v.errors.length} problem(s) — the live site was not updated</span>`;
+  h+=`</div><div class="card"><h2>Rows in each tab</h2><table><tr><th>Tab</th><th></th><th style="text-align:right">Rows</th></tr>`;
+  Object.entries(d.counts).forEach(([t,n])=>{h+=`<tr><td><code>${esc(t)}</code></td><td>${esc(LABEL[t]||"")}</td><td class="n">${n}</td></tr>`;});
+  h+=`</table></div>`;
+  if(v&&v.errors.length){h+=`<div class="card"><h2 class="bad">Fix these in the sheet</h2><ul>`+
+    v.errors.map(e=>`<li><b>${esc(e.tab)}</b>, row ${esc(e.row??"–")}, column <code>${esc(e.column??"–")}</code>: ${esc(e.problem)}</li>`).join("")+`</ul></div>`;}
+  if(v&&v.warnings.length){h+=`<div class="card"><h2 class="warn">Notes (do not stop the build)</h2><ul>`+
+    v.warnings.map(e=>`<li><b>${esc(e.tab)}</b>${e.row?`, row ${esc(e.row)}`:""}${e.column?`, <code>${esc(e.column)}</code>`:""}: ${esc(e.problem)}</li>`).join("")+`</ul></div>`;}
+  out.innerHTML=h;
+}).catch(e=>{out.innerHTML=`<div class="card"><span class="badge bad">Could not load the data</span><p style="margin-top:10px">${esc(e.message)}</p></div>`;});
+</script>
+</body>
+</html>

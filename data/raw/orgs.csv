@@ -1,0 +1,16 @@
+org_id,name,type,notes,review
+org-sinomine-resource-group,Sinomine Resource Group,company,,"merged with ""Sinomine"" — check they are the same entity"
+org-grid-metals,Grid Metals,company,,name normalised from a compound field — check
+org-acme-lithium,ACME Lithium,company,,name normalised from a compound field — check
+org-vale-base-metals,Vale Base Metals,company,,name normalised from a compound field — check
+org-norway-house-cree-nation,Norway House Cree Nation,first nation,Minago Development GP,name normalised from a compound field — check
+org-hudbay-minerals,Hudbay Minerals,company,,
+org-snow-lake-resources,Snow Lake Resources,company,renamed; see notes,name normalised from a compound field — check
+org-alamos-gold,Alamos Gold,company,,
+org-province-of-manitoba,Province of Manitoba,crown,,
+org-1911-gold,1911 Gold,company,,
+org-canadian-premium-sand,Canadian Premium Sand,company,,
+org-sio-silica-corporation,Sio Silica Corporation,company,,
+org-manitoba-hydro,Manitoba Hydro,crown corporation,,
+org-keeyask-hydropower-limited-partnership,Keeyask Hydropower Limited Partnership — Manitoba Hydro with four Cree Nations,partnership,,
+org-arctic-gateway-group,Arctic Gateway Group,partnership,,

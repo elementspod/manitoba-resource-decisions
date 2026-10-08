@@ -1,0 +1,13 @@
+concern_id,label,definition,kind,first_stated_by,status,source_ref
+ghg,Emissions and diesel,,,,verified,
+inuit,Inuit ownership,,,,verified,
+cari,Caribou,,,,verified,
+sov,Arctic sovereignty,,,,verified,
+rate,Cost to consumers,,,,verified,
+jobs,Employment,,,,verified,
+fin,Financing,,,,verified,
+wild,Wildlife beyond caribou,,,,candidate,
+reliab,Reliability of supply,,,,candidate,
+redund,System redundancy,,,,candidate,
+nat,Nation-building,,,,candidate,
+route,Routing and who benefits,,,,candidate,
