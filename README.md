@@ -32,6 +32,10 @@ The data is edited in a Google Sheet, not in this repository. Every night (and w
 - The sheet link is kept in `config/sheet-url.txt`.
 - To run a build by hand: Actions → Build and publish → Run workflow.
 
+## Licence
+
+Code: MIT (see LICENSE). Data: CC BY 4.0 (see LICENSE-DATA.md). Please credit the project as described there.
+
 ## Related
 
 A companion to the [Deep-Sea Mining Knowledge Board](https://github.com/elementspod/deep-sea-mining-knowledge-board). The two share conventions but are kept as separate repositories.
