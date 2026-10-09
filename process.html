@@ -234,14 +234,18 @@ footer{margin-top:28px;padding-top:13px;border-top:1px solid var(--rule);
 </div>
 
 <script>
-const C=[
- {id:"ghg",label:"Emissions and diesel",ev:1},{id:"inuit",label:"Inuit ownership",ev:1},
- {id:"cari",label:"Caribou",ev:1},{id:"sov",label:"Arctic sovereignty",ev:1},
- {id:"rate",label:"Cost to consumers",ev:1},{id:"jobs",label:"Employment",ev:1},
- {id:"fin",label:"Financing",ev:1},{id:"wild",label:"Wildlife beyond caribou",ev:0},
- {id:"reliab",label:"Reliability of supply",ev:0},{id:"redund",label:"System redundancy",ev:0},
- {id:"nat",label:"Nation-building",ev:0},{id:"route",label:"Routing and who benefits",ev:0}];
+fetch("data/data.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("data/data.json not found");return r.json();}).then(D=>{
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ST={verified:"v",provisional:"p",candidate:"c","no order made":"g"};
+const C=D.concerns.map(c=>({id:c.concern_id,label:esc(c.label),ev:c.status==="verified"?1:0}));
 const CM=Object.fromEntries(C.map(c=>[c.id,c]));
+const N=D.instruments.map(i=>({id:i.instrument_id,r:i.jurisdiction,p:+i.stage,k:i.kind,m:i.assessment_method,
+ t:esc(i.name),st:ST[i.status]||"c",gate:i.kind==="gate"?1:0,basis:esc(i.legal_basis),mnote:esc(i.assessment_method_note),
+ in:esc(i.takes_in),out:esc(i.can_produce),dec:esc(i.decider),pub:esc(i.public_record),rea:esc(i.written_reasons),
+ note:esc(i.note),
+ c:D.admissibility.filter(a=>a.instrument_id===i.instrument_id&&a.can_enter==="yes").map(a=>a.concern_id).filter(id=>CM[id])}));
+const E=D.edges.filter(e=>e.from_instrument_id&&e.to_instrument_id).map(e=>[e.from_instrument_id,e.to_instrument_id,e.dependency==="conditional"?1:0]);
+
 const KIND={
  frame:["g-frame","Framing — fixes what later steps can argue about"],
  intake:["g-intake","Intake — receives submissions, decides nothing"],
@@ -262,174 +266,6 @@ const METHOD={
  standard:"Compliance with technical standards"};
 const PH=["Before application","Entry","Scrutiny","Deliberation","Decision","Downstream permits"];
 const REGS=[["pro","Proponent"],["mb","Manitoba"],["nu","Nunavut"],["fed","Federal"]];
-
-const N=[
-{id:"pr-route",r:"pro",p:0,k:"frame",m:"score",t:"Route selection",st:"p",
- basis:"No statutory basis. The 2021 baseline fieldwork was itself screened by the Review Board and followed a speculative corridor from the draft land use plan.",
- mnote:"Assumed to use weighted multi-criteria siting of the kind standard in transmission routing. Not confirmed for this project — and if confirmed, it is the only place on the map where incommensurable things are given numbers and added.",
- in:"Engineering and cost constraints; traditional land use and Inuit Qaujimajatuqangit studies; whatever input the proponent chooses to seek.",
- out:"A preferred corridor and a short list of alternatives.",dec:"Proponent",pub:"Partial — the fieldwork file only",rea:"No",
- c:["cari","wild","fin","route"],note:"The only step with no public record, and everything downstream traces back to it."},
-{id:"pr-tsr",r:"pro",p:0,k:"review",m:"model",t:"Transmission service request",st:"v",
- basis:"Manitoba Hydro's open access transmission tariff. The governing provision has not been read.",
- mnote:"Power-system modelling. A genuinely technical question with a determinate answer.",
- in:"A request for up to 150 MW and a point of interconnection.",out:"Feasibility; required system upgrades.",
- dec:"Manitoba Hydro",pub:"Partial",rea:"No",c:["rate","fin","reliab"],
- note:"Filed 4 November 2025. The filing is confirmed; the tariff basis is not."},
-{id:"fed-fund",r:"fed",p:0,k:"money",m:"discret",t:"Federal funding channels",st:"p",
- basis:"Programme terms rather than statute.",
- mnote:"No published appraisal method. Decisions appear as announcements rather than as assessments.",
- in:"Project economics, strategic rationale, Indigenous participation.",
- out:"Contributions with conditions; prioritisation.",dec:"Federal funders and central agencies",
- pub:"Grant records only",rea:"Rarely",c:["sov","fin","jobs","ghg","nat","redund"],
- note:"Wide intake, no assessment, almost nothing published. Runs throughout rather than stopping here."},
-{id:"fed-desig",r:"fed",p:0,k:"switch",m:"discret",t:"Cabinet designation",st:"g",
- basis:"Canadian Energy Regulator Act s.261. Federal law treats Nunavut as a province, so the line very likely is an interprovincial power line.",
- mnote:"No criteria are published and no timeline applies. The decision is not an assessment of anything.",
- in:"Cabinet consideration.",out:"Designate, or do not designate.",dec:"Governor in Council",
- pub:"Order in council",rea:"No",c:[],
- note:"The entire federal lane hangs on this one order. None has been made, and nothing has to happen before one could be."},
-
-{id:"mb-eap",r:"mb",p:1,k:"intake",m:"check",t:"Environment Act Proposal",st:"v",
- basis:"The Environment Act ss.11–12; Classes of Development Regulation 164/88; Licensing Procedures Regulation 163/88.",
- mnote:"Completeness against the regulation's content requirements, including mapping at 1:50,000 or better.",
- in:"Project description, environmental assessment, alternatives considered.",
- out:"Filed as complete, or further information required.",dec:"Director or Minister, depending on class",
- pub:"Yes — s.17 registry",rea:"No",c:["cari","wild","ghg","route"],
- note:"Above 230 kV is Class 3 and the Minister decides; 115 to 230 kV is Class 2 and the Director does. The voltage has not been published, so the whole Manitoba lane's shape is undetermined."},
-{id:"nu-npc",r:"nu",p:1,k:"review",m:"check",t:"Planning conformity",st:"v",
- basis:"NuPPAA ss.76–85, with s.156 applying the planning provisions to the entire project.",
- mnote:"Conformity against the text of the applicable land use plan. A yes or no question about a document.",
- in:"Project description and location.",out:"Conforms; does not conform; variance; or exemption.",
- dec:"Nunavut Planning Commission",pub:"Yes",rea:"Yes, for non-conformity",c:["cari","route"],
- note:"Tested against the regional plan, since the 2023 territory-wide plan was jointly rejected in July 2026."},
-{id:"fed-cer",r:"fed",p:3,k:"delib",m:"hearing",t:"Energy Regulator review",st:"g",
- basis:"Canadian Energy Regulator Act ss.2, 261 and 262, with reasons under s.63. Removed from the Impact Assessment Act's list by SOR/2026-185 on 3 September 2026.",
- mnote:"A public interest determination on a hearing record. Inactive here.",
- in:"Engineering, routing, environmental and socio-economic effects, Indigenous consultation.",
- out:"Certificate or permit with conditions, or refusal.",dec:"The Commission and Governor in Council",
- pub:"Yes",rea:"Yes",c:["ghg","inuit","cari","rate","sov","wild"],
- note:"Would be the widest single federal forum available. Inactive because nobody has made the designation order."},
-
-{id:"mb-reg",r:"mb",p:2,k:"intake",m:"none",t:"Public registry and comment",st:"v",
- basis:"The Environment Act s.17, with ss.11(8)(a) and 12(4)(a).",
- mnote:"None. Submissions are collected, not assessed. Nothing filters what may be said and nothing determines what follows.",
- in:"Written submissions from anyone. No content filter appears in the Act.",
- out:"Comments on the record; objections that may prompt a hearing.",dec:"None — a collection point",
- pub:"Yes",rea:"Owed to objectors where no hearing is held (s.12(6))",
- c:["ghg","inuit","cari","sov","rate","jobs","fin","wild","reliab","redund","nat","route"],
- note:"Everything can come in and nothing goes out — but s.12(6) compels reasons for the decision NOT to hold a hearing."},
-{id:"mb-tac",r:"mb",p:2,k:"review",m:"expert",t:"Technical Advisory Committee",st:"c",
- basis:"Administrative practice. Only a general advisory committee power at s.5.",
- mnote:"Each department applies its own expertise to its own mandate. There is no step at which the departmental views are weighed against one another.",
- in:"The proposal, reviewed by each department within its own mandate.",
- out:"Departmental comments and recommended licence conditions.",dec:"Participating departments",
- pub:"Usually on the registry",rea:"No",c:["cari","wild","ghg"],
- note:"Each department answers within its mandate. Nothing holds several mandates together."},
-{id:"mb-crown",r:"mb",p:2,k:"review",m:"legal",t:"Crown–Indigenous consultation",st:"p",
- basis:"Section 35 of the Constitution Act 1982 and provincial policy, which has not been retrieved.",
- mnote:"A legal test turning on the strength of the claim and the seriousness of the impact. Concerns not attaching to a right fall outside it however strongly held.",
- in:"Potential adverse impacts on asserted or established rights.",out:"A consultation record and accommodation.",
- dec:"The Crown",pub:"Partial",rea:"No statutory requirement found",c:["inuit","cari","route"],
- note:"A rights channel, not a values channel."},
-{id:"nu-screen",r:"nu",p:2,k:"gate",m:"signif",t:"Screening",st:"v",gate:1,
- basis:"NuPPAA ss.86–92 and 157. Section 90(i) makes cumulative impacts mandatory. Section 75(1) bars any regulatory authority from issuing a permit until assessment is complete, and s.75(2) makes any such permit of no force or effect.",
- mnote:"A threshold judgment: may the project have significant ecosystemic or socio-economic impacts. Socio-economic sits in the test itself, which is the sharpest contrast with Manitoba.",
- in:"The proposal plus public and agency comments.",
- out:"Review not required; review required; or the project must be modified or abandoned.",
- dec:"Nunavut Impact Review Board",pub:"Yes",rea:"Yes — a written screening report",
- c:["ghg","cari","wild","inuit","reliab"],
- note:"The only confirmed hard gate on the map, and wider than first recorded: a permit issued in breach is void, not merely irregular."},
-{id:"nu-min1",r:"nu",p:2,k:"switch",m:"discret",t:"Minister's screening decision",st:"v",
- basis:"NuPPAA ss.93 and 94. Section 94(1)(a)(ii) makes a federal panel the default where the project is partly outside Nunavut.",
- mnote:"No published method. The Minister may send a project to review even where the Board found none necessary, and chooses the review body.",
- in:"The Board's screening report.",out:"Proceed; review by the Board, a federal panel or a joint panel; or not proceed.",
- dec:"Responsible Minister",pub:"Yes",rea:"Partly verified",c:["sov","fin","nat"],
- note:"Who reviews the project is a discretionary choice made before the review begins."},
-
-{id:"mb-cec",r:"mb",p:3,k:"delib",m:"hearing",t:"Clean Environment Commission hearing",st:"v",
- basis:"The Environment Act ss.6(5)(b), 12(6) and 7(3). Referral is discretionary; the report is due within 90 days.",
- mnote:"Adversarial hearing with Information Requests and cross-examination. Among the few methods able to hold several considerations in view at once — and it produces advice, not a decision.",
- in:"Evidence, public presentations, Information Requests, cross-examination.",
- out:"A public report with recommendations.",dec:"Commission recommends; Minister decides",
- pub:"Yes — reports public, transcripts by practice",rea:"Yes, where recommendations are not incorporated",
- c:["ghg","inuit","cari","sov","rate","jobs","fin","wild","reliab","nat","route"],
- note:"Broad admissibility and compelled reasons on departure — and entirely optional."},
-{id:"nu-scope",r:"nu",p:3,k:"frame",m:"check",t:"Scoping and guidelines",st:"v",
- basis:"NuPPAA ss.99 and 101. Draft guidelines must be in both official languages and in Inuktitut, which includes Inuinnaqtun.",
- mnote:"Deliberative scoping against a published draft, open to comment. The same framing move as route selection, done in the open.",
- in:"Public and agency input on what the assessment should cover.",
- out:"Guidelines telling the proponent what to assess.",dec:"Nunavut Impact Review Board",pub:"Yes",rea:"Yes",
- c:["ghg","inuit","cari","wild","jobs","route"],
- note:"The pairing with route selection is the cleanest comparison on this map."},
-{id:"nu-panel",r:"nu",p:3,k:"delib",m:"hearing",t:"Federal or joint panel",st:"v",
- basis:"NuPPAA s.94(1)(a)(ii)–(iii) and ss.160–162, with the record public under s.123(2).",
- mnote:"Panel hearing over the whole project, including the Manitoba segment.",
- in:"The whole project, including the Manitoba segment.",out:"A panel report.",
- dec:"Minister of Environment, or joint appointment",pub:"Yes",rea:"—",
- c:["ghg","inuit","cari","sov","rate","jobs","fin","wild","nat","route"],
- note:"The only body anywhere on this map with a mandate over the full 1,200 km corridor."},
-{id:"nu-hearing",r:"nu",p:3,k:"delib",m:"hearing",t:"Review and public hearing",st:"v",
- basis:"NuPPAA s.102, under which the hearing is discretionary and may be closed; s.103 factors include (c) the priorities and values of the residents and (f) cumulative effects.",
- mnote:"Hearing against a mandatory list of factors, with traditional knowledge admissible under s.103(3). The only method anywhere here that names residents' values as something to be considered.",
- in:"The impact statement, technical review, submissions and oral testimony.",out:"Findings.",
- dec:"Nunavut Impact Review Board",pub:"Yes, though a hearing may be closed",rea:"—",
- c:["ghg","inuit","cari","sov","rate","jobs","fin","wild","reliab","redund","nat","route"],
- note:"Section 103(c) makes residents' priorities and values a mandatory statutory factor. Nothing in Manitoba law has an equivalent."},
-
-{id:"mb-lic",r:"mb",p:4,k:"decide",m:"minjudge",t:"Licensing decision",st:"v",
- basis:"The Environment Act ss.11 and 12; s.12.0.1 requires proponent consultation to be considered and s.12.0.2 requires climate to be considered.",
- mnote:"Judgment on the record against two named statutory factors. How those are weighed against anything else is not specified and not published.",
- in:"The assessment record, departmental comments, the consultation record, and any Commission report.",
- out:"Licence with conditions, or refusal.",dec:"Director or Minister",pub:"Yes",rea:"Limited",
- c:["cari","wild","ghg","inuit","route"],
- note:"Everything becomes one answer here. Section 12.0.2 gives climate a statutory foothold no other value in this Act enjoys."},
-{id:"nu-cert",r:"nu",p:4,k:"decide",m:"minjudge",t:"Minister's decision and certificate",st:"v",
- basis:"NuPPAA ss.105–111, reconsideration under s.112. Override grounds are limited to national or regional interest, or to terms being insufficient or excessively onerous. Section 107(1) requires the Board to reconsider in light of the Minister's reasons. Section 108 permits the Minister to vary terms that are purely socio-economic.",
- mnote:"Judgment on the Board's report, with enumerated override grounds — except for socio-economic terms, which s.108 allows the Minister to vary without stating one.",
- in:"The Board's report.",out:"Accept or reject terms; override; issue a certificate.",
- dec:"Minister, then the Board issues",pub:"Yes — revised reports public",rea:"Implied wherever terms are rejected",
- c:["ghg","inuit","cari","sov","jobs","wild","nat"],
- note:"The sharpest thing on this map. Socio-economic considerations are mandatory at review under s.103(c), then singled out at s.108 as the one class of term a Minister may vary without stating a ground."},
-
-{id:"nu-water",r:"nu",p:5,k:"permit",m:"standard",t:"Water licence",st:"p",
- basis:"Nunavut Waters and Nunavut Surface Rights Tribunal Act, s.37 coordinating it with the Review Board.",
- mnote:"Technical standards and licence conditions.",in:"Water use and waste deposit.",
- out:"A licence with conditions.",dec:"Nunavut Water Board",pub:"Yes",rea:"Yes, by practice",c:[],
- note:"Whether a transmission corridor triggers it at all is unconfirmed."},
-{id:"nu-iol",r:"nu",p:5,k:"permit",m:"bargain",t:"Inuit Owned Land access",st:"c",
- basis:"The Nunavut Agreement. The relevant articles and the association's lands policy have not been retrieved.",
- mnote:"Negotiation between landowner and proponent. Whatever is traded against what leaves no public trace — and this may be where the most consequential combining actually happens.",
- in:"Applications to use Inuit Owned Land parcels.",out:"Permit or lease with terms, or refusal.",
- dec:"The regional Inuit association, as landowner",pub:"Unclear",rea:"Unclear",c:["inuit","jobs","route"],
- note:"NuPPAA defines a regulatory authority as a public body, so the s.75 gate may not bind a private landowner — while s.74 still prohibits carrying out the project before assessment."},
-{id:"nu-arch",r:"nu",p:5,k:"permit",m:"standard",t:"Archaeology permit",st:"c",
- basis:"Territorial archaeological and palaeontological site regulations. Not retrieved.",
- mnote:"Standards and permit conditions.",in:"Proposed ground disturbance.",
- out:"A permit with conditions.",dec:"Culture and Heritage",pub:"—",rea:"—",c:[],
- note:"Unverified. No party in the record has raised heritage as a concern."},
-{id:"fed-fish",r:"fed",p:5,k:"permit",m:"standard",t:"Fisheries Act authorisation",st:"p",
- basis:"The Fisheries Act. The provision has not been confirmed.",
- mnote:"Habitat standards with offsetting requirements. One value, assessed well, and nothing else admitted.",
- in:"Works likely to harmfully alter fish habitat.",out:"Authorisation with offsetting, or refusal.",
- dec:"Fisheries and Oceans Canada",pub:"Registry",rea:"Limited",c:["wild"],
- note:"Subject to the Nunavut screening gate, which binds federal authorities in the territory."},
-{id:"fed-mbca",r:"fed",p:5,k:"permit",m:"standard",t:"Migratory Birds Act",st:"p",
- basis:"The Migratory Birds Convention Act 1994. Inferred.",
- mnote:"Prohibitions and timing windows rather than an assessment.",
- in:"Works affecting birds or nests.",out:"No project permit; constraints on timing.",
- dec:"Environment and Climate Change Canada",pub:"—",rea:"—",c:["wild"],note:"Unverified."}];
-
-const E=[
- ["pr-tsr","pr-route",1],["fed-fund","pr-route",1],
- ["pr-route","mb-eap",1],["pr-route","nu-npc",1],["pr-route","fed-cer",1],["pr-route","fed-mbca",1],
- ["mb-eap","mb-reg",0],["mb-eap","mb-tac",1],["mb-eap","mb-crown",1],["mb-eap","mb-lic",1],
- ["mb-reg","mb-cec",1],["mb-tac","mb-lic",1],["mb-crown","mb-lic",0],["mb-cec","mb-lic",0],
- ["nu-npc","nu-screen",0],["nu-screen","nu-min1",0],
- ["nu-min1","nu-scope",1],["nu-min1","nu-panel",1],["nu-min1","nu-cert",1],
- ["nu-scope","nu-hearing",0],["nu-hearing","nu-cert",0],["nu-panel","nu-cert",1],
- ["nu-screen","nu-water",0],["nu-screen","nu-arch",0],["nu-screen","fed-fish",0],
- ["nu-screen","nu-iol",1],["fed-desig","fed-cer",1]];
 
 const DEP={};
 (function(){const inc={},adj={};N.forEach(n=>{inc[n.id]=0;adj[n.id]=[]});
@@ -674,6 +510,9 @@ build();
 window.addEventListener("resize",()=>{draw();drawBands();});
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{draw();drawBands();});
 setTimeout(()=>{draw();drawBands();},300);
+}).catch(e=>{document.body.insertAdjacentHTML("afterbegin",'<p style="padding:20px;font:15px sans-serif">Could not load the data: '+esc(e.message)+'</p>');
+ function esc(s){return String(s).replace(/[&<>"]/g,"");}
+});
 </script>
 </body>
 </html>
