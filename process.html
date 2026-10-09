@@ -280,7 +280,7 @@ const COLMODE={
  seq:{n:"By precedence",ncols:()=>Math.max(...Object.values(DEP))+1,col:n=>DEP[n.id],
   blurb:"Each step placed by how many steps must precede it, computed from the edges. Headers show which stage each span belongs to."},
  stage:{n:"By stage",ncols:()=>PH.length,col:n=>n.p,
-  blurb:"Six stages of my own devising. Easier to read, but it makes some things look concurrent that are not."}};
+  blurb:"Six stages used for grouping. Easier to read, but it can make some steps look concurrent that are not."}};
 let colMode="seq",grouping="lanes",active=null,lastFocus=null;
 const regOn={pro:1,mb:1,nu:1,fed:1};
 const STLAB={v:"verified",p:"provisional",c:"candidate",g:"no order made"};
@@ -445,7 +445,7 @@ Object.entries(COLMODE).forEach(([k,v],i)=>{
     grpEl.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
     b.setAttribute("aria-pressed","true");
     hint.textContent=k==="flow"
-      ?"One flow, with a band drawn behind each regulator's steps. The Manitoba and Nunavut bands sit side by side over the same span and never touch."
+      ?"One flow, with a band drawn behind each regulator's steps."
       :COLMODE[colMode].blurb;
     build();});
   grpEl.appendChild(b);
