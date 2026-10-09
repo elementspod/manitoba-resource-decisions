@@ -1,5 +1,5 @@
 {
- "built": "2026-10-09 11:07 UTC",
+ "built": "2026-10-09 11:11 UTC",
  "counts": {
   "sites": 50,
   "routes": 7,
@@ -599,7 +599,7 @@
    "nearest_community": "Selkirk",
    "status": "Licensed; solar plans on hold, float-glass pivot",
    "description": "A 121-acre site on the CP subdivision using Selkirk's wastewater effluent. Up to $880M estimated. In September 2026 the company was promoting a 600 t/day float-glass plant instead, noting Canada has no domestic float-glass production.",
-   "regulatory_notes": "Provincial approval announced 14 February 2024 — two days before Sio Silica was refused. The environment minister went on record explaining how the two projects differed. Technical reviewers had questioned the company's lack of glass-making experience and whether Wanipigow sand could reach solar purity.",
+   "regulatory_notes": "Environment Act licence No. 3401 was issued on 3 May 2023, the day after a registry letter (2 May 2023) said a Clean Environment Commission hearing was not recommended, so there was no Commission referral. An earlier version of this note gave 14 February 2024 as the approval date; that is not the licence date. The environment minister went on record in February 2024 explaining how this project differed from Sio Silica, which was refused on 16 February 2024. Technical reviewers had questioned the company's lack of glass-making experience and whether Wanipigow sand could reach solar purity.",
    "source_ref": ""
   },
   {
@@ -637,7 +637,7 @@
    "nearest_community": "Vivian",
    "status": "Licensed separately",
    "description": "Processing plant fed by the slurry line.",
-   "regulatory_notes": "Licensed separately from the extraction project — a split that let one half proceed while the other was contested.",
+   "regulatory_notes": "Environment Act licence No. 3367 was issued to CanWhite Sands Corp. on 16 December 2021, separately from the extraction project. That split let one half proceed while the other was contested. No Commission referral was found for the processing plant (not confirmed).",
    "source_ref": ""
   },
   {
