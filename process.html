@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kivalliq Hydro-Fibre Link — decision flow</title>
+<title>Manitoba resource decisions — approval steps</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500;600&display=swap" rel="stylesheet">
@@ -212,21 +212,21 @@ footer{margin-top:28px;padding-top:13px;border-top:1px solid var(--rule);
   <div class="grid" id="grid"></div>
 </div></div>
 
-<div class="gapband"><p><strong>Nothing connects the Manitoba and Nunavut processes.</strong> Manitoba licenses its own segment. Nunavut's statute reaches both, since ss.98 and 156–157 apply to the whole project and s.90(i) makes cumulative effects mandatory at screening. Coordinating machinery exists on both sides and has never been used here.</p></div>
+<div class="gapband"><p><strong>How to read the arrows.</strong> A solid arrow means the next step always follows. A dashed arrow means it follows only in some cases. No arrow between two steps means the data records no dependency between them, not that none exists.</p></div>
 
 <div class="legend" id="legend"></div>
 <div id="detail"><p class="placeholder">Click a step for the full entry: legal basis, assessment method, inputs, possible outputs, publication and reasons.</p></div>
 
 <section class="tail">
   <h3>Reading the precedence columns</h3>
-  <p>Position comes from the edges rather than from stages I invented, and the merged headers above say which stage each span belongs to. Two things show up that the stage view concealed.</p>
+  <p>Position comes from the arrows rather than from stages invented for the diagram, and the merged headers above say which stage each span belongs to.</p>
   <ul>
-    <li><strong>The downstream permits are not really downstream.</strong> The only thing holding them is the screening gate at NuPPAA s.75, so by precedence they sit immediately after screening — earlier than the hearing, earlier than either final decision. A permit can issue before anyone has weighed the project as a whole.</li>
-    <li><strong>Cabinet's designation sits in the first column with nothing before it.</strong> Nothing has to happen for that order to be made, and nothing compels it ever to be made.</li>
+    <li><strong>Steps in the first column have nothing before them.</strong> That does not mean they happen first in time; it means the data records no earlier step.</li>
+    <li><strong>A step can sit further right than its stage suggests</strong> when more steps must come before it. Switch to &ldquo;By stage&rdquo; to compare the two views.</li>
   </ul>
 </section>
 
-<footer>Built from the verified step and edge tables, 30 September 2026. Concerns are drawn from statements by named parties; five further categories are omitted because no party statement has been found for them. Assessment methods are my classification of what each instrument does, not a term any statute uses. Sources: NuPPAA and the <em>Canadian Energy Regulator Act</em> via Justice Laws; Manitoba's <em>Environment Act</em> and Regulations 163/88 and 164/88; SOR/2026-185; COSEWIC; Review Board and Planning Commission guidance.</footer>
+<footer id="foot">Built automatically from the project's Google Sheet. Dashed circles and chips are provisional or unverified. Assessment methods are a classification of what each step does, not a term any statute uses. Working draft: do not cite yet.</footer>
 </div>
 
 <div class="backdrop" id="backdrop" role="dialog" aria-modal="true" aria-labelledby="mtitle">
@@ -235,6 +235,7 @@ footer{margin-top:28px;padding-top:13px;border-top:1px solid var(--rule);
 
 <script>
 fetch("data/data.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("data/data.json not found");return r.json();}).then(D=>{
+document.getElementById("foot").innerHTML+=` Last built ${String(D.built).replace(/[<>&]/g,"")}. <a href="status.html">Data status</a>.`;
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ST={verified:"v",provisional:"p",candidate:"c","no order made":"g"};
 const C=D.concerns.map(c=>({id:c.concern_id,label:esc(c.label),ev:c.status==="verified"?1:0}));
