@@ -1,0 +1,4 @@
+offpath_id,title,instrument_id,element,constrains,note
+off-class,Class of development,,agency,mb-eap;mb-lic,"Classes of Development Regulation 164/88 assigns the licensing decision by voltage. The voltage has not been published, so which official decides is not yet knowable."
+off-desig,Cabinet designation,fed-desig,agency,fed-cer,"Canadian Energy Regulator Act s.261. No criteria are published and no timeline applies. Nothing need happen before the order is made, and nothing compels it ever to be made."
+off-route,Route selection,pr-route,options,mb-eap;nu-npc;fed-cer;fed-mbca,"No statutory basis. The alternatives everything downstream argues about are chosen here, with no public record beyond the fieldwork file and no duty to give reasons."

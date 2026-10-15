@@ -156,6 +156,65 @@ footer{margin-top:28px;padding-top:13px;border-top:1px solid var(--rule);
   font-size:12px;color:var(--ink-faint);max-width:74ch}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 .pagelink{margin:10px 0 0;font-size:13px}.pagelink a{color:var(--trace);text-underline-offset:2px}
+
+/* ---------- elements-of-structure layer ---------- */
+:root{--el:#5b5280;--elink:#8a7fb8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--el:#a79ad4;--elink:#7d72a8}}
+:root[data-theme="dark"]{--el:#a79ad4;--elink:#7d72a8}
+
+.eltags{display:none;flex-wrap:wrap;gap:3px;justify-content:center;margin:4px 0 0;max-width:118px}
+body.elon .eltags{display:flex}
+.eltag{font:inherit;font-size:9.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;
+  padding:0 4px;height:15px;line-height:13px;border-radius:2px;border:1px solid var(--el);
+  color:#fff;background:var(--el);white-space:nowrap}
+.eltag.limit{background:transparent;color:var(--el)}
+.eltag.silent{background:transparent;color:var(--el);border-style:dashed}
+.eltag.open{background:transparent;color:var(--ink-faint);border-color:var(--ink-faint);border-style:dashed}
+.eltag:hover{outline:1.5px solid var(--el);outline-offset:1px}
+.eltag:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+.offrail{grid-column:1/-1;display:none;gap:10px;flex-wrap:wrap;
+  margin:0 0 4px;padding:9px 11px 11px;border:1px dashed var(--elink);border-radius:4px;
+  background:color-mix(in srgb,var(--el) 5%,transparent)}
+body.elon .offrail{display:flex;align-items:flex-start}
+.offrail .rl{flex:0 0 100%;font-size:10.5px;font-weight:600;color:var(--el);
+  text-transform:uppercase;letter-spacing:.06em;margin:0 0 2px}
+.offcard{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:118px;flex:0 1 auto}
+.offcard .ocl{font-size:9.5px;color:var(--ink-faint);text-align:center;line-height:1.25;
+  max-width:124px;margin-top:1px}
+.offcard .node{margin:0}
+.offghost{display:flex;align-items:center;justify-content:center;width:42px;height:42px;
+  border-radius:50%;border:1px dashed var(--elink);opacity:.5;
+  font-size:9px;color:var(--el);font-weight:600}
+
+.elpop{position:fixed;z-index:60;max-width:290px;padding:10px 12px;border-radius:4px;
+  background:var(--panel);border:1px solid var(--el);box-shadow:0 6px 22px var(--shadow);
+  font-size:12.3px;line-height:1.45;color:var(--ink-soft);display:none}
+.elpop.on{display:block}
+.elpop h4{margin:0 0 3px;font-size:12.5px;color:var(--ink);font-weight:600}
+.elpop .st{display:inline-block;font-size:9.5px;font-weight:600;letter-spacing:.03em;
+  text-transform:uppercase;color:var(--el);border:1px solid var(--el);border-radius:2px;
+  padding:0 4px;margin:0 0 5px}
+.elpop .df{margin:5px 0 0;font-size:11.3px;color:var(--ink-faint);font-style:italic}
+
+.eldisc{display:none;margin:8px 0 0;padding:8px 11px;border-left:2px solid var(--elink);
+  background:color-mix(in srgb,var(--el) 5%,transparent);border-radius:0 3px 3px 0}
+body.elon .eldisc{display:block}
+.eldisc p{margin:0;font-size:12px;color:var(--ink-soft);line-height:1.45}
+.ellead{font-size:12.5px;color:var(--ink-soft);margin:9px 0 0;max-width:78ch}
+.legend .el{width:22px;height:15px;border-radius:2px;border:1px solid var(--el);
+  background:var(--el);flex:0 0 auto}
+.legend .el.limit{background:transparent}
+.legend .el.silent{background:transparent;border-style:dashed}
+.legend .el.open{background:transparent;border-color:var(--ink-faint);border-style:dashed}
+body:not(.elon) .legend .elleg{display:none}
+
+@media (max-width:620px){
+  .offrail{padding:8px 9px 10px}
+  .offcard{min-width:104px}
+  .eltags{max-width:104px}
+}
+.eltoggle,.elwrap{display:none}body.haselements .eltoggle{display:flex}body.haselements .elwrap{display:block}
 </style>
 </head>
 <body>
@@ -205,7 +264,15 @@ footer{margin-top:28px;padding-top:13px;border-top:1px solid var(--rule);
   <div class="tb-row">
     <span class="tb-lab">Trace a concern</span><div class="chips" id="chips"></div>
   </div>
+  <div class="tb-row eltoggle">
+    <span class="tb-lab">Elements of structure</span>
+    <div class="chips"><button class="chip" id="eltog" aria-pressed="false" type="button">off</button></div>
+  </div>
   <p class="hint" id="hint"></p>
+  <div class="elwrap">
+    <p class="ellead">Toggle &ldquo;Elements of structure&rdquo; to see which parts of the decision each step fixes, following Hansson (2018).</p>
+    <div class="eldisc"><p><strong>Prototype for discussion: not verified, not for citation.</strong> The element tags are a working classification. Each tag names the provision or fact it rests on; where no provision was found, or one has not yet been retrieved, the tag says so rather than being left off.</p></div>
+  </div>
 </div>
 
 <div class="scroller"><div class="canvas" id="canvas">
@@ -234,6 +301,7 @@ footer{margin-top:28px;padding-top:13px;border-top:1px solid var(--rule);
 <div class="backdrop" id="backdrop" role="dialog" aria-modal="true" aria-labelledby="mtitle">
   <div class="modal" id="modal"></div>
 </div>
+<div class="elpop" id="elpop" role="dialog" aria-live="polite"></div>
 
 <script>
 fetch("data/data.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("data/data.json not found");return r.json();}).then(D=>{
@@ -248,6 +316,35 @@ const N=D.instruments.map(i=>({id:i.instrument_id,r:i.jurisdiction,p:+i.stage,k:
  note:esc(i.note),
  c:D.admissibility.filter(a=>a.instrument_id===i.instrument_id&&a.can_enter==="yes").map(a=>a.concern_id).filter(id=>CM[id])}));
 const E=D.edges.filter(e=>e.from_instrument_id&&e.to_instrument_id).map(e=>[e.from_instrument_id,e.to_instrument_id,e.dependency==="conditional"?1:0]);
+
+/* ---------- elements of decision structure (Hansson 2018) ----------
+   Labels match Eric's two-pager and must not be reworded. The tags themselves
+   come from the "elements" and "offpath" tabs of the sheet. */
+const EL=[
+ ["scope","Sc","Scope","What issues and geography the decision covers"],
+ ["subdivision","Sd","Subdivision","Whether one project is split into separate decisions or processes"],
+ ["agency","Ag","Agency","Who decides"],
+ ["options","Op","Options","Which alternatives are on the table"],
+ ["horizon","Hz","Horizon","Which effects and considerations must be taken into account"],
+ ["restructuring","Rs","Restructuring","How the decision can be changed or challenged afterwards"]];
+const ELM=Object.fromEntries(EL.map(e=>[e[0],{mono:e[1],label:e[2],def:e[3]}]));
+const ELSTATE={
+ fix:["Fixes","This step settles the element for everything downstream"],
+ limit:["Limits","This step narrows the element without settling it downstream"],
+ silent:["Silent","A provision was looked for and none found — the process does not settle this"],
+ open:["Not established","A provision or practice is believed to exist but has not been retrieved"]};
+const STKEY={fixes:"fix",limits:"limit",silent:"silent","not-established":"open"};
+const IDS=new Set(N.map(n=>n.id));
+const ELROWS=(D.elements||[]).filter(r=>ELM[r.element]&&STKEY[r.state]);
+const ELT={};
+ELROWS.filter(r=>r.instrument_id&&IDS.has(r.instrument_id)).forEach(r=>{
+  (ELT[r.instrument_id]=ELT[r.instrument_id]||{})[r.element]=[STKEY[r.state],esc(r.note)];});
+const ELMAP=ELROWS.filter(r=>!r.instrument_id).map(r=>({el:r.element,state:STKEY[r.state],note:esc(r.note)}));
+const OFFPATH=(D.offpath||[]).filter(o=>ELM[o.element]).map(o=>({
+  id:o.offpath_id,title:esc(o.title),node:IDS.has(o.instrument_id)?o.instrument_id:null,el:o.element,
+  constrains:String(o.constrains||"").split(/[;|]/).map(s=>s.trim()).filter(s=>IDS.has(s)),note:esc(o.note)}));
+const OFFNODES=OFFPATH.filter(o=>o.node).map(o=>o.node);
+if(ELROWS.length||OFFPATH.length)document.body.classList.add("haselements");
 
 const KIND={
  frame:["g-frame","Framing — fixes what later steps can argue about"],
@@ -315,22 +412,54 @@ function mkNode(n){
   b.addEventListener("click",()=>{openModal(n);fill(n);});
   return b;
 }
+function elOrder(a,b){const o=EL.map(e=>e[0]);return o.indexOf(a)-o.indexOf(b);}
+function mkTag(k,state,note,title){
+  const tag=document.createElement("button");
+  tag.className="eltag "+state;tag.type="button";tag.textContent=ELM[k].mono;
+  tag.setAttribute("aria-label",`${ELM[k].label} — ${ELSTATE[state][0]}`);
+  tag.addEventListener("click",e=>{e.stopPropagation();showPop(tag,k,state,note,title);});
+  return tag;
+}
+function mkTags(id){
+  const t=ELT[id];if(!t)return null;
+  const w=document.createElement("span");w.className="eltags";
+  const step=N.find(z=>z.id===id);
+  Object.keys(t).sort(elOrder).forEach(k=>w.appendChild(mkTag(k,t[k][0],t[k][1],step?step.t:"")));
+  return w;
+}
+function mkStepped(n){
+  const b=mkNode(n);
+  const t=mkTags(n.id);
+  if(!t)return b;
+  const box=document.createElement("span");
+  box.style.cssText="display:flex;flex-direction:column;align-items:center;width:100%";
+  box.appendChild(b);box.appendChild(t);
+  return box;
+}
+const GHOST=`<span class="offghost" title="Drawn on the rail above">off<br>path</span>`;
 function build(){
   const CMd=COLMODE[colMode],nc=CMd.ncols();
   const lead=grouping==="lanes"?78:0;
+  const elon=document.body.classList.contains("elon");
   grid.style.gridTemplateColumns=(lead?`${lead}px `:"")+`repeat(${nc},minmax(120px,1fr))`;
   canvas.style.minWidth=(lead+nc*126)+"px";
   let html="";
   const spans=stageSpans(nc);
+  html+=`<div class="offrail"><p class="rl">Fixed before or outside the sequence</p></div>`;
   if(lead)html+='<div class="band first"></div>';
   spans.forEach((sp,i)=>{html+=`<div class="band${!lead&&i===0?" first":""}" style="grid-column:span ${sp.n}">${sp.s==null?"":PH[sp.s]}</div>`;});
   grid.innerHTML=html;
+  /* steps lifted onto the rail keep their ids and edges; only where they are
+     drawn changes, so the arrows follow them with no change to the edge data */
+  const lifted=elon?OFFNODES:[];
   if(grouping==="lanes"){
     REGS.forEach(([rid,rn])=>{
       grid.insertAdjacentHTML("beforeend",`<div class="lname lane-${rid}">${rn}</div>`);
       for(let i=0;i<nc;i++){
         const cell=document.createElement("div");cell.className="cell";
-        N.filter(n=>n.r===rid&&CMd.col(n)===i).forEach(n=>cell.appendChild(mkNode(n)));
+        N.filter(n=>n.r===rid&&CMd.col(n)===i).forEach(n=>{
+          if(lifted.includes(n.id))cell.insertAdjacentHTML("beforeend",GHOST);
+          else cell.appendChild(mkStepped(n));});
         grid.appendChild(cell);
       }
     });
@@ -338,13 +467,75 @@ function build(){
     const ord={pro:0,mb:1,nu:2,fed:3};
     for(let i=0;i<nc;i++){
       const cell=document.createElement("div");cell.className="cell"+(i===0?" first":"");
-      N.filter(n=>CMd.col(n)===i).sort((a,b)=>ord[a.r]-ord[b.r]).forEach(n=>cell.appendChild(mkNode(n)));
+      N.filter(n=>CMd.col(n)===i).sort((a,b)=>ord[a.r]-ord[b.r]).forEach(n=>{
+        if(lifted.includes(n.id))cell.insertAdjacentHTML("beforeend",GHOST);
+        else cell.appendChild(mkStepped(n));});
       grid.appendChild(cell);
     }
   }
+  if(elon)buildRail();
   if(active)applyTrace();
   requestAnimationFrame(()=>{draw();drawBands();});
 }
+function buildRail(){
+  const rail=grid.querySelector(".offrail");if(!rail)return;
+  OFFPATH.forEach(o=>{
+    const card=document.createElement("div");card.className="offcard";card.id="off-"+o.id;
+    const n=o.node?N.find(z=>z.id===o.node):null;
+    if(n){
+      card.appendChild(mkNode(n));
+      const t=mkTags(n.id);
+      if(t)card.appendChild(t);
+      else{const w=document.createElement("span");w.className="eltags";
+        w.appendChild(mkTag(o.el,"fix",o.note,o.title));card.appendChild(w);}
+    }else{
+      const first=N.find(z=>z.id===o.constrains[0]);
+      const b=document.createElement("button");b.className="node prov";b.type="button";
+      b.id="n-"+o.id;b.dataset.c="";b.dataset.r=first?first.r:"mb";
+      b.innerHTML=`<span class="disc"><svg viewBox="0 0 24 24"><use href="#g-switch"/></svg></span>
+        <span class="lbl">${o.title}</span>`;
+      b.addEventListener("click",()=>showPop(b,o.el,"fix",o.note,o.title));
+      card.appendChild(b);
+      const w=document.createElement("span");w.className="eltags";
+      w.appendChild(mkTag(o.el,"fix",o.note,o.title));card.appendChild(w);
+    }
+    const names=o.constrains.map(id=>{const z=N.find(y=>y.id===id);return z?z.t:id;});
+    const shown=names.length>2?names.slice(0,2).join(", ")+` +${names.length-2}`:names.join(", ");
+    if(names.length)card.insertAdjacentHTML("beforeend",
+      `<span class="ocl" title="constrains ${names.join(", ")}">constrains ${shown}</span>`);
+    rail.appendChild(card);
+  });
+  ELMAP.forEach(m=>{
+    const card=document.createElement("div");card.className="offcard";
+    card.style.cssText="min-width:140px;justify-content:flex-start";
+    const b=document.createElement("button");b.className="eltag "+m.state;b.type="button";
+    b.style.cssText="height:auto;line-height:1.3;padding:3px 6px;white-space:normal;max-width:140px";
+    b.textContent=`${ELM[m.el].mono} · ${ELSTATE[m.state][0]} across the whole map`;
+    b.addEventListener("click",e=>{e.stopPropagation();showPop(b,m.el,m.state,m.note);});
+    card.appendChild(b);
+    card.insertAdjacentHTML("beforeend",`<span class="ocl">no step fixes this</span>`);
+    rail.appendChild(card);
+  });
+}
+const elpop=document.getElementById("elpop");
+function showPop(anchor,elk,state,note,titleOverride){
+  elpop.innerHTML=`<h4>${titleOverride?titleOverride+" — ":""}${ELM[elk].label}</h4>
+    <span class="st">${ELSTATE[state][0]}</span>
+    <div>${note}</div>
+    <p class="df">${ELM[elk].def}. ${ELSTATE[state][1]}.</p>`;
+  elpop.classList.add("on");
+  const r=anchor.getBoundingClientRect(),pw=elpop.offsetWidth,ph=elpop.offsetHeight;
+  let x=r.left+r.width/2-pw/2,y=r.bottom+8;
+  x=Math.max(8,Math.min(x,window.innerWidth-pw-8));
+  if(y+ph>window.innerHeight-8)y=Math.max(8,r.top-ph-8);
+  elpop.style.left=x+"px";elpop.style.top=y+"px";
+}
+function hidePop(){elpop.classList.remove("on");}
+document.addEventListener("click",e=>{
+  if(!elpop.contains(e.target)&&!e.target.closest(".eltag")&&!e.target.closest(".offcard .node"))hidePop();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")hidePop();});
+window.addEventListener("scroll",hidePop,{passive:true});
+document.querySelector(".scroller").addEventListener("scroll",hidePop,{passive:true});
 function drawBands(){
   bands.innerHTML="";
   if(grouping!=="flow"){return;}
@@ -355,7 +546,8 @@ function drawBands(){
     if(!regOn[rid])return;
     const cols=[];
     for(let i=0;i<nc;i++){
-      const ns=N.filter(n=>n.r===rid&&COLMODE[colMode].col(n)===i)
+      const onRail=document.body.classList.contains("elon")?OFFNODES:[];
+      const ns=N.filter(n=>n.r===rid&&COLMODE[colMode].col(n)===i&&!onRail.includes(n.id))
         .map(n=>document.querySelector("#n-"+n.id+" .disc")).filter(Boolean);
       if(!ns.length){cols.push(null);continue;}
       const ys=ns.map(e=>e.getBoundingClientRect());
@@ -488,6 +680,20 @@ Object.entries(KIND).forEach(([k,[g,lab]])=>legend.insertAdjacentHTML("beforeend
   `<span><i class="g"><svg viewBox="0 0 24 24"><use href="#${g}"/></svg></i>${lab}</span>`));
 legend.insertAdjacentHTML("beforeend",`<span>Dashed circle — provisional or unverified</span>`);
 
+EL.forEach(([k,mono,label,def])=>legend.insertAdjacentHTML("beforeend",
+  `<span class="elleg"><i class="el">&nbsp;</i><b style="font-weight:600;color:var(--el)">${mono}</b>&nbsp;${label} — ${def.charAt(0).toLowerCase()+def.slice(1)}</span>`));
+Object.entries(ELSTATE).forEach(([k,[lab,def]])=>legend.insertAdjacentHTML("beforeend",
+  `<span class="elleg"><i class="el ${k}"></i>${lab} — ${def.charAt(0).toLowerCase()+def.slice(1)}</span>`));
+const eltog=document.getElementById("eltog");
+eltog.addEventListener("click",()=>{
+  const on=eltog.getAttribute("aria-pressed")==="true";
+  eltog.setAttribute("aria-pressed",on?"false":"true");eltog.textContent=on?"off":"on";
+  document.body.classList.toggle("elon",!on);
+  hidePop();
+  hint.textContent=!on?"Click any tag for the provision it rests on.":COLMODE[colMode].blurb;
+  build();
+});
+
 function draw(){
   const cb=canvas.getBoundingClientRect();
   wires.setAttribute("viewBox",`0 0 ${cb.width} ${cb.height}`);
@@ -507,6 +713,21 @@ function draw(){
       stroke="var(--rule)" stroke-width="1.3" opacity="${faint?.14:1}"
       ${dash?'stroke-dasharray="3 3"':''} marker-end="url(#ar)"/>`;
   }).join("");
+  if(document.body.classList.contains("elon")){
+    OFFPATH.filter(o=>!o.node).forEach(o=>{
+      const A=document.querySelector("#n-"+o.id+" .disc");if(!A)return;
+      const ra=A.getBoundingClientRect();
+      const ax=ra.left+ra.width/2-cb.left,ay=ra.bottom-cb.top;
+      o.constrains.forEach(id=>{
+        const B=document.querySelector("#n-"+id+" .disc");if(!B)return;
+        const rb=B.getBoundingClientRect();
+        const bx=rb.left+rb.width/2-cb.left,by=rb.top-cb.top-2;
+        wires.insertAdjacentHTML("beforeend",
+          `<path d="M${ax} ${ay} C ${ax} ${(ay+by)/2}, ${bx} ${(ay+by)/2}, ${bx} ${by}" fill="none"
+            stroke="var(--elink)" stroke-width="1.2" stroke-dasharray="2 3" opacity=".75"/>`);
+      });
+    });
+  }
 }
 hint.textContent=COLMODE.seq.blurb;
 build();

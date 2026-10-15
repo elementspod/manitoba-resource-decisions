@@ -49,13 +49,16 @@ def main():
               "'Microsoft Excel (.xlsx)' and paste that link into config/sheet-url.txt.")
         return 1
 
-    missing = [t for t in SCHEMA["tabs"] if t not in wb.sheetnames]
+    missing = [t for t, s in SCHEMA["tabs"].items() if t not in wb.sheetnames and not s.get("optional")]
     if missing:
         print("ERROR: these tabs are missing from the sheet (names must match exactly): " + ", ".join(missing))
         return 1
 
     RAW.mkdir(parents=True, exist_ok=True)
-    for tab in SCHEMA["tabs"]:
+    for tab, spec in SCHEMA["tabs"].items():
+        if tab not in wb.sheetnames:
+            print(f"  {tab:14} not in the sheet yet - keeping data/raw/{tab}.csv")
+            continue
         rows = [[cell_text(v) for v in row] for row in wb[tab].iter_rows(values_only=True)]
         # drop fully empty rows and trailing empty columns
         rows = [r for r in rows if any(c != "" for c in r)]

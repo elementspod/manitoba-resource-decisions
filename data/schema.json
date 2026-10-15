@@ -78,6 +78,24 @@
       "enums": {},
       "refs": {"site_id": "sites", "org_id": "orgs", "concern_id": "concerns", "source_ref": "sources"},
       "dates": ["date"]
+    },
+    "elements": {
+      "_about": "Elements of decision structure (Hansson 2018) per approval step. Leave instrument_id empty for a row about the whole map. Optional tab: if it is not in the sheet, the copy in data/raw is kept.",
+      "optional": true,
+      "id": null,
+      "columns": ["instrument_id","element","state","note","status"],
+      "required": ["element","state","note"],
+      "enums": {"element": ["scope","subdivision","agency","options","horizon","restructuring"], "state": ["fixes","limits","silent","not-established"], "status": ["verified","provisional","candidate","disputed"]},
+      "refs": {"instrument_id": "instruments"}
+    },
+    "offpath": {
+      "_about": "Settings fixed before or outside the step sequence, drawn on a separate rail. instrument_id = the step moved onto the rail (empty if the setting is not a step). constrains = step ids separated by semicolons. Optional tab, as above.",
+      "optional": true,
+      "id": "offpath_id",
+      "columns": ["offpath_id","title","instrument_id","element","constrains","note"],
+      "required": ["offpath_id","title","element","constrains","note"],
+      "enums": {"element": ["scope","subdivision","agency","options","horizon","restructuring"]},
+      "refs": {"instrument_id": "instruments", "constrains": "instruments"}
     }
   },
   "bounds": {"lat": [49, 60], "lon": [-102, -89]}
