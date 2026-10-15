@@ -1,5 +1,5 @@
 {
- "built": "2026-10-15 03:47 UTC",
+ "built": "2026-10-15 11:34 UTC",
  "counts": {
   "sites": 50,
   "routes": 7,
@@ -10,7 +10,9 @@
   "admissibility": 107,
   "sources": 25,
   "events": 80,
-  "statements": 0
+  "statements": 0,
+  "elements": 30,
+  "offpath": 3
  },
  "sites": [
   {
@@ -4054,5 +4056,243 @@
    "status": "verified"
   }
  ],
- "statements": []
+ "statements": [],
+ "elements": [
+  {
+   "instrument_id": "pr-route",
+   "element": "options",
+   "state": "fixes",
+   "note": "The proponent produces the preferred corridor and the short list of alternatives, with no public record beyond the fieldwork file and no duty to give reasons.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "pr-route",
+   "element": "restructuring",
+   "state": "silent",
+   "note": "Nothing issues from this step that could be altered, varied or appealed.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "mb-eap",
+   "element": "scope",
+   "state": "silent",
+   "note": "Nothing in the Environment Act reaches beyond the Manitoba segment, while NuPPAA ss.98 and 156–157 reach the whole project.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "mb-eap",
+   "element": "agency",
+   "state": "fixes",
+   "note": "Above 230 kV is Class 3 and the Minister decides; 115 to 230 kV is Class 2 and the Director does. The voltage has not been published.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "mb-eap",
+   "element": "restructuring",
+   "state": "not-established",
+   "note": "Changes to Manitoba licences are made in practice by Notice of Alteration; the provision has not been retrieved.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "fed-desig",
+   "element": "agency",
+   "state": "fixes",
+   "note": "Canadian Energy Regulator Act s.261: whether a federal decision-maker exists at all turns on this one order, and none has been made.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "fed-desig",
+   "element": "horizon",
+   "state": "silent",
+   "note": "The order is not an assessment of anything, and no recorded concern can enter it.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-npc",
+   "element": "scope",
+   "state": "fixes",
+   "note": "NuPPAA s.156 applies the planning provisions to the entire project, including the segment outside Nunavut.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-npc",
+   "element": "horizon",
+   "state": "limits",
+   "note": "Conformity is tested against the text of the applicable land use plan and nothing else.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-screen",
+   "element": "scope",
+   "state": "fixes",
+   "note": "NuPPAA s.157 applies the screening provisions to the entire project.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-screen",
+   "element": "options",
+   "state": "fixes",
+   "note": "The Board may determine that the project be modified or abandoned.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-screen",
+   "element": "horizon",
+   "state": "fixes",
+   "note": "Section 90(i) makes cumulative impacts of any other project mandatory, and socio-economic impacts sit inside the statutory test itself.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-screen",
+   "element": "restructuring",
+   "state": "fixes",
+   "note": "Section 75(2) makes any permit issued before assessment is complete of no force or effect, not merely irregular.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-min1",
+   "element": "subdivision",
+   "state": "fixes",
+   "note": "Section 94(1)(a)(ii) makes a federal panel the default where the project is partly outside Nunavut; s.94(1)(a)(iii) lets the Board review it instead by agreement.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-min1",
+   "element": "agency",
+   "state": "fixes",
+   "note": "NuPPAA ss.93–94: the Minister selects the review body and may send a project to review even where the Board found none necessary.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-scope",
+   "element": "scope",
+   "state": "fixes",
+   "note": "NuPPAA ss.99 and 101: the guidelines tell the proponent what the assessment must cover.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-scope",
+   "element": "horizon",
+   "state": "fixes",
+   "note": "The guidelines are deliberative, published in draft and open to comment — the same framing move as route selection, done in the open.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-panel",
+   "element": "scope",
+   "state": "fixes",
+   "note": "NuPPAA ss.160–162: the only body on this map with a mandate over the full 1,200 km corridor, including the Manitoba segment.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-hearing",
+   "element": "horizon",
+   "state": "fixes",
+   "note": "NuPPAA s.103 factors include (c) the priorities and values of the residents and (f) cumulative effects; s.103(3) admits traditional knowledge.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "mb-crown",
+   "element": "horizon",
+   "state": "limits",
+   "note": "The test turns on the strength of the claim and the seriousness of the impact, so concerns not attaching to a right fall outside it however strongly held.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "mb-crown",
+   "element": "restructuring",
+   "state": "not-established",
+   "note": "No statutory requirement to give reasons was found, and the provincial consultation policy has not been retrieved.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "mb-tac",
+   "element": "horizon",
+   "state": "limits",
+   "note": "Each department reviews within its own mandate, and no step weighs the departmental views against one another.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "mb-reg",
+   "element": "horizon",
+   "state": "limits",
+   "note": "No content filter appears in the Act, so anything may be said — and nothing determines what follows from it.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "mb-lic",
+   "element": "horizon",
+   "state": "fixes",
+   "note": "Section 12.0.1 requires proponent consultation to be considered and s.12.0.2 requires climate; how either is weighed against anything else is not specified.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "mb-lic",
+   "element": "restructuring",
+   "state": "not-established",
+   "note": "An Environment Act appeal goes to the minister responsible for the issuing department; the provision has not been retrieved.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-cert",
+   "element": "restructuring",
+   "state": "fixes",
+   "note": "NuPPAA s.107(1) requires the Board to reconsider in light of the Minister's reasons, and s.108 permits the Minister to vary purely socio-economic terms without stating a ground.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "fed-fish",
+   "element": "horizon",
+   "state": "limits",
+   "note": "Habitat is assessed against standards with offsetting, and nothing else is admitted.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-iol",
+   "element": "horizon",
+   "state": "not-established",
+   "note": "The Nunavut Agreement articles and the regional association's lands policy have not been retrieved.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "nu-iol",
+   "element": "restructuring",
+   "state": "not-established",
+   "note": "Whether the permit or lease can be revisited, and whether any of it is public, is unclear.",
+   "status": "candidate"
+  },
+  {
+   "instrument_id": "",
+   "element": "subdivision",
+   "state": "silent",
+   "note": "One project runs through two processes with no step joining them. Coordinating machinery exists on both sides — NuPPAA ss.159 and 162, the Environment Act s.13.1, the Joint Environmental Assessment Regulation 126/91 — and none of it has been used here.",
+   "status": "candidate"
+  }
+ ],
+ "offpath": [
+  {
+   "offpath_id": "off-class",
+   "title": "Class of development",
+   "instrument_id": "",
+   "element": "agency",
+   "constrains": "mb-eap;mb-lic",
+   "note": "Classes of Development Regulation 164/88 assigns the licensing decision by voltage. The voltage has not been published, so which official decides is not yet knowable."
+  },
+  {
+   "offpath_id": "off-desig",
+   "title": "Cabinet designation",
+   "instrument_id": "fed-desig",
+   "element": "agency",
+   "constrains": "fed-cer",
+   "note": "Canadian Energy Regulator Act s.261. No criteria are published and no timeline applies. Nothing need happen before the order is made, and nothing compels it ever to be made."
+  },
+  {
+   "offpath_id": "off-route",
+   "title": "Route selection",
+   "instrument_id": "pr-route",
+   "element": "options",
+   "constrains": "mb-eap;nu-npc;fed-cer;fed-mbca",
+   "note": "No statutory basis. The alternatives everything downstream argues about are chosen here, with no public record beyond the fieldwork file and no duty to give reasons."
+  }
+ ]
 }
