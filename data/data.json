@@ -1,5 +1,5 @@
 {
- "built": "2026-10-16 03:47 UTC",
+ "built": "2026-10-16 10:05 UTC",
  "counts": {
   "sites": 50,
   "routes": 7,
@@ -8,7 +8,7 @@
   "edges": 30,
   "concerns": 12,
   "admissibility": 107,
-  "sources": 25,
+  "sources": 26,
   "events": 80,
   "statements": 0,
   "elements": 30,
@@ -1739,9 +1739,9 @@
    "stage_label": "Decision",
    "x": 6,
    "y": 2,
-   "status": "candidate",
-   "note": "Added 8 Oct 2026 to record mineral-project histories (Wanipigow, Tanco, Minago, MacLellan). Legal basis to be confirmed by Eric.",
-   "source_ref": ""
+   "status": "provisional",
+   "note": "Legal basis checked against the Act (s.14) on 16 Oct 2026. Recorded for mineral-project histories (Wanipigow, Tanco, Minago, MacLellan).",
+   "source_ref": "src-mb-ea"
   },
   {
    "instrument_id": "mb-appeal",
@@ -1763,9 +1763,9 @@
    "stage_label": "Decision",
    "x": 6,
    "y": 3,
-   "status": "candidate",
-   "note": "Added 8 Oct 2026 for the Tanco licence appeals. Legal basis to be confirmed by Eric.",
-   "source_ref": ""
+   "status": "provisional",
+   "note": "Legal basis checked against the Act (ss.27–28) on 16 Oct 2026. Recorded for the Tanco licence appeals.",
+   "source_ref": "src-mb-ea"
   },
   {
    "instrument_id": "fed-ia",
@@ -3172,6 +3172,14 @@
    "url": "https://gov.mb.ca/sd/eal/registries/557.1/index.html",
    "tier": "",
    "retrieved": "2026-10-08"
+  },
+  {
+   "source_id": "src-mb-ea",
+   "short_name": "Environment Act (MB)",
+   "full_ref": "The Environment Act, C.C.S.M. c. E125, ss.14, 27, 28",
+   "url": "https://web2.gov.mb.ca/laws/statutes/ccsm/e125.php",
+   "tier": "",
+   "retrieved": "2026-10-16"
   }
  ],
  "events": [
@@ -4087,11 +4095,11 @@
    "status": "candidate"
   },
   {
-   "instrument_id": "mb-eap",
+   "instrument_id": "mb-noa",
    "element": "restructuring",
-   "state": "not-established",
-   "note": "Changes to Manitoba licences are made in practice by Notice of Alteration; the provision has not been retrieved.",
-   "status": "candidate"
+   "state": "fixes",
+   "note": "Environment Act s.14: the Director (or Minister) decides alone whether a change to a licensed development is minor; a minor alteration is approved in writing with no public comment, only a copy filed in the registry (s.14(2.1)), and anything larger goes back as a new proposal (s.14(3)).",
+   "status": "provisional"
   },
   {
    "instrument_id": "fed-desig",
@@ -4227,9 +4235,9 @@
    "status": "candidate"
   },
   {
-   "instrument_id": "mb-lic",
+   "instrument_id": "mb-appeal",
    "element": "restructuring",
-   "state": "not-established",
+   "state": "fixes",
    "note": "An Environment Act appeal goes to the minister responsible for the issuing department; the provision has not been retrieved.",
    "status": "candidate"
   },
@@ -4237,8 +4245,8 @@
    "instrument_id": "nu-cert",
    "element": "restructuring",
    "state": "fixes",
-   "note": "NuPPAA s.107(1) requires the Board to reconsider in light of the Minister's reasons, and s.108 permits the Minister to vary purely socio-economic terms without stating a ground.",
-   "status": "candidate"
+   "note": "Environment Act s.27: anyone affected may appeal a Director’s licence decision to the Minister within 30 days; the Minister may dismiss, vary or quash it, or send it back (s.27(2)). A Minister’s own decision is appealed to cabinet (s.28). No independent tribunal.",
+   "status": "provisional"
   },
   {
    "instrument_id": "fed-fish",

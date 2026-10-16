@@ -3,7 +3,7 @@ pr-route,options,fixes,"The proponent produces the preferred corridor and the sh
 pr-route,restructuring,silent,"Nothing issues from this step that could be altered, varied or appealed.",candidate
 mb-eap,scope,silent,"Nothing in the Environment Act reaches beyond the Manitoba segment, while NuPPAA ss.98 and 156–157 reach the whole project.",candidate
 mb-eap,agency,fixes,Above 230 kV is Class 3 and the Minister decides; 115 to 230 kV is Class 2 and the Director does. The voltage has not been published.,candidate
-mb-eap,restructuring,not-established,Changes to Manitoba licences are made in practice by Notice of Alteration; the provision has not been retrieved.,candidate
+mb-noa,restructuring,fixes,"Environment Act s.14: the Director (or Minister) decides alone whether a change to a licensed development is minor; a minor alteration is approved in writing with no public comment, only a copy filed in the registry (s.14(2.1)), and anything larger goes back as a new proposal (s.14(3)).",provisional
 fed-desig,agency,fixes,"Canadian Energy Regulator Act s.261: whether a federal decision-maker exists at all turns on this one order, and none has been made.",candidate
 fed-desig,horizon,silent,"The order is not an assessment of anything, and no recorded concern can enter it.",candidate
 nu-npc,scope,fixes,"NuPPAA s.156 applies the planning provisions to the entire project, including the segment outside Nunavut.",candidate
@@ -23,8 +23,8 @@ mb-crown,restructuring,not-established,"No statutory requirement to give reasons
 mb-tac,horizon,limits,"Each department reviews within its own mandate, and no step weighs the departmental views against one another.",candidate
 mb-reg,horizon,limits,"No content filter appears in the Act, so anything may be said — and nothing determines what follows from it.",candidate
 mb-lic,horizon,fixes,Section 12.0.1 requires proponent consultation to be considered and s.12.0.2 requires climate; how either is weighed against anything else is not specified.,candidate
-mb-lic,restructuring,not-established,An Environment Act appeal goes to the minister responsible for the issuing department; the provision has not been retrieved.,candidate
-nu-cert,restructuring,fixes,"NuPPAA s.107(1) requires the Board to reconsider in light of the Minister's reasons, and s.108 permits the Minister to vary purely socio-economic terms without stating a ground.",candidate
+mb-appeal,restructuring,fixes,An Environment Act appeal goes to the minister responsible for the issuing department; the provision has not been retrieved.,candidate
+nu-cert,restructuring,fixes,"Environment Act s.27: anyone affected may appeal a Director’s licence decision to the Minister within 30 days; the Minister may dismiss, vary or quash it, or send it back (s.27(2)). A Minister’s own decision is appealed to cabinet (s.28). No independent tribunal.",provisional
 fed-fish,horizon,limits,"Habitat is assessed against standards with offsetting, and nothing else is admitted.",candidate
 nu-iol,horizon,not-established,The Nunavut Agreement articles and the regional association's lands policy have not been retrieved.,candidate
 nu-iol,restructuring,not-established,"Whether the permit or lease can be revisited, and whether any of it is public, is unclear.",candidate
