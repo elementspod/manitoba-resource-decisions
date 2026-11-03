@@ -1,16 +1,16 @@
 org_id,name,type,notes,review
-org-sinomine-resource-group,Sinomine Resource Group,company,,"merged with ""Sinomine"" — check they are the same entity"
-org-grid-metals,Grid Metals,company,,name normalised from a compound field — check
-org-acme-lithium,ACME Lithium,company,,name normalised from a compound field — check
-org-vale-base-metals,Vale Base Metals,company,,name normalised from a compound field — check
-org-norway-house-cree-nation,Norway House Cree Nation,first nation,Minago Development GP,name normalised from a compound field — check
+org-sinomine-resource-group,Sinomine Resource Group,company,,
+org-grid-metals,Grid Metals,company,,
+org-acme-lithium,ACME Lithium,company,,
+org-vale-base-metals,Vale Base Metals,company,,
+org-norway-house-cree-nation,Norway House Cree Nation,first nation,Owns the Minago project through Minago Development GP Inc. (wholly owned by the Nation); bought from Flying Nickel Mining for $8 million in 2024.,
 org-hudbay-minerals,Hudbay Minerals,company,,
-org-snow-lake-resources,Snow Lake Resources,company,renamed; see notes,name normalised from a compound field — check
+org-snow-lake-resources,Frontier Nuclear and Minerals,company,Renamed from Snow Lake Resources Ltd. (d/b/a Snow Lake Energy) on 16 March 2026; Nasdaq LITM became FNUC. Plans to spin off its lithium assets into a separate company; not completed as of the March 2026 update.,Check whether the Manitoba lithium projects move to the new spin-off company
 org-alamos-gold,Alamos Gold,company,,
-org-province-of-manitoba,Province of Manitoba,crown,,
+org-province-of-manitoba,Province of Manitoba,government,,
 org-1911-gold,1911 Gold,company,,
 org-canadian-premium-sand,Canadian Premium Sand,company,,
 org-sio-silica-corporation,Sio Silica Corporation,company,,
 org-manitoba-hydro,Manitoba Hydro,crown corporation,,
-org-keeyask-hydropower-limited-partnership,Keeyask Hydropower Limited Partnership — Manitoba Hydro with four Cree Nations,partnership,,
+org-keeyask-hydropower-limited-partnership,Keeyask Hydropower Limited Partnership,partnership,Manitoba Hydro with four Cree Nations.,
 org-arctic-gateway-group,Arctic Gateway Group,partnership,,

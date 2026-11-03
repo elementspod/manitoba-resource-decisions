@@ -1,5 +1,5 @@
 {
- "built": "2026-11-03 10:55 UTC",
+ "built": "2026-11-03 11:41 UTC",
  "counts": {
   "sites": 50,
   "routes": 7,
@@ -368,7 +368,7 @@
    "commodity": "Lithium",
    "critical_mineral": "yes",
    "operator_org_id": "org-snow-lake-resources",
-   "operator_raw": "Snow Lake Resources (renamed; see notes)",
+   "operator_raw": "Frontier Nuclear and Minerals",
    "co_owners": "",
    "nearest_community": "Snow Lake / Wekusko Lake",
    "status": "Advanced exploration",
@@ -387,7 +387,7 @@
    "commodity": "Lithium",
    "critical_mineral": "yes",
    "operator_org_id": "org-snow-lake-resources",
-   "operator_raw": "Snow Lake Resources",
+   "operator_raw": "Frontier Nuclear and Minerals",
    "co_owners": "",
    "nearest_community": "Wekusko Lake",
    "status": "Exploration",
@@ -406,7 +406,7 @@
    "commodity": "Lithium hydroxide",
    "critical_mineral": "yes",
    "operator_org_id": "org-snow-lake-resources",
-   "operator_raw": "Snow Lake Resources / LG Energy Solution",
+   "operator_raw": "Frontier Nuclear and Minerals",
    "co_owners": "LG Energy Solution",
    "nearest_community": "Winnipeg",
    "status": "Concept, memorandum only",
@@ -1065,35 +1065,35 @@
    "name": "Sinomine Resource Group",
    "type": "company",
    "notes": "",
-   "review": "merged with \"Sinomine\" — check they are the same entity"
+   "review": ""
   },
   {
    "org_id": "org-grid-metals",
    "name": "Grid Metals",
    "type": "company",
    "notes": "",
-   "review": "name normalised from a compound field — check"
+   "review": ""
   },
   {
    "org_id": "org-acme-lithium",
    "name": "ACME Lithium",
    "type": "company",
    "notes": "",
-   "review": "name normalised from a compound field — check"
+   "review": ""
   },
   {
    "org_id": "org-vale-base-metals",
    "name": "Vale Base Metals",
    "type": "company",
    "notes": "",
-   "review": "name normalised from a compound field — check"
+   "review": ""
   },
   {
    "org_id": "org-norway-house-cree-nation",
    "name": "Norway House Cree Nation",
    "type": "first nation",
-   "notes": "Minago Development GP",
-   "review": "name normalised from a compound field — check"
+   "notes": "Owns the Minago project through Minago Development GP Inc. (wholly owned by the Nation); bought from Flying Nickel Mining for $8 million in 2024.",
+   "review": ""
   },
   {
    "org_id": "org-hudbay-minerals",
@@ -1104,10 +1104,10 @@
   },
   {
    "org_id": "org-snow-lake-resources",
-   "name": "Snow Lake Resources",
+   "name": "Frontier Nuclear and Minerals",
    "type": "company",
-   "notes": "renamed; see notes",
-   "review": "name normalised from a compound field — check"
+   "notes": "Renamed from Snow Lake Resources Ltd. (d/b/a Snow Lake Energy) on 16 March 2026; Nasdaq LITM became FNUC. Plans to spin off its lithium assets into a separate company; not completed as of the March 2026 update.",
+   "review": "Check whether the Manitoba lithium projects move to the new spin-off company"
   },
   {
    "org_id": "org-alamos-gold",
@@ -1119,7 +1119,7 @@
   {
    "org_id": "org-province-of-manitoba",
    "name": "Province of Manitoba",
-   "type": "crown",
+   "type": "government",
    "notes": "",
    "review": ""
   },
@@ -1153,9 +1153,9 @@
   },
   {
    "org_id": "org-keeyask-hydropower-limited-partnership",
-   "name": "Keeyask Hydropower Limited Partnership — Manitoba Hydro with four Cree Nations",
+   "name": "Keeyask Hydropower Limited Partnership",
    "type": "partnership",
-   "notes": "",
+   "notes": "Manitoba Hydro with four Cree Nations.",
    "review": ""
   },
   {
