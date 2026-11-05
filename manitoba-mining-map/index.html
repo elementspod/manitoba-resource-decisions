@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manitoba Mining Ecosystem Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a field-notebook map. Network canvas on the left, a reading panel on the right, explainer below. */
+:root{
+  color-scheme: light;
+  --bg:#f4f5f2; --surface:#fcfcfb; --ink:#16201c; --ink-2:#4b5550; --ink-3:#7b847f; --rule:#dcdfd9; --accent:#1f6f5c;
+  --font-display:"Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --c1:#2a78d6; --c2:#eb6834; --c3:#1baf7a; --c4:#eda100; --c5:#e87ba4; --c6:#008300; --c7:#6250d6;
+  --e-auth:#3d3c39; --e-duty:#b45309; --e-part:#1f7a5a; --e-money:#2a5fb0; --e-svc:#8a8780; --e-adv:#7b3fb5; --e-opp:#c62f2f;
+  --halo:rgba(252,252,251,.9);
+  --ok:#1f7a3a; --warn:#a86500; --crit:#b42318;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#121614; --surface:#1a1f1c; --ink:#eef1ec; --ink-2:#bfc7c1; --ink-3:#8b948e; --rule:#2e3631; --accent:#5cc4a6;
+    --c1:#3987e5; --c2:#d95926; --c3:#199e70; --c4:#c98500; --c5:#d55181; --c6:#008300; --c7:#9085e9;
+    --e-auth:#c9c8c0; --e-duty:#f59e42; --e-part:#4cc596; --e-money:#6ea2ef; --e-svc:#9b998f; --e-adv:#b48ae8; --e-opp:#f07171;
+    --halo:rgba(26,31,28,.9); --ok:#5fc27a; --warn:#e3a33a; --crit:#f07171;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#121614; --surface:#1a1f1c; --ink:#eef1ec; --ink-2:#bfc7c1; --ink-3:#8b948e; --rule:#2e3631; --accent:#5cc4a6;
+  --c1:#3987e5; --c2:#d95926; --c3:#199e70; --c4:#c98500; --c5:#d55181; --c6:#008300; --c7:#9085e9;
+  --e-auth:#c9c8c0; --e-duty:#f59e42; --e-part:#4cc596; --e-money:#6ea2ef; --e-svc:#9b998f; --e-adv:#b48ae8; --e-opp:#f07171;
+  --halo:rgba(26,31,28,.9); --ok:#5fc27a; --warn:#e3a33a; --crit:#f07171;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1440px;margin:0 auto;padding:0 20px}
+header.top{padding:22px 0 12px;display:grid;gap:6px}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3vw,34px);line-height:1.15;margin:0;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:72ch;margin:0}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:10px 0 12px;border-bottom:1px solid var(--rule)}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;color:var(--ink-2);font:500 13.5px var(--font-body);padding:7px 12px;cursor:pointer;border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.btn{border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:500 13.5px var(--font-body);padding:7px 12px;border-radius:8px;cursor:pointer}
+.btn:hover,.seg button:hover{filter:brightness(.97)}
+.search{display:flex;gap:6px;align-items:center}
+.search input{font:14px var(--font-body);padding:7px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink);width:240px}
+.lbl{font-size:12px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px;padding:14px 0}
+@media (max-width:980px){.main{grid-template-columns:1fr}}
+.stage{position:relative;background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow:hidden;min-height:620px;height:72vh;max-height:860px}
+.stage svg{width:100%;height:100%;display:block;touch-action:none}
+.crumbs{position:absolute;left:12px;bottom:8px;font-size:12.5px;color:var(--ink-3);pointer-events:none;max-width:70%}
+.zoomctl{position:absolute;right:10px;bottom:8px;display:flex;gap:4px}
+.zoomctl button{width:30px;height:30px;border-radius:6px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);cursor:pointer;font:600 15px var(--font-body)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12.5px;padding:6px 9px;border-radius:6px;max-width:300px;opacity:0;transition:opacity .1s;z-index:5}
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;overflow:auto;max-height:860px}
+@media (min-width:981px){.panel{height:72vh;min-height:620px}}
+.panel h2{font-family:var(--font-display);font-weight:600;font-size:21px;line-height:1.2;margin:4px 0 8px;text-wrap:balance}
+.panel h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin:16px 0 6px;font-weight:600}
+.panel p{margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 6px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--rule);color:var(--ink-2)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none;box-shadow:0 0 0 1px var(--ink-3) inset}
+.chip.v-verified{border-color:var(--ok);color:var(--ok)}
+.chip.v-partial{border-color:var(--warn);color:var(--warn)}
+.chip.v-unverified{border-color:var(--crit);color:var(--crit)}
+.flag{border-left:3px solid var(--warn);padding:6px 10px;background:color-mix(in srgb,var(--warn) 8%,transparent);font-size:13.5px;margin:8px 0}
+.conn{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.conn li{font-size:13.5px;line-height:1.4}
+.conn button{all:unset;cursor:pointer;color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.conn .t{font-size:11.5px;color:var(--ink-3);display:block}
+.meters{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:13px}
+.bar{height:6px;background:var(--rule);border-radius:3px;position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--ink-2);border-radius:3px}
+.stakebar{height:6px;background:linear-gradient(90deg,var(--rule),var(--rule));border-radius:3px;position:relative}
+.stakebar b{position:absolute;top:-3px;width:12px;height:12px;border-radius:50%;background:var(--ink);transform:translateX(-50%)}
+.stakebar::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--ink-3)}
+.members{display:flex;flex-wrap:wrap;gap:6px}
+.members button{font:13px var(--font-body);border:1px solid var(--rule);background:var(--bg);color:var(--ink);border-radius:6px;padding:3px 8px;cursor:pointer}
+.legend{display:grid;gap:14px;padding:6px 0 18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.legend fieldset{border:1px solid var(--rule);border-radius:10px;padding:10px 12px;margin:0;background:var(--surface)}
+.legend legend{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);padding:0 4px}
+.legend label{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:2px 0;cursor:pointer}
+.legend svg{flex:none}
+.catrow{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:2px 0}
+section.explain{padding:10px 0 30px;border-top:1px solid var(--rule)}
+section.explain h2{font-family:var(--font-display);font-size:26px;margin:18px 0 6px}
+.cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px 18px}
+.card h3{font-family:var(--font-display);font-weight:600;font-size:19px;margin:0 0 8px;text-wrap:balance}
+.card p,.card li{max-width:68ch}
+.card ul{padding-left:18px;margin:6px 0}
+.card .why{font-size:13.5px;color:var(--ink-2);border-top:1px dashed var(--rule);padding-top:8px;margin-top:10px}
+.small{font-size:13px;color:var(--ink-2)}
+table.all{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.all th,table.all td{border-bottom:1px solid var(--rule);padding:5px 8px;text-align:left;vertical-align:top}
+table.all th{position:sticky;top:0;background:var(--surface);font-weight:600}
+.tablewrap{overflow:auto;max-height:520px;border:1px solid var(--rule);border-radius:10px;background:var(--surface)}
+details summary{cursor:pointer;font-weight:600;padding:8px 0}
+footer{padding:20px 0 40px;color:var(--ink-3);font-size:13px}
+/* svg */
+.n-label{font-family:var(--font-body);fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.g-label{font-family:var(--font-display);font-weight:600}
+.guide-text{font-family:var(--font-body);fill:var(--ink-3);font-size:12px}
+.guide-line{stroke:var(--rule)}
+.node{cursor:pointer}
+.node circle.core{stroke:var(--surface);stroke-width:2}
+.node.group circle.core{stroke-width:3}
+.node.group circle.ring{fill:none;stroke-dasharray:3 3;stroke-width:1.5}
+.node.dim,.edge.dim,.span.dim{opacity:.12}
+.node.sel circle.core{stroke:var(--ink);stroke-width:3}
+.hull{fill-opacity:.06;stroke-opacity:.35;stroke-width:1}
+.hull-label{font-family:var(--font-body);font-size:11.5px;font-weight:600;fill:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;pointer-events:none}
+.span{stroke-width:2.5;stroke-linecap:round;opacity:.35}
+@media (prefers-reduced-motion: reduce){.tip{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Who shapes a mine in Manitoba</h1>
+    <p class="lede">An interactive map of the players in mineral exploration and mine development in Manitoba, Canada, and how they connect. Start with seven broad groups. Click a group to open it, click again to see named organizations, and click any organization to read what it does and where the information comes from.</p>
+  </header>
+
+  <div class="toolbar" role="toolbar" aria-label="Map controls">
+    <div>
+      <div class="lbl" id="viewlbl">Arrange by</div>
+      <div class="seg" role="group" aria-labelledby="viewlbl" id="views">
+        <button type="button" data-view="cluster" aria-pressed="true">Clusters</button>
+        <button type="button" data-view="lifecycle" aria-pressed="false">Mine life cycle</button>
+        <button type="button" data-view="stakes" aria-pressed="false">Stakes</button>
+        <button type="button" data-view="influence" aria-pressed="false">Influence</button>
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Detail</div>
+      <div class="seg" role="group" aria-label="Level of detail">
+        <button type="button" id="lvl1">Groups</button>
+        <button type="button" id="lvl2">Subgroups</button>
+        <button type="button" id="lvl3">All organizations</button>
+      </div>
+    </div>
+    <div class="search">
+      <div>
+        <label class="lbl" for="q">Find an organization</label><br>
+        <input id="q" list="names" placeholder="e.g. Hudbay, Sagkeeng, Clean Environment…" autocomplete="off">
+        <datalist id="names"></datalist>
+      </div>
+    </div>
+    <div>
+      <div class="lbl">&nbsp;</div>
+      <button class="btn" type="button" id="labelsBtn" aria-pressed="true">Labels on</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="stage" id="stage">
+      <svg id="svg" role="img" aria-label="Network of Manitoba mining actors"></svg>
+      <div class="crumbs" id="crumbs"></div>
+      <div class="zoomctl"><button type="button" id="zin" aria-label="Zoom in">+</button><button type="button" id="zout" aria-label="Zoom out">−</button><button type="button" id="zfit" aria-label="Fit to view">⤢</button></div>
+      <div class="tip" id="tip"></div>
+    </div>
+    <aside class="panel" id="panel" aria-live="polite"><p class="small">Loading data…</p></aside>
+  </div>
+
+  <div class="legend" id="legend"></div>
+
+  <section class="explain" id="explain">
+    <h2>Three mechanisms that shape where trade-offs get made</h2>
+    <p class="small" style="max-width:80ch">These short notes describe how the rules work, in plain terms. They are not legal advice. Links point to the sources used.</p>
+    <div class="cards">
+      <article class="card">
+        <h3>The Crown's duty to consult, and how it gets handed to companies</h3>
+        <p>When a government decision might affect Aboriginal or treaty rights, the Crown must consult the Nations involved first. The Supreme Court set out the duty in <a href="https://www.mltaikins.com/?p=7719">Haida Nation (2004)</a>: how deep consultation must go depends on how strong the rights claim is and how serious the possible harm is. The Crown stays responsible, but it may hand the practical steps of consultation to the company proposing the project.</p>
+        <p>In Manitoba, the mining department coordinates consultation on exploration licences and work permits under <a href="https://www.gov.mb.ca/iem/mines/procedures/pdfs/procedures_mineralexploration.pdf">draft procedures</a> and an interim provincial policy. Since 2019 it has negotiated <a href="https://gov.mb.ca/iem/mines/fnmdp.html">Mineral Development Protocols</a> with individual Nations, using a matrix that ties the level of consultation to the scale of impact. Under that matrix the Crown waits 30 days after a claim is staked before issuing it, and notifies First Nations whose Community Interest Zone it falls in. The province says plainly that it values <a href="https://www.gov.mb.ca/mines/exploration-mining.html">proponent-led engagement</a>.</p>
+        <p>In practice much of the engagement happens through agreements between companies and Nations: exploration agreements with notice, monitoring and community funds (Kiciwapa Cree Nation has four), and impact benefit agreements before a mine (Alamos has two at Lynn Lake). Federal assessment adds a second Crown for large projects. The Manitoba Métis Federation asserts its own consultation rights, and MKO and the Southern Chiefs' Organization frame expectations as free, prior and informed consent.</p>
+        <p class="why">On the map: <b>Holds the duty to consult</b> links run from the Crown to rights holders; <b>Carries out delegated consultation</b> links run from companies to Nations. Agreement terms are often confidential, so a link shows that engagement exists, not what was traded.</p>
+      </article>
+      <article class="card">
+        <h3>Free-entry claim staking</h3>
+        <p>Anyone with a prospecting licence can stake a mining claim on open Crown mineral land without asking permission first. In unsurveyed territory that still means physically placing posts at the corners, then recording the claim through the province's iMaQs system. A claim covers 16 to 256 hectares and gives the exclusive right to explore there; a mineral lease is needed later to produce (<a href="https://www.manitoba.ca/iem/mines/staking/index.html">staking requirements</a>).</p>
+        <p>Some land is closed: withdrawn areas, reserves, and backcountry zones of provincial parks. Much else is open, including other parts of parks. The Wilderness Committee counted <a href="https://globalnews.ca/news/10359321/mining-wildlife-manitoba">681 claims inside provincial parks</a> in early 2024. Claims can also sit under private land, as residents near Sio Silica found when they could not subdivide (<a href="https://www.cbc.ca/1.6846998">CBC</a>).</p>
+        <p>Free entry is under legal pressure elsewhere. In December 2025 the BC Court of Appeal found BC's former system inconsistent with UNDRIP under that province's Declaration Act, and the Supreme Court of Canada agreed in May 2026 to hear the appeal (<a href="https://en.wikipedia.org/wiki/Gitxaa%C5%82a_v._British_Columbia">Gitxaała</a>). Manitoba has no equivalent of BC's Declaration Act, so the ruling does not apply here directly. The explorers' association is pushing for online map staking (<a href="https://cdnc.heyzine.com/flip-book/pdf/1390b374e8232870e637b3f50ffd3e1906cccf17.pdf">MPDA</a>).</p>
+        <p class="why">On the map: the first stage of the life-cycle view is where rights are allocated before any public review takes place.</p>
+      </article>
+      <article class="card">
+        <h3>Flow-through shares and the spending clock</h3>
+        <p>Most junior explorers have no income, so they cannot use their own tax deductions. Flow-through shares let them pass exploration spending to investors, who deduct it in full. On top of that, individual investors can claim a federal credit of 15% (grassroots exploration) or 30% (critical minerals), both available for agreements signed up to 31 March 2027, and Manitoba residents get a further 30% provincial credit for Manitoba exploration (<a href="https://www.pdac.ca/programs-and-advocacy/access-to-capital/flow-through-shares">PDAC</a>). Flow-through raises about 70% of exploration money on Canadian exchanges.</p>
+        <p>The catch is time. Under the common "look-back" rule, investors get the deduction for the year they invest, and the company then has until the end of the next calendar year to spend the money on eligible work. Unspent amounts attract monthly charges and a penalty (<a href="https://www.mnp.ca/en/insights/directory/mining-companies-and-flow-through-shares-timeline-changes-announced">MNP</a>).</p>
+        <p>Exploration in northern Manitoba also runs on seasons, work permits and community relationships. Work permits outside parks now last up to three years with one two-year extension (<a href="https://www.tdslaw.com/resource/throne-speech-and-multi-year-permits-signal-manitoba-is-open-for-mining/">TDS</a>). When a permit or an agreement with a Nation takes longer than the spending window allows, the company has to choose: spend elsewhere, pay the penalty, or press for faster approval. That gives the financing calendar a quiet role in how long engagement can last.</p>
+        <p class="why">On the map: follow <b>Funds</b> links from Finance Canada and Manitoba Finance through investors and exchanges to the juniors.</p>
+      </article>
+      <article class="card">
+        <h3>Reading this map</h3>
+        <ul>
+          <li><b>Categories overlap.</b> Norway House Cree Nation is a rights holder and a mine owner. Hollow Water First Nation partners with Canadian Premium Sand while Camp Morning Star, on its land, opposes silica mining. Manitoba Hydro is a government body shown with infrastructure.</li>
+          <li><b>Positions vary by project and over time.</b> Mathias Colomb Cree Nation challenged Hudbay and appealed Lynn Lake licences, then signed an agreement with Alamos. A link records a documented relationship at a point in time.</li>
+          <li><b>The stakes and influence layouts are judgements</b> made to help comparison, scored roughly from public sources. Stakes asks whose costs or benefits an actor mostly carries or speaks for. Formal influence means legal authority to approve, refuse or require consent; informal influence means money, publicity, litigation and relationships.</li>
+          <li><b>Grouped views add links up.</b> When a group is closed, its links are combined; line thickness shows how many relationships it contains.</li>
+          <li><b>Not exhaustive.</b> Manitoba has 63 First Nations and many more explorers than shown. The sample follows current projects.</li>
+        </ul>
+      </article>
+    </div>
+
+    <h2>What could not be verified</h2>
+    <p class="small" style="max-width:80ch">Entries marked partly verified or unverified are listed here with the reason. Treat them as leads.</p>
+    <ul id="unverified" class="small"></ul>
+
+    <details>
+      <summary>All organizations as a table</summary>
+      <div class="tablewrap"><table class="all" id="alltable"></table></div>
+    </details>
+
+    <details>
+      <summary>Editing the data</summary>
+      <p class="small" style="max-width:80ch">The content comes from a Google Sheet with seven tabs (meta, stages, categories, subgroups, relationship_types, actors, links), read each time the page opens. If the sheet can't be reached, the page uses the snapshot CSV files in <code>data/</code>. Column rules are in <code>docs/codebook.md</code>. Snapshot files: <a href="data/actors.csv">actors.csv</a> · <a href="data/links.csv">links.csv</a> · <a href="data/subgroups.csv">subgroups.csv</a> · <a href="data/categories.csv">categories.csv</a> · <a href="data/relationship_types.csv">relationship_types.csv</a> · <a href="data/stages.csv">stages.csv</a>.</p>
+    </details>
+  </section>
+  <footer id="foot"></footer>
+</div>
+
+<script src="assets/vendor/d3.v7.8.5.min.js"></script>
+<script src="assets/config.js"></script>
+<script>
+// ---------- data loading: Google Sheet (published CSV) with snapshot fallback
+const TABS = ['meta','stages','categories','subgroups','relationship_types','actors','links'];
+async function fetchTab(name){
+  const cfg = window.MAP_CONFIG || {sheet:{},fallback:'data/'};
+  const tries = [];
+  if(cfg.sheet && cfg.sheet[name]) tries.push({url:cfg.sheet[name], from:'sheet'});
+  tries.push({url:(cfg.fallback||'data/')+name+'.csv', from:'snapshot'});
+  let lastErr;
+  for(const t of tries){
+    try{
+      const r = await fetch(t.url,{cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const txt = await r.text();
+      if(/^\s*</.test(txt)) throw new Error('got a web page, not CSV (is the tab published as CSV?)');
+      const rows = d3.csvParse(txt, row=>{ const o={}; for(const k in row) o[k.trim()] = (row[k]||'').trim(); return o; });
+      return {rows, from:t.from};
+    }catch(e){ lastErr = e; }
+  }
+  throw new Error('Could not load tab "'+name+'": '+(lastErr&&lastErr.message));
+}
+async function loadData(){
+  const res = Object.fromEntries(await Promise.all(TABS.map(async t=>[t, await fetchTab(t)])));
+  const warn = [];
+  const num = (v,def,where)=>{ if(v===''||v==null) return def; const n=Number(v); if(Number.isNaN(n)){ warn.push(where+': "'+v+'" is not a number'); return def;} return n; };
+  const meta = Object.fromEntries(res.meta.rows.filter(r=>r.key).map(r=>[r.key,r.value]));
+  const stages = res.stages.rows.filter(r=>r.id!=='').sort((a,b)=>num(a.id,0,'stages')-num(b.id,0,'stages')).map(r=>r.name);
+  const categories = res.categories.rows.filter(r=>r.id).map(r=>({id:r.id,name:r.name,slot:num(r.color_slot,1,'categories '+r.id),desc:r.description}));
+  const catIds = new Set(categories.map(c=>c.id));
+  const subcategories = res.subgroups.rows.filter(r=>r.id).filter(r=>{ if(!catIds.has(r.category)){ warn.push('subgroups '+r.id+': unknown category "'+r.category+'"'); return false;} return true; })
+    .map(r=>({id:r.id,cat:r.category,name:r.name,desc:r.description}));
+  const subIds = new Set(subcategories.map(s=>s.id));
+  const relTypes = {}; res.relationship_types.rows.filter(r=>r.id).forEach(r=>relTypes[r.id]={label:r.label,family:r.family,dash:r.dash||''});
+  const seen = new Set(), VER = new Set(['verified','partial','unverified']);
+  const actors = [];
+  res.actors.rows.filter(r=>r.id).forEach(r=>{
+    const w = 'actors '+r.id;
+    if(seen.has(r.id)){ warn.push(w+': duplicate id, row skipped'); return; }
+    if(!subIds.has(r.subgroup)){ warn.push(w+': unknown subgroup "'+r.subgroup+'", row skipped'); return; }
+    seen.add(r.id);
+    let st = (r.stages||'').split(/[;,]/).map(x=>x.trim()).filter(x=>x!=='').map(Number).filter(n=>Number.isInteger(n)&&n>=0&&n<stages.length);
+    if(!st.length){ warn.push(w+': no valid stages, set to 0'); st=[0]; }
+    const src=[]; for(let i=1;i<=6;i++){ const u=r['source'+i+'_url']; if(u) src.push([r['source'+i+'_title']||u,u]); }
+    if(!src.length) warn.push(w+': no source URL');
+    let v = (r.verification_status||'').toLowerCase(); if(!VER.has(v)){ if(v) warn.push(w+': verification_status "'+v+'" not recognised'); v='unverified'; }
+    actors.push({id:r.id,name:r.name||r.id,short:r.short_name,sub:r.subgroup,desc:r.description,projects:r.projects,stages:st,
+      stakes:num(r.stakes,0,w),formal:num(r.formal_power,0,w),informal:num(r.informal_power,0,w),verify:v,flag:r.verification_note,src});
+  });
+  const links = [];
+  res.links.rows.filter(r=>r.source||r.target).forEach((r,i)=>{
+    const w='links row '+(i+2)+' ('+r.source+' → '+r.target+')';
+    if(!seen.has(r.source)||!seen.has(r.target)){ warn.push(w+': unknown actor id, row skipped'); return; }
+    if(!relTypes[r.type]){ warn.push(w+': unknown type "'+r.type+'", row skipped'); return; }
+    links.push({s:r.source,t:r.target,type:r.type,note:r.note,url:r.source_url});
+  });
+  const fromSheet = TABS.filter(t=>res[t].from==='sheet').length;
+  return {meta:{compiled:meta.compiled||'',compiler:meta.compiler||'',note:meta.note||''},stages,categories,subcategories,relTypes,actors,links,
+    _status:{fromSheet, total:TABS.length, warn, loaded:new Date()}};
+}
+
+(async function(){
+let D;
+try{ D = await loadData(); }
+catch(e){
+  document.getElementById('panel').innerHTML = '<h3>Data could not be loaded</h3><p>'+String(e.message).replace(/</g,'&lt;')+'</p><p class="small">Check the links in assets/config.js, or open the page through a web server rather than as a local file.</p>';
+  return;
+}
+const STAGES = D.stages;
+const cats = D.categories, subs = D.subcategories, actors = D.actors, links = D.links, REL = D.relTypes;
+const catById = Object.fromEntries(cats.map(c=>[c.id,c]));
+const subById = Object.fromEntries(subs.map(s=>[s.id,s]));
+const actById = Object.fromEntries(actors.map(a=>[a.id,a]));
+actors.forEach(a=>{a.cat = subById[a.sub].cat; a.stageMean = d3.mean(a.stages);});
+const subsOf = c => subs.filter(s=>s.cat===c);
+const actsOf = s => actors.filter(a=>a.sub===s);
+const actsOfCat = c => actors.filter(a=>a.cat===c);
+const catColor = id => `var(--c${catById[id].slot})`;
+const famColor = f => `var(--e-${f})`;
+const deg = {}; links.forEach(l=>{deg[l.s]=(deg[l.s]||0)+1;deg[l.t]=(deg[l.t]||0)+1;});
+const VLABEL = {verified:'Verified',partial:'Partly verified',unverified:'Not verified'};
+
+// ---------- state
+const openCats = new Set(), openSubs = new Set();
+const relOn = new Set(Object.keys(REL));
+let view = 'cluster', selected = null, showLabels = true;
+
+// ---------- svg scaffolding
+const svg = d3.select('#svg');
+const stageEl = document.getElementById('stage');
+let W = stageEl.clientWidth, H = stageEl.clientHeight;
+const defs = svg.append('defs');
+Object.entries(REL).forEach(([k,r])=>{
+  defs.append('marker').attr('id','ar-'+k).attr('viewBox','0 -4 8 8').attr('refX',8).attr('refY',0)
+   .attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto')
+   .append('path').attr('d','M0,-4L8,0L0,4').attr('fill',famColor(r.family));
+});
+const root = svg.append('g');
+const gGuide = root.append('g'), gHull = root.append('g'), gSpan = root.append('g'), gEdge = root.append('g'), gNode = root.append('g');
+const zoom = d3.zoom().scaleExtent([0.3,4]).on('zoom', e=>root.attr('transform', e.transform));
+svg.call(zoom).on('dblclick.zoom', null);
+d3.select('#zin').on('click',()=>svg.transition().duration(250).call(zoom.scaleBy,1.3));
+d3.select('#zout').on('click',()=>svg.transition().duration(250).call(zoom.scaleBy,1/1.3));
+function fit(){
+  if(!nodes.length) return;
+  const x0=d3.min(nodes,n=>n.x-n.r)-50, x1=d3.max(nodes,n=>n.x+n.r+(n.kind==='act'&&showLabels?120:60)), y0=d3.min(nodes,n=>n.y-n.r)-75, y1=d3.max(nodes,n=>n.y+n.r+50);
+  const k=Math.min(1.15, W/(x1-x0), H/(y1-y0));
+  const t=d3.zoomIdentity.translate(W/2-k*(x0+x1)/2, H/2-k*(y0+y1)/2).scale(k);
+  svg.transition().duration(400).call(zoom.transform,t);
+}
+let autoFit=false;
+d3.select('#zfit').on('click',fit);
+svg.on('click', (e)=>{ if(e.target===svg.node()){ select(null); } });
+
+// ---------- visible model
+const nodeStore = new Map();
+function visibleNodes(){
+  const out=[];
+  cats.forEach(c=>{
+    if(!openCats.has(c.id)){ out.push(mk('cat',c.id)); return; }
+    subsOf(c.id).forEach(s=>{
+      if(!openSubs.has(s.id)) out.push(mk('sub',s.id));
+      else actsOf(s.id).forEach(a=>out.push(mk('act',a.id)));
+    });
+  });
+  return out;
+}
+function mk(kind,id){
+  const key = kind+':'+id;
+  let n = nodeStore.get(key);
+  if(!n){
+    n = {key,kind,id};
+    if(kind==='cat'){ const c=catById[id]; n.name=c.name; n.cat=id; n.members=actsOfCat(id); n.r=30; }
+    else if(kind==='sub'){ const s=subById[id]; n.name=s.name; n.cat=s.cat; n.sub=id; n.members=actsOf(id); n.r=11+Math.min(9,Math.sqrt(n.members.length)*3); }
+    else { const a=actById[id]; n.name=a.short||a.name; n.cat=a.cat; n.sub=a.sub; n.members=[a]; n.r=5.5+Math.min(6,Math.sqrt(deg[id]||0)*1.4); }
+    n.stageMean = d3.mean(n.members,m=>m.stageMean);
+    n.stakes = d3.mean(n.members,m=>m.stakes);
+    n.formal = d3.mean(n.members,m=>m.formal);
+    n.informal = d3.mean(n.members,m=>m.informal);
+    n.stMin = d3.min(n.members,m=>d3.min(m.stages)); n.stMax = d3.max(n.members,m=>d3.max(m.stages));
+    nodeStore.set(key,n);
+  }
+  return n;
+}
+function repOf(actorId, visKeys){
+  const a = actById[actorId];
+  if(visKeys.has('act:'+a.id)) return 'act:'+a.id;
+  if(visKeys.has('sub:'+a.sub)) return 'sub:'+a.sub;
+  return 'cat:'+a.cat;
+}
+function visibleEdges(nodes){
+  const keys = new Set(nodes.map(n=>n.key)), m = new Map();
+  links.forEach(l=>{
+    if(!relOn.has(l.type)) return;
+    const s=repOf(l.s,keys), t=repOf(l.t,keys);
+    if(s===t) return;
+    const k = s<t ? s+'|'+t : t+'|'+s;
+    let e = m.get(k); if(!e){ e={key:k,a:s,b:t,items:[]}; m.set(k,e); }
+    e.items.push({...l, s2:s, t2:t});
+  });
+  return [...m.values()].map(e=>{
+    const types = [...new Set(e.items.map(i=>i.type))];
+    e.single = e.items.length===1 ? e.items[0] : null;
+    e.type = types.length===1 ? types[0] : null;
+    e.source = nodeStore.get(e.single? e.single.s2 : e.a); e.target = nodeStore.get(e.single? e.single.t2 : e.b);
+    return e;
+  });
+}
+
+// ---------- targets per view
+const PAD = 70;
+function catIndex(c){ return cats.findIndex(x=>x.id===c); }
+function laneY(c){ const h=(H-PAD*1.4)/cats.length; return PAD*0.9 + h*(catIndex(c)+0.5); }
+function target(n){
+  if(view==='cluster'){
+    const i=catIndex(n.cat), ang = -Math.PI/2 + i*2*Math.PI/cats.length;
+    const rx = W*0.36, ry = H*0.35;
+    const cx = W/2 + rx*Math.cos(ang), cy = H/2 + ry*Math.sin(ang);
+    if(n.kind==='cat') return [cx,cy];
+    const sl = subsOf(n.cat), j = sl.findIndex(s=>s.id===n.sub);
+    const spread = openCats.has(n.cat) ? 80 + sl.length*8 : 0;
+    const a2 = ang + (j-(sl.length-1)/2)*(1.3/Math.max(1,sl.length-1))*1.6;
+    return [cx + spread*Math.cos(a2)*0.9, cy + spread*Math.sin(a2)*0.9];
+  }
+  if(view==='lifecycle'){
+    const x = d3.scaleLinear([0,5],[PAD+60,W-PAD-60])(n.stageMean);
+    return [x, laneY(n.cat)];
+  }
+  if(view==='stakes'){
+    const x = d3.scaleLinear([-2,2],[PAD+60,W-PAD-60])(n.stakes);
+    return [x, laneY(n.cat)];
+  }
+  // influence
+  const x = d3.scaleLinear([0,3],[PAD+30,W-PAD-90])(n.formal);
+  const y = d3.scaleLinear([0,3],[H-PAD,PAD])(n.informal);
+  return [x,y];
+}
+
+// ---------- guides
+function drawGuides(){
+  gGuide.selectAll('*').remove();
+  const g = gGuide;
+  if(view==='cluster') return;
+  if(view==='lifecycle' || view==='stakes'){
+    cats.forEach(c=>{
+      const y=laneY(c.id);
+      g.append('line').attr('class','guide-line').attr('x1',10).attr('x2',W-10).attr('y1',y).attr('y2',y).attr('stroke-dasharray','2 4');
+      g.append('text').attr('class','guide-text').attr('x',12).attr('y',y-6).text(c.name.split(' ')[0]==='Indigenous'?'Indigenous':c.name.split(' &')[0]);
+    });
+  }
+  if(view==='lifecycle'){
+    const x = d3.scaleLinear([0,5],[PAD+60,W-PAD-60]);
+    STAGES.forEach((s,i)=>{
+      g.append('line').attr('class','guide-line').attr('x1',x(i)).attr('x2',x(i)).attr('y1',PAD*0.55).attr('y2',H-12);
+      const t=g.append('text').attr('class','guide-text').attr('x',x(i)).attr('y',PAD*0.45).attr('text-anchor','middle').style('font-weight',600);
+      const words=s.split(' & '); t.text(words[0]+(words[1]?' &':''));
+      if(words[1]) g.append('text').attr('class','guide-text').attr('x',x(i)).attr('y',PAD*0.45+14).attr('text-anchor','middle').style('font-weight',600).text(words[1]);
+    });
+  }
+  if(view==='stakes'){
+    const x = d3.scaleLinear([-2,2],[PAD+60,W-PAD-60]);
+    [-2,-1,0,1,2].forEach(v=>g.append('line').attr('class','guide-line').attr('x1',x(v)).attr('x2',x(v)).attr('y1',PAD*0.55).attr('y2',H-12).attr('stroke-width',v===0?1.5:1));
+    g.append('text').attr('class','guide-text').attr('x',x(-2)).attr('y',PAD*0.45).style('font-weight',600).text('← Mostly bears costs or risks');
+    g.append('text').attr('class','guide-text').attr('x',x(2)).attr('y',PAD*0.45).attr('text-anchor','end').style('font-weight',600).text('Mostly captures benefits →');
+    g.append('text').attr('class','guide-text').attr('x',x(0)).attr('y',PAD*0.45+14).attr('text-anchor','middle').text('mixed');
+  }
+  if(view==='influence'){
+    const x = d3.scaleLinear([0,3],[PAD+30,W-PAD-90]), y = d3.scaleLinear([0,3],[H-PAD,PAD]);
+    [0,1,2,3].forEach(v=>{
+      g.append('line').attr('class','guide-line').attr('x1',x(v)).attr('x2',x(v)).attr('y1',y(3)).attr('y2',y(0));
+      g.append('line').attr('class','guide-line').attr('x1',x(0)).attr('x2',x(3)).attr('y1',y(v)).attr('y2',y(v));
+    });
+    g.append('text').attr('class','guide-text').attr('x',(x(0)+x(3))/2).attr('y',H-PAD+34).attr('text-anchor','middle').style('font-weight',600).text('Formal power: legal authority to approve, refuse or require consent →');
+    g.append('text').attr('class','guide-text').attr('transform',`translate(${PAD-26},${(y(0)+y(3))/2}) rotate(-90)`).attr('text-anchor','middle').style('font-weight',600).text('Informal power: money, publicity, litigation, relationships →');
+    const q=[[x(0.15),y(2.9),'Informal leverage, little formal say'],[x(2.85),y(2.9),'Both formal and informal power'],[x(2.85),y(0.1),'Formal authority, low profile'],[x(0.15),y(0.1),'Little power on either axis']];
+    q.forEach(([qx,qy,t],i)=>g.append('text').attr('class','guide-text').attr('x',qx).attr('y',qy).attr('text-anchor',i===1||i===2?'end':'start').style('font-style','italic').text(t));
+  }
+}
+
+// ---------- render
+let sim = null, nodes=[], edges=[];
+function render(){
+  W = stageEl.clientWidth; H = stageEl.clientHeight;
+  const prev = new Map(nodes.map(n=>[n.key,n]));
+  nodes = visibleNodes();
+  // place newly visible nodes at their parent's position
+  nodes.forEach(n=>{
+    if(n.x==null){
+      const par = n.kind==='act' ? (nodeStore.get('sub:'+n.sub)) : n.kind==='sub' ? nodeStore.get('cat:'+n.cat) : null;
+      const t = target(n);
+      n.x = (par && par.x!=null ? par.x : t[0]) + (Math.random()-.5)*12;
+      n.y = (par && par.y!=null ? par.y : t[1]) + (Math.random()-.5)*12;
+    }
+  });
+  edges = visibleEdges(nodes);
+  drawGuides();
+
+  // edges
+  const es = gEdge.selectAll('line.edge').data(edges, d=>d.key);
+  es.exit().remove();
+  const eEnter = es.enter().append('line').attr('class','edge')
+    .on('mouseenter',(e,d)=>showTip(e, edgeTip(d))).on('mousemove',moveTip).on('mouseleave',hideTip);
+  eEnter.merge(es)
+    .attr('stroke', d=> d.type ? famColor(REL[d.type].family) : 'var(--ink-3)')
+    .attr('stroke-width', d=> d.single ? 1.5 : Math.min(7, 1.2 + Math.log2(d.items.length)*1.4))
+    .attr('stroke-dasharray', d=> d.type ? REL[d.type].dash : '')
+    .attr('stroke-opacity', d=> d.single ? .85 : .55)
+    .attr('marker-end', d=> d.single ? `url(#ar-${d.single.type})` : null);
+
+  // hulls (cluster view)
+  const groups = [];
+  if(view==='cluster'){
+    openSubs.forEach(sid=>{ if(openCats.has(subById[sid].cat)) groups.push({key:'h:'+sid,label:subById[sid].name,cat:subById[sid].cat,keys:actsOf(sid).map(a=>'act:'+a.id)}); });
+  }
+  const hs = gHull.selectAll('g.h').data(groups,d=>d.key);
+  hs.exit().remove();
+  const hEnter = hs.enter().append('g').attr('class','h');
+  hEnter.append('circle').attr('class','hull');
+  hEnter.append('text').attr('class','hull-label').attr('text-anchor','middle');
+  hEnter.merge(hs).select('circle').attr('fill',d=>catColor(d.cat)).attr('stroke',d=>catColor(d.cat));
+  hEnter.merge(hs).select('text').text(d=>d.label);
+
+  // lifecycle spans
+  const spanData = view==='lifecycle' ? nodes.filter(n=>n.stMax>n.stMin) : [];
+  const sp = gSpan.selectAll('line.span').data(spanData,d=>d.key);
+  sp.exit().remove();
+  sp.enter().append('line').attr('class','span').merge(sp).attr('stroke',d=>catColor(d.cat));
+
+  // nodes
+  const ns = gNode.selectAll('g.node').data(nodes, d=>d.key);
+  ns.exit().remove();
+  const nEnter = ns.enter().append('g').attr('class',d=>'node '+(d.kind==='act'?'actor':'group'))
+    .attr('tabindex',0).attr('role','button')
+    .attr('aria-label',d=> d.kind==='act' ? actById[d.id].name : d.name+' ('+d.members.length+' organizations). Press to open.')
+    .on('click',(e,d)=>{e.stopPropagation(); onNodeClick(d);})
+    .on('keydown',(e,d)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); onNodeClick(d);} })
+    .on('mouseenter',(e,d)=>{ showTip(e, nodeTip(d)); hoverHi(d); })
+    .on('mousemove',moveTip).on('mouseleave',()=>{hideTip(); applyHighlight();});
+  nEnter.filter(d=>d.kind!=='act').append('circle').attr('class','ring');
+  nEnter.append('circle').attr('class','core');
+  nEnter.append('text').attr('class','n-label');
+  const nAll = nEnter.merge(ns);
+  nAll.select('circle.core').attr('r',d=>d.r).attr('fill',d=>catColor(d.cat));
+  nAll.select('circle.ring').attr('r',d=>d.r+5).attr('stroke',d=>catColor(d.cat));
+  nAll.select('text.n-label')
+    .attr('class',d=>'n-label'+(d.kind!=='act'?' g-label':''))
+    .attr('font-size',d=>d.kind==='cat'?14:d.kind==='sub'?12.5:11)
+    .attr('text-anchor',d=>d.kind==='act'?'start':'middle')
+    .attr('dx',d=>d.kind==='act'? d.r+4 : 0)
+    .attr('dy',d=>d.kind==='act'? 4 : d.r+16)
+    .style('display',d=> (d.kind==='act' && !showLabels) ? 'none' : null)
+    .text(d=> d.kind==='act' ? d.name : d.name + ' · ' + d.members.length);
+
+  // simulation
+  if(sim) sim.stop();
+  const axis = view!=='cluster';
+  sim = d3.forceSimulation(nodes)
+    .force('x', d3.forceX(d=>target(d)[0]).strength(axis?0.55:(d=>d.kind==='act'?0.22:0.3)))
+    .force('y', d3.forceY(d=>target(d)[1]).strength(axis? (view==='influence'?0.55:0.35) :(d=>d.kind==='act'?0.22:0.3)))
+    .force('collide', d3.forceCollide(d=> d.r + (d.kind==='act'? (showLabels?10:3) : 14)).iterations(2))
+    .force('charge', d3.forceManyBody().strength(d=> axis? -8 : (d.kind==='act'?-22:-200)).distanceMax(220))
+    .force('link', axis ? null : d3.forceLink(edges).id(d=>d.key).strength(e=> e.single?0.004:0.002).distance(120))
+    .alpha(0.9).alphaDecay(0.035)
+    .on('tick', ticked).on('end',()=>{ if(view==='cluster' && autoFit){ autoFit=false; fit(); } });
+  ticked();
+  updateCrumbs(); applyHighlight();
+}
+function ticked(){
+  gEdge.selectAll('line.edge').each(function(d){
+    const s=d.source, t=d.target; const dx=t.x-s.x, dy=t.y-s.y, L=Math.hypot(dx,dy)||1;
+    const r2 = d.single ? t.r+3 : 0;
+    d3.select(this).attr('x1',s.x+dx/L*s.r).attr('y1',s.y+dy/L*s.r).attr('x2',t.x-dx/L*r2).attr('y2',t.y-dy/L*r2);
+  });
+  gNode.selectAll('g.node').attr('transform',d=>`translate(${d.x},${d.y})`);
+  if(view==='lifecycle'){
+    const x = d3.scaleLinear([0,5],[PAD+60,W-PAD-60]);
+    gSpan.selectAll('line.span').attr('x1',d=>x(d.stMin)).attr('x2',d=>x(d.stMax)).attr('y1',d=>d.y).attr('y2',d=>d.y);
+  }
+  gHull.selectAll('g.h').each(function(g){
+    const pts = g.keys.map(k=>nodeStore.get(k)).filter(n=>n && n.x!=null);
+    if(!pts.length) return;
+    const cx=d3.mean(pts,p=>p.x), cy=d3.mean(pts,p=>p.y);
+    const r = d3.max(pts,p=>Math.hypot(p.x-cx,p.y-cy)+p.r) + 18;
+    d3.select(this).select('circle').attr('cx',cx).attr('cy',cy).attr('r',r);
+    d3.select(this).select('text').attr('x',cx).attr('y',cy-r-5);
+  });
+}
+
+// ---------- interactions
+function onNodeClick(d){
+  if(d.kind==='cat'){ openCats.add(d.id); select({kind:'cat',id:d.id}); render(); }
+  else if(d.kind==='sub'){ openSubs.add(d.id); select({kind:'sub',id:d.id}); render(); }
+  else select({kind:'act',id:d.id});
+}
+function revealActor(id){
+  const a=actById[id]; openCats.add(a.cat); openSubs.add(a.sub); render(); select({kind:'act',id});
+}
+function select(s){ selected = s; renderPanel(); applyHighlight(); }
+function neighbourKeys(actorIds){
+  const set=new Set(actorIds), out=new Set();
+  links.forEach(l=>{ if(!relOn.has(l.type)) return; if(set.has(l.s)) out.add(l.t); if(set.has(l.t)) out.add(l.s); });
+  return out;
+}
+function highlightFor(n){
+  if(!n) return null;
+  const ids = n.members.map(m=>m.id);
+  const nb = neighbourKeys(ids);
+  const keys = new Set(nodes.map(x=>x.key));
+  const hi = new Set([n.key]);
+  nb.forEach(id=>hi.add(repOf(id,keys)));
+  return hi;
+}
+function applyHighlight(hiOverride){
+  let n=null;
+  if(selected){ n = selected.kind==='act' ? nodeStore.get('act:'+selected.id) : null; if(n && !nodes.includes(n)) n=null; }
+  const hi = hiOverride!==undefined ? hiOverride : highlightFor(n);
+  gNode.selectAll('g.node').classed('dim', d=> hi ? !hi.has(d.key) : false).classed('sel', d=> n ? d.key===n.key : false);
+  gEdge.selectAll('line.edge').classed('dim', d=> hi && n ? !(d.a===n.key || d.b===n.key) : false);
+}
+function hoverHi(d){ if(d.kind==='act') applyHighlight(highlightFor(d)); }
+
+// ---------- tooltips
+const tip = document.getElementById('tip');
+function showTip(e,html){ tip.innerHTML=html; tip.style.opacity=1; moveTip(e); }
+function moveTip(e){ const r=stageEl.getBoundingClientRect(); let x=e.clientX-r.left+14, y=e.clientY-r.top+12; if(x>r.width-310) x=e.clientX-r.left-310; tip.style.left=x+'px'; tip.style.top=y+'px'; }
+function hideTip(){ tip.style.opacity=0; }
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function nodeTip(d){
+  if(d.kind==='act'){ const a=actById[d.id]; return `<b>${esc(a.name)}</b><br>${esc(subById[a.sub].name)}`; }
+  return `<b>${esc(d.name)}</b><br>${d.members.length} organizations · click to open`;
+}
+function edgeTip(e){
+  const nm = k => { const n=nodeStore.get(k); return n.kind==='act'? actById[n.id].short||actById[n.id].name : n.name; };
+  if(e.single) return `<b>${esc(nm(e.single.s2))}</b> → ${esc(REL[e.single.type].label.toLowerCase())} → <b>${esc(nm(e.single.t2))}</b>${e.single.note?'<br>'+esc(e.single.note):''}`;
+  const c = d3.rollups(e.items,v=>v.length,i=>i.type).sort((a,b)=>b[1]-a[1]);
+  return `<b>${esc(nm(e.a))}</b> ↔ <b>${esc(nm(e.b))}</b><br>${e.items.length} relationships: `+c.map(([t,n])=>`${n} ${esc(REL[t].label.toLowerCase())}`).join('; ');
+}
+
+// ---------- panel
+const panel = document.getElementById('panel');
+function chipCat(cid,sid){ return `<span class="chip"><span class="dot" style="background:${catColor(cid)}"></span>${esc(catById[cid].name)}${sid?' › '+esc(subById[sid].name):''}</span>`; }
+function renderPanel(){
+  if(!selected){
+    const nv = actors.filter(a=>a.verify!=='verified').length;
+    panel.innerHTML = `<h3>How to use</h3>
+      <p>Click a coloured group to open its subgroups, and a subgroup to see the organizations in it. Click an organization for its role, its links and its sources.</p>
+      <p>Use <b>Arrange by</b> to move the same nodes into a different layout: clusters, stage of the mine life cycle, who carries costs or benefits, or formal and informal power.</p>
+      <p>Hover a line to see the relationship. Turn relationship types on or off in the key below the map.</p>
+      <h3>In this map</h3>
+      <p>${actors.length} organizations in ${subs.length} subgroups and ${cats.length} groups, joined by ${links.length} documented relationships. ${nv} entries are only partly verified or not verified; they are listed below the map.</p>
+      <h3>Groups</h3>
+      <div class="members">${cats.map(c=>`<button type="button" data-open-cat="${c.id}"><span class="dot" style="background:${catColor(c.id)}"></span> ${esc(c.name)}</button>`).join('')}</div>
+      <p class="small" style="margin-top:14px">Compiled ${esc(D.meta.compiled)}. ${esc(D.meta.note)}</p>`;
+  } else if(selected.kind==='cat' || selected.kind==='sub'){
+    const isCat = selected.kind==='cat';
+    const o = isCat ? catById[selected.id] : subById[selected.id];
+    const cid = isCat ? o.id : o.cat;
+    const mem = isCat ? actsOfCat(o.id) : actsOf(o.id);
+    const kids = isCat ? subsOf(o.id) : null;
+    panel.innerHTML = `${chipCat(cid,isCat?null:o.id)}
+      <h2>${esc(o.name)}</h2><p>${esc(o.desc)}</p>
+      <div class="chips"><button class="btn" type="button" data-collapse="${selected.kind}:${o.id}">Close this ${isCat?'group':'subgroup'}</button>
+      ${isCat?`<button class="btn" type="button" data-openall="${o.id}">Show all its organizations</button>`:''}</div>
+      ${isCat?`<h3>Subgroups</h3><div class="members">${kids.map(s=>`<button type="button" data-open-sub="${s.id}">${esc(s.name)} · ${actsOf(s.id).length}</button>`).join('')}</div>`:''}
+      <h3>Organizations (${mem.length})</h3><div class="members">${mem.map(a=>`<button type="button" data-actor="${a.id}">${esc(a.short||a.name)}</button>`).join('')}</div>`;
+  } else {
+    const a = actById[selected.id];
+    const out = links.filter(l=>l.s===a.id), inc = links.filter(l=>l.t===a.id);
+    const li = (l,other,dir) => `<li><span class="t">${dir==='out'?esc(REL[l.type].label)+' →':'← '+esc(REL[l.type].label)+' (incoming)'}</span><button type="button" data-actor="${other}">${esc(actById[other].name)}</button>${l.note?' — '+esc(l.note):''}${l.url?` <a href="${esc(l.url)}" target="_blank" rel="noopener">[source]</a>`:''}</li>`;
+    const stakesPct = (a.stakes+2)/4*100;
+    panel.innerHTML = `${chipCat(a.cat,a.sub)}
+      <h2>${esc(a.name)}</h2>
+      <div class="chips"><span class="chip v-${a.verify}">${VLABEL[a.verify]}</span></div>
+      <p>${esc(a.desc)}</p>
+      ${a.flag?`<div class="flag"><b>Unverified:</b> ${esc(a.flag)}</div>`:''}
+      <p class="small"><b>Projects:</b> ${esc(a.projects)}<br><b>Life-cycle stages:</b> ${a.stages.map(i=>esc(STAGES[i])).join(', ')}</p>
+      <h3>Placement (editorial judgement)</h3>
+      <div class="meters">
+        <span>Stakes</span><div class="stakebar" title="−2 bears costs, +2 captures benefits"><b style="left:${stakesPct}%"></b></div><span class="small">${a.stakes>0?'+':''}${a.stakes}</span>
+        <span>Formal</span><div class="bar"><i style="width:${a.formal/3*100}%"></i></div><span class="small">${a.formal}/3</span>
+        <span>Informal</span><div class="bar"><i style="width:${a.informal/3*100}%"></i></div><span class="small">${a.informal}/3</span>
+      </div>
+      <h3>Connections (${out.length+inc.length})</h3>
+      ${out.length+inc.length? `<ul class="conn">${out.map(l=>li(l,l.t,'out')).join('')}${inc.map(l=>li(l,l.s,'in')).join('')}</ul>` : '<p class="small">No documented links mapped.</p>'}
+      <h3>Sources</h3>
+      <ul class="conn">${a.src.map(s=>`<li><a href="${esc(s[1])}" target="_blank" rel="noopener">${esc(s[0])}</a></li>`).join('')}</ul>`;
+  }
+}
+panel.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.actor) revealActor(b.dataset.actor);
+  else if(b.dataset.openCat){ openCats.add(b.dataset.openCat); select({kind:'cat',id:b.dataset.openCat}); render(); }
+  else if(b.dataset.openSub){ const s=subById[b.dataset.openSub]; openCats.add(s.cat); openSubs.add(s.id); select({kind:'sub',id:s.id}); render(); }
+  else if(b.dataset.openall){ openCats.add(b.dataset.openall); subsOf(b.dataset.openall).forEach(s=>openSubs.add(s.id)); render(); }
+  else if(b.dataset.collapse){
+    const [k,id]=b.dataset.collapse.split(':');
+    if(k==='cat'){ openCats.delete(id); subsOf(id).forEach(s=>openSubs.delete(s.id)); }
+    else openSubs.delete(id);
+    select(null); render();
+  }
+});
+
+// ---------- crumbs
+function updateCrumbs(){
+  const msg = {cluster:'Clusters: groups placed by category; closeness shows connection.',
+    lifecycle:'Life cycle: placed at the average of the stages where each actor is active; bars show the span.',
+    stakes:'Stakes: left carries more of the costs or risks, right more of the benefits. Rough editorial scores.',
+    influence:'Influence: right has more formal authority, up has more informal leverage. Rough editorial scores.'}[view];
+  document.getElementById('crumbs').textContent = msg;
+}
+
+// ---------- toolbar
+function setView(v){
+  view=v; svg.call(zoom.transform,d3.zoomIdentity); document.querySelectorAll('#views button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.view===v));
+  try{ if(location.hash!=='#'+v) history.replaceState(null,'','#'+v); }catch(_){}
+  render();
+}
+document.querySelectorAll('#views button').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+window.addEventListener('hashchange',()=>{ const h=location.hash.slice(1); if(['cluster','lifecycle','stakes','influence'].includes(h) && h!==view) setView(h); });
+document.getElementById('lvl1').onclick=()=>{ svg.call(zoom.transform,d3.zoomIdentity); openCats.clear(); openSubs.clear(); select(null); render(); };
+document.getElementById('lvl2').onclick=()=>{ autoFit=true; cats.forEach(c=>openCats.add(c.id)); openSubs.clear(); select(null); render(); };
+document.getElementById('lvl3').onclick=()=>{ autoFit=true; cats.forEach(c=>openCats.add(c.id)); subs.forEach(s=>openSubs.add(s.id)); render(); };
+document.getElementById('labelsBtn').onclick=function(){ showLabels=!showLabels; this.setAttribute('aria-pressed',showLabels); this.textContent= showLabels?'Labels on':'Labels off'; render(); };
+const dl=document.getElementById('names'); actors.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(a=>{const o=document.createElement('option'); o.value=a.name; dl.appendChild(o);});
+document.getElementById('q').addEventListener('change',e=>{
+  const v=e.target.value.trim().toLowerCase(); if(!v) return;
+  const a = actors.find(x=>x.name.toLowerCase()===v) || actors.find(x=>(x.name+' '+(x.short||'')).toLowerCase().includes(v));
+  if(a){ revealActor(a.id); e.target.value=''; }
+});
+
+// ---------- legend
+function buildLegend(){
+  const L=document.getElementById('legend');
+  const fams = {auth:'Authority',duty:'Consultation',part:'Partnership & ownership',money:'Money & markets',svc:'Services & advice',adv:'Advocacy',opp:'Opposition'};
+  const catHtml = `<fieldset><legend>Groups (node colour)</legend>${cats.map(c=>`<div class="catrow"><span class="dot" style="background:${catColor(c.id)};width:12px;height:12px"></span>${esc(c.name)}</div>`).join('')}
+    <p class="small" style="margin:8px 0 0">Large nodes are closed groups (dashed ring); click to open. Node size for organizations grows with number of links.</p></fieldset>`;
+  const relHtml = `<fieldset><legend>Relationship types (click to show or hide)</legend>${Object.entries(REL).map(([k,r])=>`<label><input type="checkbox" data-rel="${k}" checked><svg width="34" height="10" aria-hidden="true"><line x1="1" y1="5" x2="33" y2="5" stroke="${famColor(r.family)}" stroke-width="2" stroke-dasharray="${r.dash}"/></svg>${esc(r.label)}</label>`).join('')}
+    <div class="chips" style="margin-top:6px"><button class="btn" type="button" id="relAll">Show all</button><button class="btn" type="button" id="relNone">Hide all</button></div></fieldset>`;
+  L.innerHTML = catHtml + relHtml;
+  L.querySelectorAll('input[data-rel]').forEach(i=>i.addEventListener('change',()=>{ i.checked?relOn.add(i.dataset.rel):relOn.delete(i.dataset.rel); render(); if(selected) renderPanel(); }));
+  document.getElementById('relAll').onclick=()=>{ Object.keys(REL).forEach(k=>relOn.add(k)); L.querySelectorAll('input[data-rel]').forEach(i=>i.checked=true); render(); };
+  document.getElementById('relNone').onclick=()=>{ relOn.clear(); L.querySelectorAll('input[data-rel]').forEach(i=>i.checked=false); render(); };
+}
+
+// ---------- unverified list + table
+function buildLists(){
+  const ul=document.getElementById('unverified');
+  ul.innerHTML = actors.filter(a=>a.verify!=='verified').map(a=>`<li><b>${esc(a.name)}</b> (${VLABEL[a.verify].toLowerCase()}): ${esc(a.flag||'')}</li>`).join('')
+   + `<li><b>Relationship notes</b> marked "role not confirmed" or "status unknown" in the map are leads, not findings.</li>`;
+  const t=document.getElementById('alltable');
+  t.innerHTML = `<thead><tr><th>Organization</th><th>Group › subgroup</th><th>Stages</th><th>Stakes</th><th>Formal</th><th>Informal</th><th>Links</th><th>Status</th></tr></thead><tbody>`+
+   actors.map(a=>`<tr><td>${esc(a.name)}</td><td>${esc(catById[a.cat].name)} › ${esc(subById[a.sub].name)}</td><td>${a.stages.map(i=>i+1).join(', ')}</td><td>${a.stakes}</td><td>${a.formal}</td><td>${a.informal}</td><td>${deg[a.id]||0}</td><td>${VLABEL[a.verify]}</td></tr>`).join('')+`</tbody>`;
+  const S = D._status;
+  const src = S.fromSheet===S.total ? 'live from the Google Sheet' : S.fromSheet===0 ? 'from the snapshot in data/' : `partly from the Google Sheet (${S.fromSheet} of ${S.total} tabs), rest from the snapshot`;
+  document.getElementById('foot').innerHTML = `Compiled ${esc(D.meta.compiled)} by ${esc(D.meta.compiler)}. Data loaded ${src}, ${S.loaded.toLocaleString()}. `+
+    (S.warn.length ? `<details style="display:inline"><summary>${S.warn.length} data problem${S.warn.length>1?'s':''}</summary><ul>${S.warn.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></details>` : '0 data problems.')+
+    `<br>Stages in the table: ${STAGES.map((s,i)=>(i+1)+' '+esc(s)).join(' · ')}. Corrections welcome.`;
+}
+
+buildLegend(); buildLists(); renderPanel();
+const h0 = location.hash.slice(1);
+if(['cluster','lifecycle','stakes','influence'].includes(h0)) { view=h0; document.querySelectorAll('#views button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.view===view)); }
+render();
+let rt; window.addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(render,200); });
+})();
+</script>
+</body>
+</html>

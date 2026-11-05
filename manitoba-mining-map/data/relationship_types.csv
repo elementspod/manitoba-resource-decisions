@@ -1,0 +1,14 @@
+id,label,family,dash
+regulates,Regulates or licenses,auth,
+oversees,Oversees or sets policy for,auth,1 3
+consult,Holds the duty to consult,duty,
+delegated,Carries out delegated consultation / engagement,duty,6 3
+partners,"Partners with, agreement or equity stake",part,
+owns,Owns or controls,part,1 3
+funds,Funds or finances,money,
+buys,Buys output from,money,6 3
+supplies,"Supplies data, power or services",svc,
+advises,Advises or reviews for,svc,6 3
+advocates,Lobbies or advocates to,adv,
+represents,Represents,adv,6 3
+opposes,Opposes or challenges,opp,2 3

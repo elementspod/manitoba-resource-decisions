@@ -1,0 +1,28 @@
+id,category,name,description
+gov-mines,gov,Provincial mining ministry,"Manitoba Business, Mining, Trade and Job Creation and its units: Mines Branch, Critical Minerals Office, Manitoba Geological Survey."
+gov-env,gov,Provincial environmental assessment,The Environment Act licensing process and the Clean Environment Commission.
+gov-policy,gov,"Cabinet, consultation & Crown–Indigenous bodies","Political direction, the Crown's consultation function, and new shared-governance bodies."
+gov-fed,gov,Federal government,"Federal assessment, critical-minerals policy and the tax rules behind flow-through shares."
+gov-courts,gov,Courts & tribunals,Bodies that settle disputes and define the content of the duty to consult.
+ind-fn,ind,First Nations,Rights-holding Nations named in Manitoba mining files. This is a sample tied to current projects; Manitoba has 63 First Nations.
+ind-metis,ind,Métis government,"The Manitoba Métis Federation, government of the Red River Métis."
+ind-orgs,ind,Political organizations,Province-wide and regional organizations of First Nations.
+ind-biz,ind,Indigenous-owned enterprises,Companies owned by Nations that develop or hold projects.
+ind-major,industry,Majors & producers,"Companies operating mines in Manitoba, or large companies exploring here."
+ind-mid,industry,Mid-tiers & developers,Companies moving a specific project through permitting toward production or restart.
+ind-junior,industry,Juniors & explorers,"Exploration companies, mostly listed on the TSX Venture or CSE, funded largely by equity including flow-through shares."
+ind-prosp,industry,Prospectors,Individuals who hold prospecting licences and stake claims.
+ind-assoc,industry,Industry associations,Groups that speak for producers or explorers.
+ind-svc,industry,Contractors & suppliers,"Drilling, geophysics and other field services."
+fin-markets,finance,Capital markets & flow-through,Exchanges and the investors who buy exploration equity.
+fin-public,finance,Public funds & tax credits,Government money and tax expenditures aimed at exploration and development.
+fin-private,finance,Private capital & royalties,Investment funds and royalty companies.
+com-muni,community,Municipalities,"Host towns and rural municipalities. Governments in their own right, placed here because their stake is local."
+com-env,community,Environmental & watchdog groups,"Organizations that monitor, intervene in hearings and campaign."
+com-citizen,community,Residents' & land-defence groups,Groups formed around a particular project or place.
+com-labour,community,Labour & business,Unions and chambers of commerce.
+svc-consult,services,Consultants,Firms that prepare assessments and studies or run engagement.
+svc-legal,services,Legal,Lawyers representing parties in hearings and courts.
+svc-research,services,Research & training,Universities and colleges.
+mkt-buyers,markets,Buyers & offtakers,Companies that buy or have agreed to buy a project's output.
+mkt-infra,markets,"Power, rail & ports",Infrastructure owners whose decisions a project depends on.
