@@ -159,6 +159,7 @@ footer{padding:20px 0 40px;color:var(--ink-3);font-size:13px}
     <div>
       <div class="lbl">&nbsp;</div>
       <button class="btn" type="button" id="labelsBtn" aria-pressed="true">Labels on</button>
+      <button class="btn" type="button" id="resetBtn">Reset view</button>
     </div>
   </div>
 
@@ -712,7 +713,19 @@ document.getElementById('lvl1').onclick=()=>{ svg.call(zoom.transform,d3.zoomIde
 document.getElementById('lvl2').onclick=()=>{ autoFit=true; cats.forEach(c=>openCats.add(c.id)); openSubs.clear(); select(null); render(); };
 document.getElementById('lvl3').onclick=()=>{ autoFit=true; cats.forEach(c=>openCats.add(c.id)); subs.forEach(s=>openSubs.add(s.id)); render(); };
 document.getElementById('labelsBtn').onclick=function(){ showLabels=!showLabels; this.setAttribute('aria-pressed',showLabels); this.textContent= showLabels?'Labels on':'Labels off'; render(); };
-const dl=document.getElementById('names'); actors.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(a=>{const o=document.createElement('option'); o.value=a.name; dl.appendChild(o);});
+function resetView(){
+  openCats.clear(); openSubs.clear();
+  Object.keys(REL).forEach(k=>relOn.add(k));
+  document.querySelectorAll('#legend input[data-rel]').forEach(i=>i.checked=true);
+  showLabels = true;
+  const lb=document.getElementById('labelsBtn'); lb.setAttribute('aria-pressed','true'); lb.textContent='Labels on';
+  document.getElementById('q').value='';
+  nodeStore.clear();
+  selected = null; renderPanel();
+  setView('cluster');
+}
+document.getElementById('resetBtn').onclick = resetView;
+  const dl=document.getElementById('names'); actors.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(a=>{const o=document.createElement('option'); o.value=a.name; dl.appendChild(o);});
 document.getElementById('q').addEventListener('change',e=>{
   const v=e.target.value.trim().toLowerCase(); if(!v) return;
   const a = actors.find(x=>x.name.toLowerCase()===v) || actors.find(x=>(x.name+' '+(x.short||'')).toLowerCase().includes(v));
