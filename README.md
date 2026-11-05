@@ -6,11 +6,15 @@ A second view shows the approval steps a project can pass through (provincial, f
 
 A third view maps the ecosystem of players involved in mineral exploration and mine development in Manitoba — regulators, industry, finance, Indigenous rights holders and organizations, communities and civil society, professional services, and downstream markets. Players are grouped into categories and subcategories, with typed relationships showing how they connect (regulates, consults, funds, partners, opposes, etc.). Multiple layouts let you rearrange the network by stage of the mine life cycle, by who bears costs vs captures benefits, and by formal vs informal influence.
 
-Live site (provincial map): https://elementspod.github.io/manitoba-resource-decisions/
-  Approval steps view: https://elementspod.github.io/manitoba-resource-decisions/process.html
-  Mining ecosystem network: https://elementspod.github.io/manitoba-resource-decisions/manitoba-mining-map/
-  Repository: https://github.com/elementspod/manitoba-resource-decisions
-  Data status (for editors): https://elementspod.github.io/manitoba-resource-decisions/status.html
+•Live site (provincial map): https://elementspod.github.io/manitoba-resource-decisions/
+
+•Approval steps view: https://elementspod.github.io/manitoba-resource-decisions/process.html
+
+•Mining ecosystem network: https://elementspod.github.io/manitoba-resource-decisions/manitoba-mining-map/
+
+•Repository: https://github.com/elementspod/manitoba-resource-decisions
+
+•Data status (for editors): https://elementspod.github.io/manitoba-resource-decisions/status.html
 
 **Status: working draft.** Most site locations are approximate (only a handful come from a named source), regulatory histories are summaries, and several entries are unverified leads. Approximate locations are shown with a dashed ring on the map. The mining ecosystem network also contains partly verified and unverified entries, flagged on each actor’s panel. Do not cite yet.
 
