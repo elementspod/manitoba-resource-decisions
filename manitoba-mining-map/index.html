@@ -634,7 +634,12 @@ function chipCat(cid,sid){ return `<span class="chip"><span class="dot" style="b
 function renderPanel(){
   if(!selected){
     const nv = actors.filter(a=>a.verify!=='verified').length;
-    panel.innerHTML = `<h3>How to use</h3>
+    const openList = [
+      ...[...openCats].map(id=>`<button type="button" data-collapse="cat:${id}">Close ${esc(catById[id].name)}</button>`),
+      ...[...openSubs].filter(id=>openCats.has(subById[id].cat)).map(id=>`<button type="button" data-collapse="sub:${id}">Close ${esc(subById[id].name)}</button>`)
+    ];
+    const openHtml = openList.length ? `<h3>Open now</h3><div class="members">${openList.join('')}<button type="button" data-collapseall="1">Close all</button></div>` : '';
+    panel.innerHTML = openHtml + `<h3>How to use</h3>
       <p>Click a coloured group to open its subgroups, and a subgroup to see the organizations in it. Click an organization for its role, its links and its sources.</p>
       <p>Use <b>Arrange by</b> to move the same nodes into a different layout: clusters, stage of the mine life cycle, who carries costs or benefits, or formal and informal power.</p>
       <p>Hover a line to see the relationship. Turn relationship types on or off in the key below the map.</p>
@@ -684,6 +689,7 @@ panel.addEventListener('click',e=>{
   else if(b.dataset.openCat){ openCats.add(b.dataset.openCat); select({kind:'cat',id:b.dataset.openCat}); render(); }
   else if(b.dataset.openSub){ const s=subById[b.dataset.openSub]; openCats.add(s.cat); openSubs.add(s.id); select({kind:'sub',id:s.id}); render(); }
   else if(b.dataset.openall){ openCats.add(b.dataset.openall); subsOf(b.dataset.openall).forEach(s=>openSubs.add(s.id)); render(); }
+  else if(b.dataset.collapseall){ openCats.clear(); openSubs.clear(); select(null); render(); }
   else if(b.dataset.collapse){
     const [k,id]=b.dataset.collapse.split(':');
     if(k==='cat'){ openCats.delete(id); subsOf(id).forEach(s=>openSubs.delete(s.id)); }
