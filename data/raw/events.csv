@@ -66,7 +66,7 @@ ev-truenorth-noa-2026-05-19,site-true-north-mine-and,mb-noa,2026-05-19,filed,,n/
 ev-truenorth-noa-2026-06-03,site-true-north-mine-and,mb-noa,2026-06-03,approved,org-province-of-manitoba,unknown,src-reg-2435-40,verified
 ev-keeyask-cec-2012-11-14,site-keeyask-generating-station,mb-cec,2012-11-14,referred,org-province-of-manitoba,unknown,src-reg-5550,verified
 ev-keeyask-cec-2013-09-24,site-keeyask-generating-station,mb-cec,2013-09-24,hearing-held,,n/a,src-cec-keeyask,verified
-ev-keeyask-cec-n,site-keeyask-generating-station,mb-cec,,report-issued,,yes,src-cbc-keeyask,provisional
+ev-keeyask-cec-n,site-keeyask-generating-station,mb-cec,2014-05-07,report-issued,,yes,src-cbc-keeyask,provisional
 ev-keeyask-ia-2014-06-27,site-keeyask-generating-station,fed-ia,2014-06-27,approved,,yes,src-ceaa-keeyask,verified
 ev-keeyask-lic-2014-07-02,site-keeyask-generating-station,mb-lic,2014-07-02,issued,org-province-of-manitoba,unknown,src-lic-3107,verified
 ev-keeyask-noa-2020-01-10,site-keeyask-generating-station,mb-noa,2020-01-10,filed,,n/a,src-reg-5550,verified

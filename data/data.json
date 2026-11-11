@@ -1,5 +1,5 @@
 {
- "built": "2026-11-10 11:16 UTC",
+ "built": "2026-11-11 11:02 UTC",
  "counts": {
   "sites": 50,
   "routes": 7,
@@ -32,7 +32,7 @@
    "status": "Operating",
    "description": "Canada's only producing lithium mine and one of the world's largest cesium sources. Operating since 1969; Sinomine bought it in June 2019 for $135M and restarted spodumene production in late 2021. Throughput about 400 t/day.",
    "regulatory_notes": "Original licence No. 973 dates from 1983. A cesium plant amendment was filed in 2022 and a 2023 Notice of Alteration allowed milling of ore from other properties. A new comprehensive licence replaced the 1983 one and excluded the proposal to partly drain Bernic Lake. Appeals against the new licence were dismissed by cabinet order — the Wilderness Committee objected not to the licence but to the appeal route, since the only recourse is to the same minister whose department issued it. In 2022 Ottawa ordered three other Chinese firms to divest Canadian lithium assets; Sinomine kept Tanco.",
-   "source_ref": ""
+   "source_ref": "src-reg-1906-2"
   },
   {
    "site_id": "site-falcon-west-cesium-project",
@@ -146,7 +146,7 @@
    "status": "Operating",
    "description": "Two underground mines and a mill on the 135 km Thompson Nickel Belt. In February 2026 Vale agreed to transfer majority ownership to a consortium including the federal Canada Growth Fund, with up to US$200M committed.",
    "regulatory_notes": "Operates under long-standing provincial licences; no Commission referral was found for the change of control. Vale's Q2 2026 statements still describe Thompson as held for sale, so closing is not confirmed. Nickel, copper and cobalt are all on Canada's critical minerals list.",
-   "source_ref": ""
+   "source_ref": "src-reg-557-10"
   },
   {
    "site_id": "site-birchtree-mine",
@@ -222,7 +222,7 @@
    "status": "Licensed, pre-construction",
    "description": "Wholly owned by Norway House Cree Nation since November 2024, bought from Flying Nickel for about $8M plus share surrender. Resource of roughly 690–722 Mlb nickel measured and indicated, plus palladium and platinum. The first phase quarries dolomite for low-emission magnesium before nickel — the community describes this as using the entire animal.",
    "regulatory_notes": "Environment Act Licence No. 2981 issued August 2011 to Victory Nickel for a 10,000 t/day open pit. Changes proposed in 2022 triggered consultation with Norway House, Misipawistik, Mosakahiken, Pimicikamak and the Manitoba Métis Federation. The amended licence was announced in March 2026. No Commission hearing was held. Manitoba committed $2M toward the magnesium phase at PDAC 2026. The site lies inside the Norway House Resource Management Area — the one RMA overlap verified in the research. Marketed by the community as removing the usual consultation hurdle through direct ownership.",
-   "source_ref": ""
+   "source_ref": "src-reg-5463-1"
   },
   {
    "site_id": "site-lalor-mine",
@@ -431,7 +431,7 @@
    "status": "Under construction",
    "description": "The higher-grade pit, to be mined first.",
    "regulatory_notes": "Federal assessment completed March 2023 with a positive decision statement. Separate provincial licence issued.",
-   "source_ref": ""
+   "source_ref": "src-reg-6074"
   },
   {
    "site_id": "site-maclellan-deposit-and-mill",
@@ -450,7 +450,7 @@
    "status": "Under construction",
    "description": "9,000 t/day mill. About 186,000 oz/yr over a 25-year life, roughly 3 Moz total. Initial capital raised to $937M. First production expected in the first half of 2029, delayed from 2028 by the 2025 wildfire evacuation.",
    "regulatory_notes": "Environment Act Licence No. 3391, with a Notice of Alteration approved 26 March 2026. The only Manitoba mineral project in this catalogue to go through a full federal environmental assessment, completed March 2023. Benefit agreements are in place with both proximate First Nations: Marcel Colomb signed in June 2023, Mathias Colomb in 2025 while its judicial review of the federal decision statement was being resolved. No provincial Commission hearing.",
-   "source_ref": ""
+   "source_ref": "src-reg-6073"
   },
   {
    "site_id": "site-lynn-lake-legacy-mine",
@@ -545,7 +545,7 @@
    "status": "Restarting — first ore targeted December 2026",
    "description": "Formerly San Gold, then Klondex. About 62,000 ha and a fully permitted 1,300 t/day mill. A March 2026 preliminary economic assessment outlines about 58,000 oz/yr over 11 years.",
    "regulatory_notes": "The restart uses existing permits; no new Environment Act filing was found. First Nation relationships are not documented in the sources consulted — a gap worth closing.",
-   "source_ref": ""
+   "source_ref": "src-reg-2435-40"
   },
   {
    "site_id": "site-central-mine",
@@ -583,7 +583,7 @@
    "status": "Licensed; quarry development for proppant",
    "description": "More than 41 contiguous quarry leases about 160 km north of Winnipeg. Inferred resource of 24.4 Mt of low-iron glass sand.",
    "regulatory_notes": "Licence No. 3285 issued 16 May 2019. A Notice of Alteration reducing volume and footprint produced licence 3285 R, approved July 2023 by the department — no Commission hearing. Hollow Water's chief and council supported the project and signed a participation agreement; the Wilderness Committee says they waived Crown consultation. Some members opposed it through Camp Morningstar, citing sacred sites, and criticised the use of a minor alteration to make a substantial change. The cleanest contrast with Sio Silica anywhere in this catalogue.",
-   "source_ref": ""
+   "source_ref": "src-reg-5991"
   },
   {
    "site_id": "site-selkirk-glass-manufacturing-facility",
@@ -602,7 +602,7 @@
    "status": "Licensed; solar plans on hold, float-glass pivot",
    "description": "A 121-acre site on the CP subdivision using Selkirk's wastewater effluent. Up to $880M estimated. In September 2026 the company was promoting a 600 t/day float-glass plant instead, noting Canada has no domestic float-glass production.",
    "regulatory_notes": "Environment Act licence No. 3401 was issued on 3 May 2023, the day after a registry letter (2 May 2023) said a Clean Environment Commission hearing was not recommended, so there was no Commission referral. An earlier version of this note gave 14 February 2024 as the approval date; that is not the licence date. The environment minister went on record in February 2024 explaining how this project differed from Sio Silica, which was refused on 16 February 2024. Technical reviewers had questioned the company's lack of glass-making experience and whether Wanipigow sand could reach solar purity.",
-   "source_ref": ""
+   "source_ref": "src-reg-6137"
   },
   {
    "site_id": "site-simba-sand-extraction",
@@ -621,7 +621,7 @@
    "status": "Permitting — re-filed October 2025",
    "description": "Airlift extraction of silica from the Winnipeg Sandstone aquifer, piped as slurry to a separately licensed plant. The original plan was 1.36 Mt/yr over 24 years from more than a thousand wells, up to 7,200 over time. The aquifer supplies drinking water to about 100,000 people.",
    "regulatory_notes": "The only mineral project in the Commission's record. Referred in November 2021 for significant public interest. Twelve hearing days, 27 February to 15 March 2023, in Steinbach, Anola and Beausejour. The June 2023 report made eight recommendations and said the Commission could not state with confidence that the effects were understood — it declined to recommend either way. A draft licence was circulated in September 2023. On 16 February 2024 the minister refused it, saying the risk was simply too great; the company called the decision political. Springfield council voted against twice and was overruled by the Municipal Board; a phone-in referendum ran about 95% against. The Métis Federation intervened. Participants received no funding. Re-filed as SiMbA in October 2025 covering years 0–4 only, with an equity offer to Brokenhead Ojibway Nation reportedly worth more than $10M a year — a First Nation the company had not consulted the first time round. No decision found.",
-   "source_ref": ""
+   "source_ref": "src-reg-6275"
   },
   {
    "site_id": "site-vivian-sand-processing-facility",
@@ -640,7 +640,7 @@
    "status": "Licensed separately",
    "description": "Processing plant fed by the slurry line.",
    "regulatory_notes": "Environment Act licence No. 3367 was issued to CanWhite Sands Corp. on 16 December 2021, separately from the extraction project. That split let one half proceed while the other was contested. No Commission referral was found for the processing plant (not confirmed).",
-   "source_ref": ""
+   "source_ref": "src-reg-6057"
   },
   {
    "site_id": "site-gods-lake-mine",
@@ -830,7 +830,7 @@
    "status": "Operating",
    "description": "Partnership with Tataskweyak, War Lake, York Factory and Fox Lake Cree Nations.",
    "regulatory_notes": "Commission hearings from October 2013 into January 2014, mostly at the Fort Garry Hotel in Winnipeg, with a report in April 2014.",
-   "source_ref": ""
+   "source_ref": "src-reg-5550"
   },
   {
    "site_id": "site-jenpeg-generating-station",
@@ -3924,7 +3924,7 @@
    "event_id": "ev-keeyask-cec-n",
    "site_id": "site-keeyask-generating-station",
    "instrument_id": "mb-cec",
-   "date": "",
+   "date": "2014-05-07",
    "outcome": "report-issued",
    "decider_org_id": "",
    "reasons_published": "yes",
