@@ -1,5 +1,5 @@
 {
- "built": "2026-11-12 11:35 UTC",
+ "built": "2026-11-12 11:43 UTC",
  "counts": {
   "sites": 50,
   "routes": 7,
@@ -102,7 +102,7 @@
    "commodity": "Lithium, cesium, tantalum",
    "critical_mineral": "yes",
    "operator_org_id": "org-acme-lithium",
-   "operator_raw": "ACME Lithium, optioned to Snow Lake",
+   "operator_raw": "ACME Lithium, optioned to Frontier Nuclear and Minerals (formerly Snow Lake Resources)",
    "co_owners": "optioned to Snow Lake",
    "nearest_community": "Bernic Lake",
    "status": "Exploration",
