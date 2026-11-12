@@ -1,5 +1,5 @@
 {
- "built": "2026-11-11 11:17 UTC",
+ "built": "2026-11-12 11:18 UTC",
  "counts": {
   "sites": 50,
   "routes": 7,
@@ -8,7 +8,7 @@
   "edges": 30,
   "concerns": 12,
   "admissibility": 107,
-  "sources": 33,
+  "sources": 42,
   "events": 80,
   "statements": 0,
   "elements": 30,
@@ -70,7 +70,7 @@
    "status": "Concept, not licensed",
    "description": "A 2023 proposal to partly drain Bernic Lake for open-pit access.",
    "regulatory_notes": "Explicitly excluded from the replacement licence. Would almost certainly trigger federal permits.",
-   "source_ref": ""
+   "source_ref": "src-reg-1906-2"
   },
   {
    "site_id": "site-tanco-concentrator-and-cesium",
@@ -3236,6 +3236,78 @@
    "url": "https://www.arcticgateway.com/port-of-churchill",
    "tier": "",
    "retrieved": "2026-11-11"
+  },
+  {
+   "source_id": "src-mb-oam",
+   "short_name": "MB orphaned and abandoned mines",
+   "full_ref": "Manitoba Environment and Climate Change, Orphaned and Abandoned Mines (FAQ)",
+   "url": "https://gov.mb.ca/sd/environment_and_biodiversity/mines/faq.html",
+   "tier": "",
+   "retrieved": "2026-11-12"
+  },
+  {
+   "source_id": "src-mbhydro-gen",
+   "short_name": "Manitoba Hydro generation",
+   "full_ref": "Manitoba Hydro, Generation (generating stations)",
+   "url": "https://www.hydro.mb.ca/corporate/operations/generation/",
+   "tier": "",
+   "retrieved": "2026-11-12"
+  },
+  {
+   "source_id": "src-mortenson-bipole",
+   "short_name": "Bipole III converter stations",
+   "full_ref": "Mortenson, “Mortenson and Siemens complete Bipole III HVDC converter stations in Canada”",
+   "url": "https://www.mortenson.com/news-insights/mortenson-and-siemens-complete-bipole-iii-hvdc-converter-stations-in-canada",
+   "tier": "",
+   "retrieved": "2026-11-12"
+  },
+  {
+   "source_id": "src-noa-vale-smelter",
+   "short_name": "Vale smelter closure NoA",
+   "full_ref": "Vale, Notice of Alteration: Thompson smelter and refinery closure (MB Registry 557.1)",
+   "url": "https://web40.gov.mb.ca/sd/eal/registries/557.1/notice_of_alteration_smelter_refinery_closure_final.pdf",
+   "tier": "",
+   "retrieved": "2026-11-12"
+  },
+  {
+   "source_id": "src-hudbay-snowlake-2026",
+   "short_name": "Hudbay Snow Lake plan 2026",
+   "full_ref": "Hudbay Minerals, Snow Lake mine plan update, September 2026",
+   "url": "https://s23.q4cdn.com/405985100/files/doc_news/2026/09/HBMNR25_SnowLakeMinePlanUpdate_final.pdf",
+   "tier": "",
+   "retrieved": "2026-11-12"
+  },
+  {
+   "source_id": "src-snowlake-trs",
+   "short_name": "Snow Lake lithium technical report",
+   "full_ref": "Snow Lake Resources, Technical Report Summary, Snow Lake Lithium Project (SEC filing, 2023)",
+   "url": "https://www.sec.gov/Archives/edgar/data/1769697/000109690623001559/litm_ex96z1.htm",
+   "tier": "",
+   "retrieved": "2026-11-12"
+  },
+  {
+   "source_id": "src-acme-shatford",
+   "short_name": "ACME Shatford Lake option",
+   "full_ref": "ACME Lithium, option agreement with Snow Lake Resources on Shatford Lake",
+   "url": "https://www.newsfilecorp.com/release/196130/ACME-Lithium-Signs-Option-Agreement-with-Snow-Lake-Resources-at-its-Manitoba-Lithium-Project",
+   "tier": "",
+   "retrieved": "2026-11-12"
+  },
+  {
+   "source_id": "src-mgs-edenlake",
+   "short_name": "MGS Eden Lake",
+   "full_ref": "Manitoba Geological Survey, Eden Lake rare-earth carbonatite",
+   "url": "https://www.gov.mb.ca/iem/geo/raremetals/pdfs/edenlake.pdf",
+   "tier": "",
+   "retrieved": "2026-11-12"
+  },
+  {
+   "source_id": "src-nrcan-thompson-2026",
+   "short_name": "NRCan Thompson sale 2026",
+   "full_ref": "Natural Resources Canada, “Thompson Mine Complex transaction closes”, 16 Oct 2026",
+   "url": "https://www.canada.ca/en/natural-resources-canada/news/2026/10/thompson-mine-complex-transaction-closes-helping-secure-a-stronger-future-for-canadian-nickel.html",
+   "tier": "",
+   "retrieved": "2026-11-12"
   }
  ],
  "events": [
