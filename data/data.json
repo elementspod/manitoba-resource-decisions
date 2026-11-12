@@ -1,9 +1,9 @@
 {
- "built": "2026-11-12 11:18 UTC",
+ "built": "2026-11-12 11:35 UTC",
  "counts": {
   "sites": 50,
   "routes": 7,
-  "orgs": 15,
+  "orgs": 16,
   "instruments": 26,
   "edges": 30,
   "concerns": 12,
@@ -89,7 +89,7 @@
    "status": "Approved 2023; build status unconfirmed",
    "description": "A CAD 176M, 1 Mtpa processing plant approved in February 2023.",
    "regulatory_notes": "Cesium plant expansion filed as an Environment Act Proposal amendment in 2022.",
-   "source_ref": ""
+   "source_ref": "src-reg-1906-2"
   },
   {
    "site_id": "site-shatford-lake-lithium",
@@ -108,7 +108,7 @@
    "status": "Exploration",
    "description": "31 claims contiguous to the south of Tanco.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-acme-shatford"
   },
   {
    "site_id": "site-donner-lake-lithium",
@@ -127,7 +127,7 @@
    "status": "Exploration, metallurgical testing",
    "description": "Spodumene ore test-milled at Tanco under a 2023 Notice of Alteration.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-reg-1906-2"
   },
   {
    "site_id": "site-thompson-mine-complex",
@@ -139,14 +139,14 @@
    "category_label": "Mine",
    "commodity": "Nickel, copper, cobalt",
    "critical_mineral": "yes",
-   "operator_org_id": "org-vale-base-metals",
-   "operator_raw": "Vale Base Metals, transferring to Exiro / Orion / Canada Growth Fund consortium (81.1%)",
+   "operator_org_id": "org-exiro-nickel",
+   "operator_raw": "Exiro Nickel Company (Vale Base Metals minority stake)",
    "co_owners": "transferring to Exiro / Orion / Canada Growth Fund consortium (81.1%)",
    "nearest_community": "Thompson",
    "status": "Operating",
    "description": "Two underground mines and a mill on the 135 km Thompson Nickel Belt. In February 2026 Vale agreed to transfer majority ownership to a consortium including the federal Canada Growth Fund, with up to US$200M committed.",
    "regulatory_notes": "Operates under long-standing provincial licences; no Commission referral was found for the change of control. Vale's Q2 2026 statements still describe Thompson as held for sale, so closing is not confirmed. Nickel, copper and cobalt are all on Canada's critical minerals list.",
-   "source_ref": "src-reg-557-10"
+   "source_ref": "src-nrcan-thompson-2026"
   },
   {
    "site_id": "site-birchtree-mine",
@@ -203,7 +203,7 @@
    "status": "Closed",
    "description": "Former integrated smelter and refinery. Closure dates unverified.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-noa-vale-smelter"
   },
   {
    "site_id": "site-minago-critical-minerals-project",
@@ -317,7 +317,7 @@
    "status": "Advanced exploration",
    "description": "Past-producing gold mine named as a growth option in September 2026.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-hudbay-snowlake-2026"
   },
   {
    "site_id": "site-777-mine",
@@ -374,7 +374,7 @@
    "status": "Advanced exploration",
    "description": "Spodumene pegmatite on the Grass River linking Wekusko Lake with Crowduck Bay. Resource figures conflict badly across sources — roughly 8–11 Mt at about 1% Li₂O from company-linked sources; one trade site's 73.6 Mt figure is inconsistent with everything else and should not be used.",
    "regulatory_notes": "No Environment Act filing found. The company has renamed repeatedly and pivoted toward uranium elsewhere, so the Manitoba lithium project appears deprioritised.",
-   "source_ref": ""
+   "source_ref": "src-snowlake-trs"
   },
   {
    "site_id": "site-grass-river-lithium-deposit",
@@ -393,7 +393,7 @@
    "status": "Exploration",
    "description": "Second deposit of the Snow Lake lithium project.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-snowlake-trs"
   },
   {
    "site_id": "site-centreport-lithium-hydroxide-plant",
@@ -469,7 +469,7 @@
    "status": "Remediation — provincial priority",
    "description": "Farley headframe and mill demolished; tailings cover options under review.",
    "regulatory_notes": "One of five priority orphaned and abandoned mine sites under a $50.7M five-year commitment.",
-   "source_ref": ""
+   "source_ref": "src-mb-oam"
   },
   {
    "site_id": "site-ruttan-mine",
@@ -488,7 +488,7 @@
    "status": "Remediation — provincial priority",
    "description": "More than 1.3 million cubic metres of clay placed over the tailings.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mb-oam"
   },
   {
    "site_id": "site-sherridon-camp-lake",
@@ -507,7 +507,7 @@
    "status": "Long-term monitoring",
    "description": "The Sherritt-Gordon mine operated 1931–51 and left about 7 Mt of acid-generating tailings over 47 hectares. Remediation began in 2009 and construction was declared complete in 2022.",
    "regulatory_notes": "The province considers this finished; the Manitoba Métis Federation does not. It says many Red River Métis citizens still have concerns, and earlier reporting documented local distrust. Manitoba created a Sherridon Collaboration Table in March 2024. A good test case for whether a closed file is actually closed.",
-   "source_ref": ""
+   "source_ref": "src-mb-oam"
   },
   {
    "site_id": "site-eden-lake-carbonatite",
@@ -526,7 +526,7 @@
    "status": "Occurrence; no active project confirmed",
    "description": "Manitoba's best-documented rare earth carbonatite occurrence.",
    "regulatory_notes": "Note that the Mindat locality for this name is about 110 km off; the provincial coordinates were used.",
-   "source_ref": ""
+   "source_ref": "src-mgs-edenlake"
   },
   {
    "site_id": "site-true-north-mine-and",
@@ -564,7 +564,7 @@
    "status": "Remediation — provincial priority",
    "description": "Historic gold mine, one of five priority legacy sites.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mb-oam"
   },
   {
    "site_id": "site-wanipigow-sand-quarry",
@@ -659,7 +659,7 @@
    "status": "Remediation — provincial priority",
    "description": "Remote fly-in legacy site.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mb-oam"
   },
   {
    "site_id": "site-snow-lake-historic-workings",
@@ -678,7 +678,7 @@
    "status": "Remediation — provincial priority",
    "description": "Historic tailings.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mb-oam"
   },
   {
    "site_id": "site-baker-patton",
@@ -697,7 +697,7 @@
    "status": "Remediation — high priority",
    "description": "Listed as a high-priority orphaned site.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mb-oam"
   },
   {
    "site_id": "site-keewatinohk-converter-station",
@@ -716,7 +716,7 @@
    "status": "Operating",
    "description": "Northern terminal of Bipole III and the proposed tie-in point for the Kivalliq line.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mortenson-bipole"
   },
   {
    "site_id": "site-riel-converter-station",
@@ -735,7 +735,7 @@
    "status": "Operating",
    "description": "Southern terminal of Bipole III.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mortenson-bipole"
   },
   {
    "site_id": "site-kelsey-generating-station",
@@ -754,7 +754,7 @@
    "status": "Operating",
    "description": "Built to power the Thompson nickel operations.",
    "regulatory_notes": "Probably within the Split Lake Resource Management Area — inferred, not verified.",
-   "source_ref": ""
+   "source_ref": "src-mbhydro-gen"
   },
   {
    "site_id": "site-kettle-generating-station",
@@ -773,7 +773,7 @@
    "status": "Operating",
    "description": "Lower Nelson station.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mbhydro-gen"
   },
   {
    "site_id": "site-long-spruce-generating-station",
@@ -792,7 +792,7 @@
    "status": "Operating",
    "description": "Lower Nelson station.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mbhydro-gen"
   },
   {
    "site_id": "site-limestone-generating-station",
@@ -811,7 +811,7 @@
    "status": "Operating",
    "description": "Largest Lower Nelson station.",
    "regulatory_notes": "",
-   "source_ref": ""
+   "source_ref": "src-mbhydro-gen"
   },
   {
    "site_id": "site-keeyask-generating-station",
@@ -849,7 +849,7 @@
    "status": "Operating",
    "description": "Controls Lake Winnipeg outflow.",
    "regulatory_notes": "Probably within the Cross Lake Resource Management Area — inferred.",
-   "source_ref": ""
+   "source_ref": "src-mbhydro-gen"
   },
   {
    "site_id": "site-port-of-churchill",
@@ -1163,6 +1163,13 @@
    "name": "Arctic Gateway Group",
    "type": "partnership",
    "notes": "",
+   "review": ""
+  },
+  {
+   "org_id": "org-exiro-nickel",
+   "name": "Exiro Nickel Company",
+   "type": "company",
+   "notes": "Consortium led by Exiro Minerals with Orion Resource Partners and Canada Growth Fund; bought the Thompson Mine Complex from Vale Base Metals, closed 16 Oct 2026. Vale keeps a minority stake.",
    "review": ""
   }
  ],
